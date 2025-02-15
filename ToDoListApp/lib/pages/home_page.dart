@@ -2,12 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/pages/settings_page.dart';
 import '../providers/task_provider.dart';
+import '../providers/theme_provider.dart'; // Add this import
 import 'add_task_page.dart';
 import '../widgets/task_tile.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context); // Get theme provider
+    final themeData = themeProvider.themeData; // Get current theme data
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -15,14 +24,14 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: themeData.appBarTheme.titleTextStyle?.color, // Use theme color
           ),
         ),
-        backgroundColor: Colors.deepPurple, // Vibrant app bar color
-        elevation: 10, // Add shadow for depth
+        backgroundColor: themeData.colorScheme.primary, // Use theme color
+        elevation: 10,
         actions: [
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
+            icon: Icon(Icons.settings, color: themeData.iconTheme.color),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => SettingsPage()),
@@ -40,7 +49,7 @@ class HomePage extends StatelessWidget {
                   Icon(
                     Icons.assignment,
                     size: 80,
-                    color: Colors.deepPurple.withOpacity(0.5),
+                    color: themeData.colorScheme.primary.withOpacity(0.5),
                   ),
                   SizedBox(height: 16),
                   Text(
@@ -48,7 +57,7 @@ class HomePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.grey[600],
+                      color: themeData.colorScheme.onSurface.withOpacity(0.7),
                     ),
                   ),
                 ],
@@ -84,7 +93,7 @@ class HomePage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  color: _getPriorityColor(task.priority), // Set background color based on priority
+                  color: _getPriorityColor(task.priority),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
                     onTap: () => Navigator.push(
@@ -112,25 +121,24 @@ class HomePage extends StatelessWidget {
           );
         },
         child: Icon(Icons.add, color: Colors.white),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: themeData.colorScheme.primary, // Use theme color
         elevation: 8,
-        splashColor: Colors.purpleAccent, // Add splash effect
+        splashColor: themeData.colorScheme.secondary,
       ),
-      backgroundColor: Colors.grey[100], // Light background for contrast
+      backgroundColor: themeData.scaffoldBackgroundColor, // Use theme background
     );
   }
 
-  // Helper function to get priority-based background color
   Color _getPriorityColor(int priority) {
     switch (priority) {
-      case 1: // Low priority
+      case 1:
         return Colors.green.shade100;
-      case 2: // Medium priority
+      case 2:
         return Colors.orange.shade100;
-      case 3: // High priority
+      case 3:
         return Colors.red.shade100;
       default:
-        return Colors.white; // Default color
+        return Theme.of(context).cardTheme.color ?? Colors.white;
     }
   }
 }

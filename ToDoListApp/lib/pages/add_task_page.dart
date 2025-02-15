@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
+import '../providers/theme_provider.dart';
 
 class AddTaskPage extends StatefulWidget {
   final Task? existingTask;
@@ -14,6 +15,7 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
+
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
@@ -41,6 +43,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeData = themeProvider.themeData;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -48,17 +52,18 @@ class _AddTaskPageState extends State<AddTaskPage> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: themeData.appBarTheme.titleTextStyle?.color,
           ),
         ),
-        backgroundColor: Colors.deepPurple, // Vibrant app bar color
+        backgroundColor: themeData.appBarTheme.backgroundColor, // Vibrant app bar color
         elevation: 10, // Add shadow for depth
-        iconTheme: IconThemeData(color: Colors.white), // White back icon
+        iconTheme: themeData.appBarTheme.iconTheme, // White back icon
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.deepPurple.shade50, Colors.white],
+            colors: [themeData.colorScheme.primary.withOpacity(0.05),
+              themeData.scaffoldBackgroundColor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -106,18 +111,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
     required IconData icon,
     String? Function(String?)? validator,
   }) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final themeData = themeProvider.themeData;
     return TextFormField(
       controller: controller,
+      style: TextStyle(color: themeData.colorScheme.onSurface),
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Colors.deepPurple),
+        labelStyle: TextStyle(color: themeData.colorScheme.onSurface),
+        prefixIcon: Icon(icon, color: themeData.colorScheme.primary),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.deepPurple),
+          borderSide: BorderSide(color: themeData.colorScheme.primary),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.deepPurple, width: 2),
+          borderSide: BorderSide(color: themeData.colorScheme.primary, width: 2),
         ),
       ),
       validator: validator,
@@ -125,18 +134,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   Widget _buildDatePickerField() {
+    final themeData = Provider.of<ThemeProvider>(context).themeData;
     return TextFormField(
       controller: _dueDateController,
       decoration: InputDecoration(
         labelText: 'Due Date',
-        prefixIcon: Icon(Icons.calendar_today, color: Colors.deepPurple),
+        labelStyle: TextStyle(color: themeData.colorScheme.onSurface),
+        prefixIcon: Icon(Icons.calendar_today, color: themeData.colorScheme.primary),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.deepPurple),
+          borderSide: BorderSide(color: themeData.colorScheme.primary),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.deepPurple, width: 2),
+          borderSide: BorderSide(color: themeData.colorScheme.primary, width: 2),
         ),
       ),
       onTap: () async {
@@ -155,6 +166,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   Widget _buildPriorityDropdown() {
+    final themeData = Provider.of<ThemeProvider>(context).themeData;
     return DropdownButtonFormField<int>(
       value: _priority,
       items: [
@@ -171,29 +183,34 @@ class _AddTaskPageState extends State<AddTaskPage> {
         labelText: 'Priority',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.deepPurple),
+          borderSide: BorderSide(color: themeData.colorScheme.primary),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.deepPurple, width: 2),
+          borderSide: BorderSide(color: themeData.colorScheme.primary, width: 2),
         ),
       ),
     );
   }
 
+
   Widget _buildSaveButton() {
+    final themeData = Provider.of<ThemeProvider>(context).themeData;
     return ElevatedButton(
       onPressed: _submit,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurple, // Button color
-        padding: EdgeInsets.symmetric(vertical: 16),
+        backgroundColor: themeData.colorScheme.primary, // Use primary color for the button
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
       ),
       child: Text(
         'Save Task',
-        style: TextStyle(fontSize: 18),
+        style: TextStyle(
+          fontSize: 18,
+          color: themeData.colorScheme.onPrimary, // Use onPrimary color for the text
+        ),
       ),
     );
   }
