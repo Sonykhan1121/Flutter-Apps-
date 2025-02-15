@@ -19,7 +19,7 @@ class Homepage extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanQrCode()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ScanQr()));
                 },
                 child: Text("Scane QR code"),
               ),

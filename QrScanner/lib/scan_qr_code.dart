@@ -1,44 +1,63 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class ScanQrCode extends StatefulWidget {
-  const ScanQrCode({super.key});
+import 'dart:io' show Platform;
 
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+
+class ScanQr extends StatefulWidget {
   @override
-  State<ScanQrCode> createState() => _ScanQrCodeState();
+  _ScanQrState createState() => _ScanQrState();
 }
 
-class _ScanQrCodeState extends State<ScanQrCode> {
-  String _qr_Data = "Qr code data will appear here...";
+class _ScanQrState extends State<ScanQr> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
 
-  Future<void> ScanQr() async{
-    final qrCode = await FlutterBarcodeScanner.scanBarcode('Colors.black','Cancel',true,ScanMode.QR);
-    if(!mounted)
-      return;
-    setState(() {
-
-      _qr_Data = qrCode;
-    });
+  // In order to get hot reload to work we need to pause the camera if the platform
+  // is android, or resume the camera if the platform is iOS.
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Scan QR'),
-        centerTitle: true,
-      ),
-      body: Center(
-       child: Column(
-         children: [
-           SizedBox(height: 30,),
-           Text(_qr_Data,style: TextStyle(color: Colors.orange),),
-           SizedBox(height: 30,),
-           ElevatedButton(onPressed: (){
-
-           }, child: Text('Scan QR code')),
-         ],
-       ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: QRView(
+              key: qrKey,
+              onQRViewCreated: _onQRViewCreated,
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Center(
+              child: (result != null)
+                  ? Text('Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
+                  : Text('Scan a code'),
+            ),
+          )
+        ],
       ),
     );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+      });
+    });
   }
 }
