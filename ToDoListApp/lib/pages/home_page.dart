@@ -12,10 +12,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    // Assuming you have access to TaskProvider here
+    Provider.of<TaskProvider>(context, listen: false).loadTasks();
+  }
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context); // Get theme provider
-    final themeData = themeProvider.themeData; // Get current theme data
+    final themeData = themeProvider.themeData;
+
+    // Get current theme data
 
     return Scaffold(
       appBar: AppBar(
@@ -41,6 +52,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Consumer<TaskProvider>(
         builder: (context, provider, child) {
+
           if (provider.tasks.isEmpty) {
             return Center(
               child: Column(

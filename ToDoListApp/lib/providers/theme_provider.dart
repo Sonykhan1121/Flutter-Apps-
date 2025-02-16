@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class ThemeProvider extends ChangeNotifier {
   ThemeData _themeData;
-  Color _accentColor = Colors.deepPurple; // Default accent color
+  Color _accentColor; // Default accent color
 
   ThemeProvider({bool isDarkMode = false})
-      : _themeData = isDarkMode ? ThemeData.dark() : ThemeData.light() {
+      : _themeData = isDarkMode ? ThemeData.dark() : ThemeData.light() ,
+  _accentColor = Colors.deepPurple
+  {
     // Initialize the theme with the default accent color
     _themeData = _themeData.copyWith(
       colorScheme: _themeData.colorScheme.copyWith(
@@ -14,6 +16,7 @@ class ThemeProvider extends ChangeNotifier {
       ),
     );
   }
+
 
   ThemeData get themeData => _themeData;
 
