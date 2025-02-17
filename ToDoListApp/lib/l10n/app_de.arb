@@ -1,0 +1,20 @@
+{
+  "settingsTitle": "Einstellungen",
+  "darkModeToggle": "Dunkelmodus",
+  "language": "Sprache",
+  "enableNotifications": "Benachrichtigungen aktivieren",
+  "accentColor": "Akzentfarbe",
+  "resetSettings": "Einstellungen zurücksetzen",
+  "chooseAccentColor": "Akzentfarbe wählen",
+  "resetSettingsConfirmation": "Sind Sie sicher, dass Sie alle Einstellungen zurücksetzen möchten?",
+  "cancel": "Abbrechen",
+  "reset": "Zurücksetzen",
+  "addTask": "Aufgabe Hinzufügen",
+  "editTask": "Aufgabe Bearbeiten",
+  "title": "Titel",
+  "description": "Beschreibung",
+  "dueDate": "Fälligkeitsdatum",
+  "priority": "Priorität",
+  "saveTask": "Aufgabe Speichern",
+  "enterTitle": "Bitte geben Sie einen Titel ein"
+}

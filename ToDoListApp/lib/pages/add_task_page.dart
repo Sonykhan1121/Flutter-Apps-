@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/task_model.dart';
 import '../providers/task_provider.dart';
 import '../providers/theme_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddTaskPage extends StatefulWidget {
   final Task? existingTask;
@@ -48,7 +49,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.existingTask == null ? 'Add Task' : 'Edit Task',
+          widget.existingTask == null ? AppLocalizations.of(context)!.addTask : AppLocalizations.of(context)!.editTask,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -76,11 +77,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
               children: <Widget>[
                 _buildInputField(
                   controller: _titleController,
-                  label: 'Title',
+                  label: AppLocalizations.of(context)!.title,
                   icon: Icons.title,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a title';
+                      return AppLocalizations.of(context)!.enterTitle;
                     }
                     return null;
                   },
@@ -88,7 +89,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 SizedBox(height: 16),
                 _buildInputField(
                   controller: _descriptionController,
-                  label: 'Description',
+                  label: AppLocalizations.of(context)!.description
+                  ,
                   icon: Icons.description,
                 ),
                 SizedBox(height: 16),
@@ -115,6 +117,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     final themeData = themeProvider.themeData;
     return TextFormField(
       controller: controller,
+      maxLines: 1,
       style: TextStyle(color: themeData.colorScheme.onSurface),
       decoration: InputDecoration(
         labelText: label,
@@ -138,7 +141,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return TextFormField(
       controller: _dueDateController,
       decoration: InputDecoration(
-        labelText: 'Due Date',
+        labelText: AppLocalizations.of(context)!.dueDate,
         labelStyle: TextStyle(color: themeData.colorScheme.onSurface),
         prefixIcon: Icon(Icons.calendar_today, color: themeData.colorScheme.primary),
         border: OutlineInputBorder(
@@ -180,7 +183,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         });
       },
       decoration: InputDecoration(
-        labelText: 'Priority',
+        labelText: AppLocalizations.of(context)!.priority,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: themeData.colorScheme.primary),
@@ -206,7 +209,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ),
       ),
       child: Text(
-        'Save Task',
+        AppLocalizations.of(context)!.saveTask,
         style: TextStyle(
           fontSize: 18,
           color: themeData.colorScheme.onPrimary, // Use onPrimary color for the text

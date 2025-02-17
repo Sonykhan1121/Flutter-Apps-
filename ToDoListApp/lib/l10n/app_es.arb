@@ -1,0 +1,20 @@
+{
+  "settingsTitle": "Configuraciones",
+  "darkModeToggle": "Modo Oscuro",
+  "language": "Idioma",
+  "enableNotifications": "Habilitar Notificaciones",
+  "accentColor": "Color de Acento",
+  "resetSettings": "Restablecer Configuraciones",
+  "chooseAccentColor": "Elegir Color de Acento",
+  "resetSettingsConfirmation": "¿Estás seguro de que deseas restablecer todas las configuraciones?",
+  "cancel": "Cancelar",
+  "reset": "Restablecer",
+  "addTask": "Añadir Tarea",
+  "editTask": "Editar Tarea",
+  "title": "Título",
+  "description": "Descripción",
+  "dueDate": "Fecha de Vencimiento",
+  "priority": "Prioridad",
+  "saveTask": "Guardar Tarea",
+  "enterTitle": "Por favor, ingresa un título"
+}

@@ -1,0 +1,20 @@
+{
+  "settingsTitle": "Paramètres",
+  "darkModeToggle": "Mode Sombre",
+  "language": "Langue",
+  "enableNotifications": "Activer les Notifications",
+  "accentColor": "Couleur d'Accent",
+  "resetSettings": "Réinitialiser les Paramètres",
+  "chooseAccentColor": "Choisir la Couleur d'Accent",
+  "resetSettingsConfirmation": "Êtes-vous sûr de vouloir réinitialiser tous les paramètres ?",
+  "cancel": "Annuler",
+  "reset": "Réinitialiser",
+  "addTask": "Ajouter une Tâche",
+  "editTask": "Modifier la Tâche",
+  "title": "Titre",
+  "description": "Description",
+  "dueDate": "Date d'Échéance",
+  "priority": "Priorité",
+  "saveTask": "Enregistrer la Tâche",
+  "enterTitle": "Veuillez entrer un titre"
+}

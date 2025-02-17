@@ -1,0 +1,20 @@
+{
+  "settingsTitle": "设置",
+  "darkModeToggle": "深色模式",
+  "language": "语言",
+  "enableNotifications": "启用通知",
+  "accentColor": "强调色",
+  "resetSettings": "重置设置",
+  "chooseAccentColor": "选择强调色",
+  "resetSettingsConfirmation": "您确定要重置所有设置吗？",
+  "cancel": "取消",
+  "reset": "重置",
+  "addTask": "添加任务",
+  "editTask": "编辑任务",
+  "title": "标题",
+  "description": "描述",
+  "dueDate": "截止日期",
+  "priority": "优先级",
+  "saveTask": "保存任务",
+  "enterTitle": "请输入标题"
+}

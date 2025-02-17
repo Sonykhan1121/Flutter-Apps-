@@ -5,6 +5,7 @@ import '../providers/task_provider.dart';
 import '../providers/theme_provider.dart'; // Add this import
 import 'add_task_page.dart';
 import '../widgets/task_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -76,52 +77,63 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }
-          return ListView.builder(
-            itemCount: provider.tasks.length,
-            itemBuilder: (context, index) {
-              final task = provider.tasks[index];
-              return Dismissible(
-                key: Key(task.id.toString()),
-                background: Container(
-                  color: Colors.red,
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 20),
-                  child: Icon(Icons.delete, color: Colors.white),
-                ),
-                direction: DismissDirection.endToStart,
-                onDismissed: (direction) {
-                  provider.deleteTask(task.id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('${task.title} deleted'),
-                      backgroundColor: Colors.red,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                },
-                child: Card(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  color: _getPriorityColor(task.priority),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddTaskPage(existingTask: task),
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: provider.tasks.length,
+                  itemBuilder: (context, index) {
+                    final task = provider.tasks[index];
+                    return Dismissible(
+                      key: Key(task.id.toString()),
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 20),
+                        child: Icon(Icons.delete, color: Colors.white),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TaskTile(task: task),
-                    ),
-                  ),
+                      direction: DismissDirection.endToStart,
+                      onDismissed: (direction) {
+                        provider.deleteTask(task.id);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${task.title} deleted'),
+                            backgroundColor: Colors.red,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      },
+                      child: Card(
+                        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        color: _getPriorityColor(task.priority),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddTaskPage(existingTask: task),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: TaskTile(task: task),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+              SizedBox(height: 16),
+              Text(
+                  AppLocalizations.of(context)!.language,
+                style: TextStyle(
+                  fontSize: 16,)),
+            ],
           );
         },
       ),

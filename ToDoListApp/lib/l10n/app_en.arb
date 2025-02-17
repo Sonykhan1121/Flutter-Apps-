@@ -1,0 +1,20 @@
+{
+  "settingsTitle": "Settings",
+  "darkModeToggle": "Dark Mode",
+  "language": "Language",
+  "enableNotifications": "Enable Notifications",
+  "accentColor": "Accent Color",
+  "resetSettings": "Reset Settings",
+  "chooseAccentColor": "Choose Accent Color",
+  "resetSettingsConfirmation": "Are you sure you want to reset all settings?",
+  "cancel": "Cancel",
+  "reset": "Reset",
+  "addTask": "Add Task",
+  "editTask": "Edit Task",
+  "title": "Title",
+  "description": "Description",
+  "dueDate": "Due Date",
+  "priority": "Priority",
+  "saveTask": "Save Task",
+  "enterTitle": "Please enter a title"
+}
