@@ -1,4 +1,9 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_list/pages/settings_page.dart';
 
@@ -14,6 +19,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _noteController = TextEditingController();
+  final GlobalKey _globalKey = GlobalKey();
+
   bool _isFabOpen = false;
 
   @override
@@ -96,7 +103,9 @@ class _HomePageState extends State<HomePage> {
           return Column(
             children: [
               Expanded(
+
                 child: ListView.builder(
+
                   itemCount: provider.tasks.length,
                   itemBuilder: (context, index) {
                     final task = provider.tasks[index];
@@ -146,7 +155,20 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              Text("..My drawing..",textAlign: TextAlign.center,),
+              Expanded(
+                flex: 1,
+                child: ListView.builder(
+
+                  scrollDirection: Axis.horizontal,
+                  itemCount: provider.imagePaths.length,
+                  itemBuilder: (context, index) {
+
+                    String imagePath = provider.imagePaths[index];
+                    return Image.file(File(imagePath));
+                  },
+                ),
+              ),
             ],
           );
         },
@@ -218,41 +240,19 @@ class _HomePageState extends State<HomePage> {
   }
   void _showDrawerDialog(BuildContext context) {
     List<Offset?> _points = [];
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
           insetPadding: EdgeInsets.all(10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0), // Rounded corners
-          ),
-          elevation: 10, // Shadow effect
           child: Container(
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.7,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20.0), // Rounded corners
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  spreadRadius: 5,
-                ),
-              ],
-            ),
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    'Draw Here',
-                    style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Draw Here', style: TextStyle(fontSize: 20)),
                 ),
                 Expanded(
                   child: StatefulBuilder(
@@ -273,11 +273,8 @@ class _HomePageState extends State<HomePage> {
                             _points.add(null);
                           });
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
+                        child: RepaintBoundary(
+                          key: _globalKey,
                           child: CustomPaint(
                             painter: SignaturePainter(_points),
                             child: Container(
@@ -289,50 +286,52 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Save the drawing or handle other actions
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          final RenderRepaintBoundary boundary =
+                          _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
+                          final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+                          final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                          if (byteData == null) {
+                            throw Exception('Failed to capture image bytes.');
+                          }
+                          final Uint8List pngBytes = byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
+
+                          final directory = await getTemporaryDirectory();
+                          final String imagePath = '${directory.path}/saved_drawing_${DateTime.now().millisecondsSinceEpoch}.png';
+                          final File imgFile = File(imagePath);
+                          await imgFile.writeAsBytes(pngBytes);
+
+                          Provider.of<TaskProvider>(context, listen: false).addImagePath(imagePath);
                           Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.greenAccent,
-                          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                        child: Text(
-                          'Save',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        } catch (error) {
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Error'),
+                              content: Text('Failed to save drawing: $error'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: Text('Save'),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -341,7 +340,6 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
 
   Color _getPriorityColor(int priority) {
     switch (priority) {
