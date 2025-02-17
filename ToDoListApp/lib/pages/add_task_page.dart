@@ -16,7 +16,6 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
@@ -56,9 +55,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
             color: themeData.appBarTheme.titleTextStyle?.color,
           ),
         ),
-        backgroundColor: themeData.appBarTheme.backgroundColor, // Vibrant app bar color
-        elevation: 10, // Add shadow for depth
-        iconTheme: themeData.appBarTheme.iconTheme, // White back icon
+        backgroundColor: themeData.appBarTheme.backgroundColor,
+        elevation: 10,
+        iconTheme: themeData.appBarTheme.iconTheme,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -89,14 +88,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 SizedBox(height: 16),
                 _buildInputField(
                   controller: _descriptionController,
-                  label: AppLocalizations.of(context)!.description
-                  ,
+                  label: AppLocalizations.of(context)!.description,
                   icon: Icons.description,
                 ),
                 SizedBox(height: 16),
                 _buildDatePickerField(),
                 SizedBox(height: 16),
                 _buildPriorityDropdown(),
+                SizedBox(height: 16),
+                _buildCategoryDropdown(),
                 SizedBox(height: 16),
                 _buildSaveButton(),
               ],
@@ -154,7 +154,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ),
       ),
       onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode()); // Prevent keyboard from showing
+        FocusScope.of(context).requestFocus(FocusNode());
         DateTime? pickedDate = await showDatePicker(
           context: context,
           initialDate: _dueDateController.text.isNotEmpty ? DateFormat('yyyy-MM-dd').parse(_dueDateController.text) : DateTime.now(),
@@ -162,7 +162,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           lastDate: DateTime(2100),
         );
         if (pickedDate != null) {
-          _dueDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate); // Ensure you import 'package:intl/intl.dart';
+          _dueDateController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
         }
       },
     );
@@ -196,13 +196,40 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
+  Widget _buildCategoryDropdown() {
+    final themeData = Provider.of<ThemeProvider>(context).themeData;
+    return DropdownButtonFormField<String>(
+      value: _category,
+      items: [
+        DropdownMenuItem(child: Text("General"), value: 'General'),
+        DropdownMenuItem(child: Text("Work"), value: 'Work'),
+        DropdownMenuItem(child: Text("Personal"), value: 'Personal'),
+      ],
+      onChanged: (String? newValue) {
+        setState(() {
+          _category = newValue!;
+        });
+      },
+      decoration: InputDecoration(
+        labelText: AppLocalizations.of(context)!.category,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: themeData.colorScheme.primary),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: themeData.colorScheme.primary, width: 2),
+        ),
+      ),
+    );
+  }
 
   Widget _buildSaveButton() {
     final themeData = Provider.of<ThemeProvider>(context).themeData;
     return ElevatedButton(
       onPressed: _submit,
       style: ElevatedButton.styleFrom(
-        backgroundColor: themeData.colorScheme.primary, // Use primary color for the button
+        backgroundColor: themeData.colorScheme.primary,
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -212,7 +239,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         AppLocalizations.of(context)!.saveTask,
         style: TextStyle(
           fontSize: 18,
-          color: themeData.colorScheme.onPrimary, // Use onPrimary color for the text
+          color: themeData.colorScheme.onPrimary,
         ),
       ),
     );
@@ -220,7 +247,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      // Remove manual ID assignment
       Task task = Task(
         title: _titleController.text,
         description: _descriptionController.text,
@@ -232,7 +258,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
       if (widget.existingTask == null) {
         Provider.of<TaskProvider>(context, listen: false).addTask(task);
       } else {
-        // For existing tasks, keep the original ID
         task = task.copyWith(id: widget.existingTask!.id);
         Provider.of<TaskProvider>(context, listen: false).updateTask(task);
       }

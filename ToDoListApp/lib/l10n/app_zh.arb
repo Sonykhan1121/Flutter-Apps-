@@ -16,5 +16,6 @@
   "dueDate": "截止日期",
   "priority": "优先级",
   "saveTask": "保存任务",
-  "enterTitle": "请输入标题"
+  "enterTitle": "请输入标题",
+  "category": "分类"
 }

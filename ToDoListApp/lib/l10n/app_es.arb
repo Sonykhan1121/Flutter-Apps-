@@ -16,5 +16,6 @@
   "dueDate": "Fecha de Vencimiento",
   "priority": "Prioridad",
   "saveTask": "Guardar Tarea",
-  "enterTitle": "Por favor, ingresa un título"
+  "enterTitle": "Por favor, ingresa un título",
+  "category": "Categoría"
 }

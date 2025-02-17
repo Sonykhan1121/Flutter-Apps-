@@ -16,5 +16,6 @@
   "dueDate": "Due Date",
   "priority": "Priority",
   "saveTask": "Save Task",
-  "enterTitle": "Please enter a title"
+  "enterTitle": "Please enter a title",
+  "category":"Category"
 }

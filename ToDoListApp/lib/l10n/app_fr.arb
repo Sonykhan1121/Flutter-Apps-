@@ -16,5 +16,6 @@
   "dueDate": "Date d'Échéance",
   "priority": "Priorité",
   "saveTask": "Enregistrer la Tâche",
-  "enterTitle": "Veuillez entrer un titre"
+  "enterTitle": "Veuillez entrer un titre",
+  "category": "Catégorie"
 }

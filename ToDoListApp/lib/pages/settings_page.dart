@@ -12,16 +12,17 @@ class SettingsPage extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final languageProvider = Provider.of<LanguageProvider>(context);
 
-
     return Scaffold(
       appBar: AppBar(
         title: Text(Constants.settingsTitle),
+        backgroundColor: themeProvider.themeData.colorScheme.primary,
       ),
       body: ListView(
         padding: EdgeInsets.all(16),
         children: [
           // Dark Mode Toggle
           _buildSettingTile(
+            context,
             title: AppLocalizations.of(context)!.darkModeToggle,
             trailing: Switch(
               value: themeProvider.isDarkMode,
@@ -34,18 +35,19 @@ class SettingsPage extends StatelessWidget {
 
           // Language Selection
           _buildSettingTile(
+            context,
             title: AppLocalizations.of(context)!.language,
-            trailing: DropdownButton<Locale>( // Use Locale type
-              value: languageProvider.locale, // Set value from provider
+            trailing: DropdownButton<Locale>(
+              value: languageProvider.locale,
               onChanged: (Locale? newValue) {
                 if (newValue != null) {
-                  languageProvider.setLocale(newValue); // Update provider
+                  languageProvider.setLocale(newValue);
                 }
               },
               items: L10n.all.map<DropdownMenuItem<Locale>>((Locale locale) {
-                return DropdownMenuItem<Locale>( // Use Locale in DropdownMenuItem
+                return DropdownMenuItem<Locale>(
                   value: locale,
-                  child: Text(locale.languageCode), // Display language code or name
+                  child: Text(locale.languageCode),
                 );
               }).toList(),
             ),
@@ -54,8 +56,8 @@ class SettingsPage extends StatelessWidget {
 
           // Notification Preferences
           _buildSettingTile(
-            title: AppLocalizations.of(context)!.enableNotifications
-            ,
+            context,
+            title: AppLocalizations.of(context)!.enableNotifications,
             trailing: Switch(
               value: true, // Default value
               onChanged: (bool value) {
@@ -67,11 +69,12 @@ class SettingsPage extends StatelessWidget {
 
           // Appearance Customization
           _buildSettingTile(
+            context,
             title: AppLocalizations.of(context)!.accentColor,
             trailing: IconButton(
               icon: Icon(Icons.color_lens),
               onPressed: () {
-                _showColorPicker(context, themeProvider,languageProvider);
+                _showColorPicker(context, themeProvider);
               },
             ),
           ),
@@ -79,6 +82,7 @@ class SettingsPage extends StatelessWidget {
 
           // Reset Settings
           _buildSettingTile(
+            context,
             title: AppLocalizations.of(context)!.resetSettings,
             trailing: IconButton(
               icon: Icon(Icons.restore),
@@ -93,21 +97,43 @@ class SettingsPage extends StatelessWidget {
   }
 
   // Helper method to build a consistent setting tile
-  Widget _buildSettingTile({required String title, required Widget trailing}) {
-    return ListTile(
-      title: Text(title),
-      trailing: trailing,
+  Widget _buildSettingTile(BuildContext context, {required String title, required Widget trailing}) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: themeProvider.themeData.cardColor,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        trailing: trailing,
+      ),
     );
   }
 
   // Show a color picker dialog for accent color customization
-  void _showColorPicker(BuildContext context, ThemeProvider themeProvider,LanguageProvider LanguageProvider) {
+  void _showColorPicker(BuildContext context, ThemeProvider themeProvider) {
     final List<Color> colors = [
       Colors.deepPurple,
       Colors.blue,
       Colors.green,
       Colors.orange,
       Colors.red,
+      Colors.pink,
+      Colors.purple,
+      Colors.deepOrange,
+      Colors.amber,
+      Colors.lightGreen,
     ];
 
     showDialog(
@@ -130,6 +156,10 @@ class SettingsPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: color,
                     borderRadius: BorderRadius.circular(25),
+                    border: Border.all(
+                      color: themeProvider.themeData.colorScheme.onSurface,
+                      width: 2,
+                    ),
                   ),
                 ),
               );
@@ -141,8 +171,7 @@ class SettingsPage extends StatelessWidget {
   }
 
   // Show a confirmation dialog for resetting settings
-  void _showResetConfirmationDialog(
-      BuildContext context, ThemeProvider themeProvider) {
+  void _showResetConfirmationDialog(BuildContext context, ThemeProvider themeProvider) {
     showDialog(
       context: context,
       builder: (context) {

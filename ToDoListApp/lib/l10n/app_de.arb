@@ -16,5 +16,6 @@
   "dueDate": "Fälligkeitsdatum",
   "priority": "Priorität",
   "saveTask": "Aufgabe Speichern",
-  "enterTitle": "Bitte geben Sie einen Titel ein"
+  "enterTitle": "Bitte geben Sie einen Titel ein",
+  "category": "Kategorie"
 }
