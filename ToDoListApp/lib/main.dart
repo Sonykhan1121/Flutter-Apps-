@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:to_do_list/providers/language_provider.dart';
-import 'l10n/l10n.dart';
-import 'providers/task_provider.dart';
-import 'providers/theme_provider.dart';
-import 'pages/home_page.dart';
-import 'utils/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:to_do_list/providers/language_provider.dart';
+
+import 'l10n/l10n.dart';
+import 'pages/home_page.dart';
+import 'providers/task_provider.dart';
+import 'providers/theme_provider.dart';
+import 'utils/constants.dart';
 
 
 void main() {

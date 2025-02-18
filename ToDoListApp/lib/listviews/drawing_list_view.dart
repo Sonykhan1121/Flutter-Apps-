@@ -51,8 +51,7 @@ class _DrawingListViewState extends State<DrawingListView> {
                     ],
                     elevation: 24.0,
                     backgroundColor: Provider.of<ThemeProvider>(context)
-                        .themeData
-                        .primaryColor,
+                        .themeData.colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
