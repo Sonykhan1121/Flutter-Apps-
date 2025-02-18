@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:to_do_list/models/image_model.dart';
 
 class ImageDatabaseHelper {
   static final ImageDatabaseHelper instance = ImageDatabaseHelper._init();
@@ -32,18 +33,18 @@ class ImageDatabaseHelper {
     ''');
   }
 
-  Future<void> insertImagePath(String path) async {
+  Future<int> insertImagePath(String path) async {
     final db = await instance.database;
     final json = {'path': path};
 
-    await db.insert('ImagePaths', json);
+   return await db.insert('ImagePaths', json);
   }
 
-  Future<List<String>> getImagePaths() async {
+  Future<List<Map<String,dynamic>>> getImagePaths() async {
     final db = await instance.database;
     final results = await db.query('ImagePaths');
 
-    return results.map((json) => json['path'] as String).toList();
+    return results.toList();
   }
 
   Future<void> deleteImagePath(int id) async {

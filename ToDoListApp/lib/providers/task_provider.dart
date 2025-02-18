@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../database/database_helper.dart';
 import '../database/image_database_helper.dart';
+import '../models/image_model.dart';
 import '../models/task_model.dart';
 
 
 
 class TaskProvider extends ChangeNotifier {
   List<Task> _tasks = [];
-  List<String> _imagePaths = [];
+  List<ImageModel> _images = [];
 
 
   List<Task> get tasks => _tasks;
 
 
 
-  List<String> get imagePaths => _imagePaths;
+  List<ImageModel> get images => _images;
 
   void loadTasks() async {
     _tasks = await DatabaseHelper.instance.getTasks();
@@ -40,20 +41,20 @@ class TaskProvider extends ChangeNotifier {
 
 
   void loadImagePaths() async {
-    _imagePaths = await ImageDatabaseHelper.instance.getImagePaths();
+    final results = await ImageDatabaseHelper.instance.getImagePaths();
+    _images = results.map((map) => ImageModel.fromMap(map)).toList();
     notifyListeners();
   }
-
   void addImagePath(String path) async {
-    await ImageDatabaseHelper.instance.insertImagePath(path);
-    _imagePaths.add(path);
-    notifyListeners();
-  }
-
-  void deleteImagePath(int id) async {
-    await ImageDatabaseHelper.instance.deleteImagePath(id);
+    int id = await ImageDatabaseHelper.instance.insertImagePath(path);
+    ImageModel image = ImageModel(id: id, path: path);
+    _images.add(image);
     loadImagePaths();
   }
-
+  void deleteImagePath(int id) async {
+    await ImageDatabaseHelper.instance.deleteImagePath(id);
+    _images.removeWhere((image) => image.id == id);
+    loadImagePaths();
+  }
 
 }
