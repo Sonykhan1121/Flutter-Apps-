@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/providers/current_weather_provider.dart';
+import 'package:weather_app/providers/themeprovider.dart';
 import 'package:weather_app/views/current_weather_screen.dart';
 import 'package:weather_app/views/homepage.dart';
 
@@ -16,14 +17,17 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CurrentWeatherProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        title: 'Weather App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home:  CurrentWeatherScreen(lat: 23.8103,lon: 90.4125), // Set HomeScreen as the home
-      ),
+      child: Consumer<ThemeProvider>(builder: (context, value, child) {
+        return MaterialApp(
+
+          debugShowCheckedModeBanner: false,
+          title: 'Weather App',
+          theme: value.themeData,
+          home:  Homepage(), // Set HomeScreen as the home
+        );
+      },),
     );
   }
 }
