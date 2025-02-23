@@ -12,10 +12,12 @@ class _WeatherPageState extends State<Homepage> {
   final TextEditingController _cityController = TextEditingController();
 
   void _navigateToWeatherDetails() {
+    String city = _cityController.text.toLowerCase();
+    _cityController.text  = "";
     // Placeholder for navigation logic
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CurrentWeatherScreen(city: _cityController.text.toLowerCase())),
+      MaterialPageRoute(builder: (context) => CurrentWeatherScreen(city: city)),
     );
   }
 
