@@ -70,10 +70,10 @@ class CalculatorScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        value.top ,
+                                        print_together(value.top) ,
                                         maxLines: 3,
                                         style: TextStyle(
-                                          fontSize: 34.0,
+                                          fontSize: (34.0/((value.top.length>8)?2:1)),
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -81,7 +81,7 @@ class CalculatorScreen extends StatelessWidget {
                                         value.bottom,
                                         maxLines: 1,
                                         style: TextStyle(
-                                          fontSize: 34.0,
+                                          fontSize: (34.0/((value.bottom.length>12)?2:1)),
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -95,7 +95,7 @@ class CalculatorScreen extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Text(
-                                      '[D]',
+                                      '${value.logo_text1}',
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
@@ -103,7 +103,7 @@ class CalculatorScreen extends StatelessWidget {
                                     ),
                                     SizedBox(width: 20),
                                     Text(
-                                      '[Math]',
+                                      '${value.logo_text2}',
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
@@ -128,5 +128,17 @@ class CalculatorScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String print_together(List<String> top) {
+    if(top.isEmpty)
+      {
+        return "_";
+      }
+    String pt = "";
+    for(var i = 0; i < top.length; i++) {
+      pt += top[i]+"";
+    }
+    return pt;
   }
 }

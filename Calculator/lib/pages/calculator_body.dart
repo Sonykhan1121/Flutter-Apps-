@@ -65,50 +65,70 @@ class CalcButton extends StatelessWidget {
     );
   }
 
-  void getOnPress(String label,ButtonProvider provider)  {
+  Future<void> getOnPress(String label,ButtonProvider provider)  async {
     switch (label) {
       case 'ON':
+        provider.clearButton();
         provider.addButton('Powering on calculator....');
-
+        await Future.delayed(Duration(seconds: 1));
+        provider.clearButton();
         break;
       case 'HEX':
         print('Switch to HEX mode');
+        provider.addlogotext('[HEX]');
+        provider.toHexa();
         break;
       case 'DEC':
         print('Switch to DEC mode');
+        provider.addlogotext('[DEC]');
+        provider.toDecimal();
+
         break;
       case 'OCT':
         print('Switch to OCT mode');
+        provider.addlogotext('[OCT]');
+        provider.toOctal();
         break;
       case 'BIN':
         print('Switch to BIN mode');
+        provider.addlogotext('[BIN]');
+        provider.toBinary();
         break;
       case 'sin':
         print('Sin function');
+        provider.addButton("Sin(");
         break;
       case 'cos':
         print('Cos function');
+        provider.addButton('Cos(');
         break;
       case 'tan':
         print('Tan function');
+        provider.addButton('tan(');
         break;
       case 'log':
         print('Logarithm function');
+        provider.addButton('Log(');
         break;
       case 'ln':
         print('Natural log function');
+        provider.addButton('Ln(');
         break;
       case 'sin⁻¹':
         print('Inverse sin function');
+        provider.addButton('sin⁻¹(');
         break;
       case 'cos⁻¹':
         print('Inverse cos function');
+        provider.addButton('cos⁻¹(');
         break;
       case 'tan⁻¹':
         print('Inverse tan function');
+        provider.addButton('tan⁻¹(');
         break;
       case '10^x':
         print('10 to the power x function');
+        provider.addButton('10^(');
         break;
       case 'M+':
         print('Memory add');
@@ -118,31 +138,73 @@ class CalcButton extends StatelessWidget {
         break;
       case 'Ans':
         print('Answer');
+        provider.addButton(" ${provider.ans}");
         break;
       case 'e^':
         print('Exponential function');
+        provider.addButton('e^(');
         break;
       case 'DEL':
         print('Delete last entry');
+
+        provider.deleteOne();
         break;
       case 'AC':
         print('All clear');
         provider.clearButton();
         break;
-      case '×':
+      case 'x':
         print('Multiplication');
+        provider.addButton('*');
         break;
       case '÷':
         print('Division');
+        provider.addButton('/');
         break;
       case '+':
         print('Addition');
+        provider.addButton("+");
         break;
       case '-':
         print('Subtraction');
+        provider.addButton("-");
         break;
       case '=':
         print('Calculate result');
+        provider.calculateResult();
+        break;
+      case "1":
+        provider.addButton("1");
+        break;
+      case "2":
+        provider.addButton("2");
+        break;
+      case "3":
+        provider.addButton("3");
+        break;
+      case "4":
+        provider.addButton("4");
+        break;
+      case "5":
+        provider.addButton("5");
+        break;
+      case "6":
+        provider.addButton("6");
+        break;
+      case "7":
+        provider.addButton("7");
+        break;
+      case "8":
+        provider.addButton("8");
+        break;
+      case "9":
+        provider.addButton("9");
+        break;
+      case "0":
+        provider.addButton("0");
+        break;
+      case '.':
+        provider.addButton(".");
         break;
       default:
         print('Undefined button pressed');
