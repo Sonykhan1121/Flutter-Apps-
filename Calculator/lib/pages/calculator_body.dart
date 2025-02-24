@@ -13,6 +13,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<ButtonProvider>(context);
     return Container(
       padding: EdgeInsets.all(20),
       child: GridView.count(
@@ -126,6 +127,7 @@ class CalcButton extends StatelessWidget {
         break;
       case 'AC':
         print('All clear');
+        provider.clearButton();
         break;
       case '×':
         print('Multiplication');

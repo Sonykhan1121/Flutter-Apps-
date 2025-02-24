@@ -10,8 +10,8 @@ class ButtonProvider extends ChangeNotifier {
   }
 
   void clearButton() {
-    top='';
-    bottom='';
+    top='_';
+    bottom='0';
     notifyListeners();
   }
   void addresult(String res)
