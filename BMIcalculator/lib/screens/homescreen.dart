@@ -214,7 +214,7 @@ class _HomePageState extends State<HomePage> {
 
               // Weight Input
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   DropdownButton<String>(
                     value: _weightUnit,
