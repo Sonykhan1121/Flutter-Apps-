@@ -2,12 +2,15 @@ import 'package:bmicalculator/screens/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../services/bmi_calculation.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late  double bmi;
   final _formKey = GlobalKey<FormState>();
   String? _selectedGender;
   String _heightUnit = 'cm';
@@ -16,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _heightController1 = TextEditingController();
   final TextEditingController _heightController2 = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
+  final bmicalculation = BmiCalculation();
 
   List<Widget> _buildHeightFields() {
     if (_heightUnit == 'feet') {
@@ -102,7 +106,6 @@ class _HomePageState extends State<HomePage> {
 
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-
                 ],
                 decoration: InputDecoration(
                   labelText: 'Age',
@@ -151,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       flex: 1,
                       child: Image.asset(
-                        'assets/images/${_selectedGender}.png',
+                        'assets/images/$_selectedGender.png',
                         width: 200,
                         height: 100,
                       ),
@@ -192,7 +195,8 @@ class _HomePageState extends State<HomePage> {
                         value: 'feet',
                         child: Row(
                           children: [
-                            Icon(Icons.accessibility), // Icon for feet (using accessibility as a placeholder)
+                            Icon(Icons.accessibility),
+                            // Icon for feet (using accessibility as a placeholder)
                             SizedBox(width: 8),
                             Text('FEET'),
                           ],
@@ -218,12 +222,15 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   DropdownButton<String>(
                     value: _weightUnit,
-                    items: ['kg', 'pounds']
-                        .map((unit) => DropdownMenuItem(
-                      value: unit,
-                      child: Text(unit),
-                    ))
-                        .toList(),
+                    items:
+                        ['kg', 'pound']
+                            .map(
+                              (unit) => DropdownMenuItem(
+                                value: unit,
+                                child: Text(unit),
+                              ),
+                            )
+                            .toList(),
                     onChanged: (value) {
                       setState(() => _weightUnit = value!);
                     },
@@ -232,9 +239,10 @@ class _HomePageState extends State<HomePage> {
                     controller: _weightController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      hintText: _weightUnit == 'kg'
-                          ? 'Enter weight in kilograms'
-                          : 'Enter weight in pounds',
+                      hintText:
+                          _weightUnit == 'kg'
+                              ? 'Enter weight in kilograms'
+                              : 'Enter weight in pounds',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
@@ -251,12 +259,62 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        double height = double.parse(_heightController1.text);
+                        if (_heightController2.text.isNotEmpty) {
+                          height +=
+                              (double.parse(_heightController2.text) / 12);
+                        }
+                        bmi = bmicalculation.calculateBmi(
+                          weight: double.parse(_weightController.text),
+                          height: height,
+                          weightUnit: _weightUnit,
+                          heightUnit: _heightUnit,
+                        );
+
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false, // Prevent dialog from being dismissed when tapped outside
+                          builder: (BuildContext context) {
+                            return Dialog(
+                              backgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min, // Prevents the Column from taking extra space
+                                    children: <Widget>[
+                                      CircularProgressIndicator(),
+                                      SizedBox(height: 16), // Add some spacing between the indicator and text
+                                      Text(
+                                        "Loading...",
+                                        style: theme.textTheme.bodyLarge,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+
+
+                        await Future.delayed(Duration(seconds: 1),
+                                (){
+                                  Navigator.pop(context);
+                        });
+
+
+                        String? status = _selectedGender;
+                        clear_fields();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ResultScreen(),
+                            builder:
+                                (context) =>
+                                    ResultScreen(bmi: bmi, status: status!),
                           ),
                         );
                       }
@@ -265,16 +323,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      _formKey.currentState!.reset();
-                      _ageController.clear();
-                      _heightController1.clear();
-                      _heightController2.clear();
-                      _weightController.clear();
-                      setState(() {
-                        _selectedGender = null;
-                        _heightUnit = 'cm';
-                        _weightUnit = 'kg';
-                      });
+                      clear_fields();
                     },
                     child: Text('Clear'),
                   ),
@@ -286,7 +335,17 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  void clear_fields() {
+    _formKey.currentState!.reset();
+    _ageController.clear();
+    _heightController1.clear();
+    _heightController2.clear();
+    _weightController.clear();
+    setState(() {
+      _selectedGender = null;
+      _heightUnit = 'cm';
+      _weightUnit = 'kg';
+    });
+  }
 }
-
-
-
