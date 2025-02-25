@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
           child: TextFormField(
             controller: _heightController1,
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(labelText: 'Feet'),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Enter feet';
@@ -40,6 +41,7 @@ class _HomePageState extends State<HomePage> {
           child: TextFormField(
             controller: _heightController2,
             keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(labelText: 'Inches'),
             validator: (value) {
               if (value == null || value.isEmpty) return 'Enter inches';
@@ -72,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(title: Text('BMI Calculator')),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.fromLTRB(20, 20, 20, 40),
         child: Form(
           key: _formKey,
           child: Column(
@@ -103,6 +105,7 @@ class _HomePageState extends State<HomePage> {
               TextFormField(
                 controller: _ageController,
                 keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
 
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -238,6 +241,7 @@ class _HomePageState extends State<HomePage> {
                   TextFormField(
                     controller: _weightController,
                     keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       hintText:
                           _weightUnit == 'kg'
@@ -308,7 +312,7 @@ class _HomePageState extends State<HomePage> {
 
 
                         String? status = _selectedGender;
-                        clear_fields();
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
