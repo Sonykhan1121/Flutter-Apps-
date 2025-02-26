@@ -2,6 +2,7 @@ import 'package:codemasterhome/models/progress_item_model.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/appColors.dart';
+import '../utils/appScale.dart';
 
 class ProgressItem extends StatefulWidget {
   final ProgressItemModel progressItemModel;
@@ -28,7 +29,7 @@ class _ProgressItemState extends State<ProgressItem> {
                 widget.progressItemModel.title!,
                 style: TextStyle(
                   fontFamily: "NotoSerif",
-                  fontSize: 18,
+                  fontSize: AppScale.scaleText(16, context),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -37,8 +38,8 @@ class _ProgressItemState extends State<ProgressItem> {
                 'Completed ${widget.progressItemModel.progress*100}%',
                 style: TextStyle(
                   fontFamily: "NotoSerif",
-                  fontSize: 18,
-                  color: Colors.grey[600],
+                  fontSize: AppScale.scaleText(14, context),
+                  color: Colors.blueGrey,
                 ),
               ),
             ],
@@ -76,7 +77,7 @@ class _ProgressItemState extends State<ProgressItem> {
           "${widget.progressItemModel.progress * 100}%",
           style: TextStyle(
             fontFamily: "NotoSerif",
-            fontSize: 16,
+            fontSize: AppScale.scaleText(16, context),
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),

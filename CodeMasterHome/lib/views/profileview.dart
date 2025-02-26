@@ -1,3 +1,4 @@
+import 'package:codemasterhome/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfileView extends StatelessWidget {
@@ -7,7 +8,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Profile'),
+        child: ProfileWidget(),
       ),
     );
   }

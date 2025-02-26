@@ -2,6 +2,7 @@ import 'package:codemasterhome/widgets/progress_item.dart';
 import 'package:flutter/material.dart';
 
 import '../models/progress_item_model.dart';
+import '../utils/appScale.dart';
 
 class QuickAccessWidget extends StatefulWidget {
   const QuickAccessWidget({super.key});
@@ -20,7 +21,7 @@ class _QuickAccessWidgetState extends State<QuickAccessWidget> {
         children: [
           Text(
             'Quick access',
-            style: TextStyle(fontFamily:"NotoSerif",fontSize: 28,fontWeight: FontWeight.w700),
+            style: TextStyle(fontFamily:"NotoSerif",fontSize: AppScale.scaleText(22, context),fontWeight: FontWeight.w700),
           ),
           SizedBox(height: 20),
           ProgressItem(progressItemModel: ProgressItemModel(title: 'ReactJS', progress: 0.8),),

@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class PracticeView extends StatefulWidget {
-  const PracticeView({super.key});
+class CodeIDEScreen extends StatefulWidget {
+  const CodeIDEScreen({super.key});
 
   @override
-  State<PracticeView> createState() => _PracticeViewState();
+  State<CodeIDEScreen> createState() => _CodeIDEScreenState();
 }
 
-class _PracticeViewState extends State<PracticeView> {
+class _CodeIDEScreenState extends State<CodeIDEScreen> {
   String selectedLanguage = 'python';
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _inputController = TextEditingController();
   String _output = '';
   bool _isRunning = false;
-  bool _showOutput = true;
-  bool _isDark = false;
-  bool _showInput = true;
+  bool _showOutput = false;
+  bool _isDark = true;
+  bool _showInput = false;
 
   final Map<String, String> _codeTemplates = {
     'python': 'def main():\n    print("Hello, World!")\n\nif __name__ == "__main__":\n    main()',
@@ -228,7 +228,6 @@ class _PracticeViewState extends State<PracticeView> {
             }
           },
           items: _codeTemplates.keys.map<DropdownMenuItem<String>>((String language) {
-
             return DropdownMenuItem<String>(
               value: language,
               child: Row(
@@ -286,7 +285,7 @@ class _PracticeViewState extends State<PracticeView> {
               children: [
                 // Line numbers
                 Container(
-                  width: 50,
+                  width: 40,
                   color: _isDark ? const Color(0xFF252525) : Colors.grey[200],
                   padding: const EdgeInsets.only(right: 8),
                   child: ListView.builder(
@@ -300,7 +299,7 @@ class _PracticeViewState extends State<PracticeView> {
                           '${index + 1}',
                           style: TextStyle(
                             color: _isDark ? Colors.grey : Colors.grey[700],
-                            fontFamily: 'Noto Serif',
+                            fontFamily: 'monospace',
                             fontSize: 12,
                           ),
                         ),
@@ -321,7 +320,7 @@ class _PracticeViewState extends State<PracticeView> {
                       contentPadding: EdgeInsets.all(16),
                     ),
                     style: TextStyle(
-                      fontFamily: 'Noto Serif',
+                      fontFamily: 'monospace',
                       color: _isDark ? Colors.white : Colors.black,
                     ),
                   ),

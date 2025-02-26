@@ -1,13 +1,15 @@
+import 'package:codemasterhome/widgets/stylish_webview.dart';
 import 'package:flutter/material.dart';
 
 import '../models/course_model.dart';
 import '../utils/appColors.dart';
+import '../utils/appScale.dart';
 
 class CourseCard extends StatefulWidget {
   final CourseModel courseModel;
+  final String url;
 
-
-  CourseCard(this.courseModel);
+  CourseCard(this.courseModel,{required this.url});
 
   @override
   State<CourseCard> createState() => _CourseCardState();
@@ -46,7 +48,7 @@ class _CourseCardState extends State<CourseCard> {
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(widget.courseModel.image_asset),
+                  image: AssetImage(widget.courseModel.image_asset!),
                   // Adjust your image asset path
                   fit: BoxFit.cover,
                 ),
@@ -67,31 +69,31 @@ class _CourseCardState extends State<CourseCard> {
                 // This will provide even spacing
                 children: [
                   Text(
-                widget.courseModel.title,
+                widget.courseModel.title!,
                     style: TextStyle(
                       fontFamily: "NotoSerif",
                       fontWeight: FontWeight.bold,
-                      fontSize: 23,
+                      fontSize: AppScale.scaleText(18, context),
                     ),
                   ),
                   Text(
-                    widget.courseModel.provideby
+                    widget.courseModel.provideby!
                     ,
                     style: TextStyle(
                       fontFamily: "NotoSerif",
                       fontWeight: FontWeight.normal,
-                      fontSize: 21,
-                      color: Colors.grey,
+                      fontSize: AppScale.scaleText(16, context),
+                      color: Colors.blueGrey,
                     ),
                   ),
                   Text(
-                    widget.courseModel.duration
+                    widget.courseModel.duration!
                     ,
                     style: TextStyle(
                       fontFamily: "NotoSerif",
                       fontWeight: FontWeight.normal,
-                      fontSize: 21,
-                      color: Colors.grey,
+                      fontSize: AppScale.scaleText(16, context),
+                      color: Colors.blueGrey,
                     ),
                   ),
                   SizedBox(height: 8),
@@ -100,7 +102,7 @@ class _CourseCardState extends State<CourseCard> {
                     alignment: Alignment.bottomRight,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Action to perform when button is pressed
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=>StylishWebview(url: widget.url,title: widget.courseModel.title,)));
                       },
                       style: ElevatedButton.styleFrom(
                         alignment: Alignment.bottomRight,
@@ -121,7 +123,7 @@ class _CourseCardState extends State<CourseCard> {
                         style: TextStyle(
                           fontFamily: "NotoSerif",
                           fontWeight: FontWeight.normal,
-                          fontSize: 21,
+                          fontSize: AppScale.scaleText(14, context),
                           color: Colors.black,
                         ),
                       ),

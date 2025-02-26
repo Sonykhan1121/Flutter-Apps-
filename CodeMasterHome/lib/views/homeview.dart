@@ -1,3 +1,4 @@
+import 'package:codemasterhome/widgets/heading.dart';
 import 'package:codemasterhome/widgets/quickaccesswidget.dart';
 import 'package:flutter/material.dart';
 
@@ -21,18 +22,9 @@ class _HomeViewState extends State<HomeView> {
         child: Center(
           child:Column(
             children: [
-              Container(
-
-                padding: EdgeInsets.only(left: 16,top: 20,right: 16,bottom: 12),
-
-                child: Text(
-                  'Start Learning to Code for free',
-                  textAlign:TextAlign.start,
-                  style: TextStyle(fontFamily:"NotoSerif",fontSize: 28,fontWeight: FontWeight.w700),
-                ),
-              ),
-              CourseCard(CourseModel(image_asset: 'assets/images/course_cover.jpg',title: 'Introduction to HTML',provideby: 'by Codecademy',duration: '3h 14m')),
-              CourseCard(CourseModel(image_asset: 'assets/images/course_cover1.jpg',title: 'Learn Python',provideby: 'by Codecademy',duration: '4h 32m',)),
+              Heading(title:'Start Learning to Code for free'),
+              CourseCard(CourseModel(image_asset: 'assets/images/flutter_banner.jpg',title: 'Introduction to Flutter',provideby: 'by flutter dev',duration: 'Grow More'),url: 'https://flutter.dev'),
+              CourseCard(CourseModel(image_asset: 'assets/images/intro_to_html.jpg',title: 'Introduction to HTML',provideby: 'by W3Scool',duration: '4h 32m',),url: "https://www.w3schools.com/html/default.asp"),
               QuickAccessWidget(),
 
             ],
@@ -41,4 +33,5 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
 }
