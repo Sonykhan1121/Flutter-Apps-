@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../models/fillintheblackquestion.dart';
+import '../models/matchingquestion.dart';
+import '../models/multiple_choice_question.dart';
 import '../models/question.dart';
+import '../models/shortanswerquestion.dart';
+import '../models/truefalsequestion.dart';
+import '../utils/appColors.dart';
+import '../views/reviewanswerscreen.dart';
 
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
@@ -93,8 +100,8 @@ class _TestScreenState extends State<TestScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Knowledge Test'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.secondary,
+        foregroundColor: Colors.black,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -141,8 +148,8 @@ class _TestScreenState extends State<TestScreen> {
         const SizedBox(height: 8),
         LinearProgressIndicator(
           value: (_currentQuestionIndex + 1) / _questions.length,
-          backgroundColor: Colors.blue.shade100,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade700),
+          backgroundColor: Colors.orange.shade50,
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.secondary),
         ),
       ],
     );
@@ -178,13 +185,13 @@ class _TestScreenState extends State<TestScreen> {
       children: [
         Row(
           children: [
-            Icon(typeIcon, color: Colors.blue.shade700),
+            Icon(typeIcon, color: AppColors.secondary),
             const SizedBox(width: 8),
             Text(
               typeText,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.blue.shade700,
+                color: AppColors.secondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -233,7 +240,7 @@ class _TestScreenState extends State<TestScreen> {
                 _userAnswers[_currentQuestionIndex] = value;
               });
             },
-            activeColor: Colors.blue.shade700,
+            activeColor: AppColors.secondary,
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -256,7 +263,7 @@ class _TestScreenState extends State<TestScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             filled: true,
-            fillColor: Colors.grey.shade50,
+            fillColor: Colors.orange.shade50,
           ),
           onChanged: (value) {
             setState(() {
@@ -283,7 +290,7 @@ class _TestScreenState extends State<TestScreen> {
                 _userAnswers[_currentQuestionIndex] = value;
               });
             },
-            activeColor: Colors.blue.shade700,
+            activeColor: AppColors.secondary,
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -302,7 +309,7 @@ class _TestScreenState extends State<TestScreen> {
                 _userAnswers[_currentQuestionIndex] = value;
               });
             },
-            activeColor: Colors.blue.shade700,
+            activeColor: AppColors.secondary,
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -327,7 +334,7 @@ class _TestScreenState extends State<TestScreen> {
                 'Items',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade700,
+                  color: AppColors.secondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -337,7 +344,7 @@ class _TestScreenState extends State<TestScreen> {
                 'Matches',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade700,
+                  color: AppColors.secondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -445,7 +452,7 @@ class _TestScreenState extends State<TestScreen> {
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.arrow_back),
+              Icon(Icons.arrow_back,color: Colors.orange,),
               SizedBox(width: 8),
               Text('Previous'),
             ],
@@ -456,8 +463,8 @@ class _TestScreenState extends State<TestScreen> {
             _nextQuestion();
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
+            backgroundColor: AppColors.secondary,
+            foregroundColor: Colors.black,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
           child: Row(
@@ -465,7 +472,7 @@ class _TestScreenState extends State<TestScreen> {
             children: [
               Text(_currentQuestionIndex < _questions.length - 1 ? 'Next' : 'Finish'),
               const SizedBox(width: 8),
-              const Icon(Icons.arrow_forward),
+              const Icon(Icons.arrow_forward,color: Colors.black,),
             ],
           ),
         ),
@@ -532,8 +539,12 @@ class _TestScreenState extends State<TestScreen> {
             OutlinedButton(
               onPressed: () {
                 setState(() {
-                  _showResults = false;
-                  _currentQuestionIndex = 0;
+                  _showResults = true;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ReviewAnswersScreen(questions: _questions, userAnswers: _userAnswers)),
+                  );
                 });
               },
               style: OutlinedButton.styleFrom(
@@ -554,93 +565,4 @@ class _TestScreenState extends State<TestScreen> {
   }
 }
 
-// Abstract Question class
 
-// Multiple Choice Question
-class MultipleChoiceQuestion extends Question {
-  final List<String> options;
-  final int correctAnswer;
-
-  MultipleChoiceQuestion(String questionText, this.options, this.correctAnswer)
-      : super(questionText);
-
-  @override
-  bool checkAnswer(dynamic userAnswer) {
-    return userAnswer == correctAnswer;
-  }
-}
-
-// Fill in the Blank Question
-class FillInTheBlankQuestion extends Question {
-  final String correctAnswer;
-
-  FillInTheBlankQuestion(String questionText, this.correctAnswer)
-      : super(questionText);
-
-  @override
-  bool checkAnswer(dynamic userAnswer) {
-    if (userAnswer == null) return false;
-    return userAnswer.toString().trim().toLowerCase() ==
-        correctAnswer.toLowerCase();
-  }
-}
-
-// True False Question
-class TrueFalseQuestion extends Question {
-  final bool correctAnswer;
-
-  TrueFalseQuestion(String questionText, this.correctAnswer)
-      : super(questionText);
-
-  @override
-  bool checkAnswer(dynamic userAnswer) {
-    return userAnswer == correctAnswer;
-  }
-}
-
-// Matching Question
-class MatchingQuestion extends Question {
-  final List<String> leftItems;
-  final List<String> rightItems;
-  final List<int> correctMatches;
-
-  MatchingQuestion(
-      String questionText,
-      this.leftItems,
-      this.rightItems,
-      this.correctMatches,
-      ) : super(questionText);
-
-  @override
-  bool checkAnswer(dynamic userAnswer) {
-    if (userAnswer == null) return false;
-
-    List<int?> answers = userAnswer as List<int?>;
-    if (answers.contains(null)) return false;
-
-    for (int i = 0; i < correctMatches.length; i++) {
-      if (answers[i] != correctMatches[i]) {
-        return false;
-      }
-    }
-    return true;
-  }
-}
-
-// Short Answer Question
-class ShortAnswerQuestion extends Question {
-  final String modelAnswer;
-
-  ShortAnswerQuestion(String questionText, this.modelAnswer)
-      : super(questionText);
-
-  @override
-  bool checkAnswer(dynamic userAnswer) {
-    if (userAnswer == null) return false;
-    // This is a simple implementation; a real app might use more sophisticated
-    // text comparison or manual grading
-    return userAnswer.toString().trim().toLowerCase().contains(
-      modelAnswer.toLowerCase().split(' ')[0],
-    );
-  }
-}
