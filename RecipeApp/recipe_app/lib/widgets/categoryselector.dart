@@ -24,7 +24,7 @@ class CategorySelector extends StatelessWidget {
 
     return Container(
       height: 50,
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin:  EdgeInsets.symmetric(vertical: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,

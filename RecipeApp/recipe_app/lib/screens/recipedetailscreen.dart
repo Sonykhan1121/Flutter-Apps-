@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/recipeProvider.dart';
 
 
-class RecipeDetailScreen extends StatelessWidget {
+class RecipeDetailScreen extends StatefulWidget {
   final String id;
 
   const RecipeDetailScreen({
@@ -13,8 +13,13 @@ class RecipeDetailScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<RecipeDetailScreen> createState() => _RecipeDetailScreenState();
+}
+
+class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
+  @override
   Widget build(BuildContext context) {
-    final recipe = Provider.of<RecipeProvider>(context, listen: false).findById(id);
+    var recipe = Provider.of<RecipeProvider>(context,listen: false).findById(widget.id);
 
     return Scaffold(
       body: CustomScrollView(
@@ -41,15 +46,19 @@ class RecipeDetailScreen extends StatelessWidget {
             ),
             actions: [
               Consumer<RecipeProvider>(
-                builder: (ctx, recipes, _) => IconButton(
-                  icon: Icon(
-                    recipe.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {
-                    recipes.toggleFavorite(recipe.id);
-                  },
-                ),
+                builder: (ctx, recipes, _) {
+                  recipe = recipes.findById(widget.id);
+
+                  return IconButton(
+                    icon: Icon(
+                      recipe.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      recipes.toggleFavorite(recipe.id);
+                    },
+                  );
+                },
               ),
             ],
           ),

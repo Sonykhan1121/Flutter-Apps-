@@ -29,8 +29,8 @@ class RecipeGrid extends StatelessWidget {
       ),
     )
         : GridView.builder(
-      padding: const EdgeInsets.all(10),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      padding:  EdgeInsets.all(10),
+      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         childAspectRatio: 3 / 4,
         crossAxisSpacing: 10,

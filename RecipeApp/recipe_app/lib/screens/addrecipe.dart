@@ -1,6 +1,10 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/recipeProvider.dart';
 
 class AddRecipeScreen extends StatefulWidget {
   const AddRecipeScreen({Key? key}) : super(key: key);
@@ -10,6 +14,7 @@ class AddRecipeScreen extends StatefulWidget {
 }
 
 class _AddRecipeScreenState extends State<AddRecipeScreen> {
+  File? _image;
   final _formKey = GlobalKey<FormState>();
   final _ingredientsController = TextEditingController();
   final _instructionsController = TextEditingController();
@@ -25,12 +30,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
     'category': 'Main Course',
   };
 
-  final List<String> _categories = [
-    'Main Course',
-    'Fish',
-    'Rice',
-    'Dessert',
-  ];
+  final List<String> _categories = ['Main Course', 'Fish', 'Rice', 'Dessert'];
 
   void _saveForm() {
     final isValid = _formKey.currentState!.validate();
@@ -41,20 +41,34 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
     _formKey.currentState!.save();
 
     // Process ingredients and instructions from text controllers
-    _recipeData['ingredients'] = _ingredientsController.text
-        .split('\n')
-        .where((ingredient) => ingredient.trim().isNotEmpty)
-        .toList();
+    _recipeData['ingredients'] =
+        _ingredientsController.text
+            .split('\n')
+            .where((ingredient) => ingredient.trim().isNotEmpty)
+            .toList();
 
-    _recipeData['instructions'] = _instructionsController.text
-        .split('\n')
-        .where((instruction) => instruction.trim().isNotEmpty)
-        .toList();
+    _recipeData['instructions'] =
+        _instructionsController.text
+            .split('\n')
+            .where((instruction) => instruction.trim().isNotEmpty)
+            .toList();
 
     // Here you would add the recipe to the provider
-    // For example: Provider.of<RecipeProvider>(context, listen: false).addRecipe(_recipeData);
+    // For example:
+    Provider.of<RecipeProvider>(context, listen: false).addRecipe(_recipeData);
 
     Navigator.of(context).pop();
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path); // Update the UI with the selected image
+      });
+    }
   }
 
   @override
@@ -70,10 +84,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
       appBar: AppBar(
         title: const Text('Add New Recipe'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveForm,
-          ),
+          IconButton(icon: const Icon(Icons.save), onPressed: _saveForm),
         ],
       ),
       body: Padding(
@@ -83,6 +94,22 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                GestureDetector(
+                  onTap: _pickImage,
+                  // Attach the image picking function to the GestureDetector
+                  child: CircleAvatar(
+                    radius: 100,
+                    // Size of the avatar
+                    backgroundColor: Colors.grey[300],
+                    backgroundImage: _image != null ? FileImage(_image!) : null,
+                    // Display the selected image
+                    child:
+                        _image == null
+                            ? Icon(Icons.camera_alt, size: 50)
+                            : null, // Show an icon if no image is selected
+                  ),
+                ),
+                const SizedBox(height: 10),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Recipe Name'),
                   textInputAction: TextInputAction.next,
@@ -96,24 +123,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                     _recipeData['name'] = value;
                   },
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Image URL'),
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.url,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter an image URL';
-                    }
-                    if (!value.startsWith('http') && !value.startsWith('https')) {
-                      return 'Please enter a valid URL';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _recipeData['imageUrl'] = value;
-                  },
-                ),
+
                 const SizedBox(height: 10),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Description'),
@@ -133,12 +143,13 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                 DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Category'),
                   value: _selectedCategory,
-                  items: _categories.map((category) {
-                    return DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    );
-                  }).toList(),
+                  items:
+                      _categories.map((category) {
+                        return DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }).toList(),
                   onChanged: (value) {
                     if (value != null) {
                       setState(() {
@@ -152,7 +163,9 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Cook Time (minutes)'),
+                  decoration: const InputDecoration(
+                    labelText: 'Cook Time (minutes)',
+                  ),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -214,8 +227,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _saveForm,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  child:  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     child: Text(
                       'Add Recipe',
                       style: TextStyle(
@@ -225,6 +238,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                     ),
                   ),
                 ),
+                SizedBox(height:20),
               ],
             ),
           ),
