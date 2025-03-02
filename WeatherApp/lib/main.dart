@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/signUpandLoginUser_features/pages/login_page.dart';
 import 'package:weather_app/providers/current_weather_provider.dart';
 import 'package:weather_app/providers/themeprovider.dart';
+import 'package:weather_app/signUpandLoginUser_features/pages/singup_page.dart';
+import 'package:weather_app/signUpandLoginUser_features/providers/user_provider.dart';
 import 'package:weather_app/views/current_weather_screen.dart';
 import 'package:weather_app/views/homepage.dart';
 
@@ -18,6 +21,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => CurrentWeatherProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: Consumer<ThemeProvider>(builder: (context, value, child) {
         return MaterialApp(
@@ -25,7 +29,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Weather App',
           theme: value.themeData,
-          home:  Homepage(), // Set HomeScreen as the home
+          home:  SignupPage(), // Set HomeScreen as the home
         );
       },),
     );
