@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+
+class DatePicker extends StatelessWidget {
+  final DateTime selectedDate;
+  final Function(DateTime) onSelectDate;
+
+  DatePicker({required this.selectedDate, required this.onSelectDate});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: InkWell(
+        onTap: () async {
+          DateTime? newDate = await showDatePicker(
+            context: context,
+            initialDate: selectedDate,
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+          );
+          if (newDate != null) {
+            onSelectDate(newDate);
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(Icons.calendar_month, color: Colors.grey),
+              Text(
+                "${formatDate(selectedDate)}",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Icon(Icons.arrow_drop_down, color: Colors.grey),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  String formatDate(DateTime selectedDate) {
+    return "${selectedDate.day.toString().padLeft(2, '0')} ${getMonthName(selectedDate.month)} ${selectedDate.year}";
+  }
+
+  String getMonthName(int month) {
+    switch (month) {
+      case 1:
+        return 'January';
+      case 2:
+        return 'February';
+      case 3:
+        return 'March';
+      case 4:
+        return 'April';
+      case 5:
+        return 'May';
+      case 6:
+        return 'June';
+      case 7:
+        return 'July';
+      case 8:
+        return 'August';
+      case 9:
+        return 'September';
+      case 10:
+        return 'October';
+      case 11:
+        return 'November';
+      case 12:
+        return 'December';
+      default:
+        return ''; // Or throw an exception for invalid month
+    }
+  }
+}
