@@ -6,6 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import '../Colors/colors.dart';
 
 class AddEmployee extends StatefulWidget {
+  const AddEmployee({super.key});
+
   @override
   _AddEmployeeState createState() => _AddEmployeeState();
 }
@@ -17,7 +19,7 @@ class _AddEmployeeState extends State<AddEmployee> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Cl.primary_color.withOpacity(0.6)),
+          icon: Icon(Icons.arrow_back, color: Cl.primaryColor.withOpacity(0.6)),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -42,20 +44,20 @@ class _AddEmployeeState extends State<AddEmployee> {
                   width: 158.w,
                   height: 158.h,
                   decoration: BoxDecoration(
-                    border: Border.all(width: 1.w,color: Cl.primary_color),
+                    border: Border.all(width: 1.w,color: Cl.primaryColor),
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent, // Top color
-                        Cl.primary_color.withOpacity(0.6), // Bottom quarter color
+                        Cl.primaryColor.withOpacity(0.6), // Bottom quarter color
                       ],
                       stops: [0.75, 1.0], // 75% is blue, 25% is red
                     ),
                   ),
                   child: Center(
-                    child: Icon(Icons.person, color: Colors.blue.shade900, size: 100.w),
+                    child: Icon(Icons.person, color: Colors.blue.shade900, size: 100.sp),
                   ),
                 ),
                 // Camera Icon Positioned at Bottom-Center
@@ -132,7 +134,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 12.sp,color: Cl.primary_color, fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 12.sp,color: Cl.primaryColor, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 5),
           TextFormField(

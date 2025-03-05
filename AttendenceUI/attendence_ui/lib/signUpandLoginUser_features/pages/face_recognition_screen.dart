@@ -1,7 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../Colors/colors.dart';
 
@@ -14,7 +13,7 @@ class FaceRecognitionScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Cl.primary_color),
+          icon: Icon(Icons.arrow_back, color: Cl.primaryColor),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -89,7 +88,7 @@ class FaceRecognitionScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Cl.primary_color, // Dark blue
+                    backgroundColor: Cl.primaryColor, // Dark blue
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6.w),
                     ),

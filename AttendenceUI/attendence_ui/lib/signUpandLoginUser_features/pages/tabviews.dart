@@ -41,9 +41,9 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
               Tab(text: 'Absent'),
               Tab(text: 'Overtime'),
             ],
-            unselectedLabelColor: Cl.primary_color.withOpacity(0.6) ,
+            unselectedLabelColor: Cl.primaryColor.withOpacity(0.6) ,
             labelStyle: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w500),
-            labelColor: Cl.primary_color,
+            labelColor: Cl.primaryColor,
 
 
 

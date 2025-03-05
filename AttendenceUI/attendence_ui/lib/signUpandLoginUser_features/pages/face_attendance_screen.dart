@@ -58,7 +58,7 @@ class FaceAttendanceScreen extends StatelessWidget {
                         'ID: TG0642',
                         style: TextStyle(
                           fontSize: 12.w,
-                          color: Cl.primary_color.withOpacity(0.4),
+                          color: Cl.primaryColor.withOpacity(0.4),
                         ),
                       ),
                     ],
@@ -74,18 +74,18 @@ class FaceAttendanceScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
-                      color: Cl.primary_color,
+                      color: Cl.primaryColor,
                     ),
                   ),
                   ElevatedButton.icon(
                     onPressed: () {},
-                    icon: Icon(Icons.calendar_month,color: Cl.primary_color,),
+                    icon: Icon(Icons.calendar_month,color: Cl.primaryColor,),
                     label: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text("01 February 2025",style: TextStyle(fontSize: 12.sp),),
 
-                        Icon(Icons.chevron_right,color: Cl.primary_color.withOpacity(0.6),),
+                        Icon(Icons.chevron_right,color: Cl.primaryColor.withOpacity(0.6),),
                       ],
                     ),
                     // Add a trailing icon by placing it inside the label as a Row
@@ -121,7 +121,7 @@ class FaceAttendanceScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
-                  color: Cl.primary_color,
+                  color: Cl.primaryColor,
                 ),
               ),
               SizedBox(height: 20.h),
@@ -182,13 +182,13 @@ class FaceAttendanceScreen extends StatelessWidget {
   Color get_IconColor(IconData icon) {
     switch (icon) {
       case LucideIcons.briefcase:
-        return Cl.primary_color;
+        return Cl.primaryColor;
       case LucideIcons.armchair:
-        return Cl.secondary_color;
+        return Cl.secondaryColor;
       case LucideIcons.settings:
-        return Cl.secondary_color;
+        return Cl.secondaryColor;
       case LucideIcons.alarmClock:
-        return Cl.third_color;
+        return Cl.thirdColor;
       default:
         return Colors.black;
     }

@@ -34,14 +34,14 @@ class DatePicker extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.calendar_month, color: Cl.primary_color,size: 20.w,),
+              Icon(Icons.calendar_month, color: Cl.primaryColor,size: 20.w,),
               SizedBox(width: 20.w,),
               Text(
                 "${formatDate(selectedDate)}",
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500,color: Cl.primary_color),
+                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500,color: Cl.primaryColor),
               ),
               Spacer(),
-              Icon(Icons.arrow_drop_down, color: Cl.primary_color.withOpacity(0.6),),
+              Icon(Icons.arrow_drop_down, color: Cl.primaryColor.withOpacity(0.6),),
             ],
           ),
         ),

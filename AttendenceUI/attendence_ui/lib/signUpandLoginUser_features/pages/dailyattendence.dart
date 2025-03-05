@@ -24,7 +24,6 @@ class _DailyAttendanceState extends State<DailyAttendence> with SingleTickerProv
         title: Text("Daily Attendance",style: TextStyle(fontSize: 20.sp,color: Colors.black.withOpacity(0.6)),),
         centerTitle: true,
 
-
       ),
       body: Column(
         children:[

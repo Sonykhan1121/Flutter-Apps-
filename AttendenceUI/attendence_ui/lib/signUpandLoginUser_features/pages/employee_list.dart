@@ -140,15 +140,15 @@ class ProfileRow extends StatelessWidget {
         PopupMenuItem(
           value: 'edit',
           child: ListTile(
-            leading: Icon(Icons.edit,color: Cl.primary_color,),
-            title: Text('Edit',style:TextStyle(fontSize:12.sp,fontWeight: FontWeight.w500,color: Cl.primary_color)),
+            leading: Icon(Icons.edit,color: Cl.primaryColor,),
+            title: Text('Edit',style:TextStyle(fontSize:12.sp,fontWeight: FontWeight.w500,color: Cl.primaryColor)),
           ),
         ),
         PopupMenuItem(
           value: 'delete',
           child: ListTile(
-            leading: Icon(Icons.delete,color: Cl.primary_color,),
-            title: Text('Delete',style:TextStyle(fontSize:12.sp,fontWeight: FontWeight.w500,color: Cl.primary_color)),
+            leading: Icon(Icons.delete,color: Cl.primaryColor,),
+            title: Text('Delete',style:TextStyle(fontSize:12.sp,fontWeight: FontWeight.w500,color: Cl.primaryColor)),
           ),
         ),
       ],
@@ -194,7 +194,7 @@ class ProfileRow extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop(); // Dismiss the dialog but don't delete
                     },
-                    child: Text("Cancel", style: TextStyle(fontSize:15.sp,color: Cl.primary_color)),
+                    child: Text("Cancel", style: TextStyle(fontSize:15.sp,color: Cl.primaryColor)),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(

@@ -36,7 +36,7 @@ class _NavigationPageState extends State<NavigationPage> {
       backgroundColor: Colors.white,
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Cl.primary_color,
+        backgroundColor: Cl.primaryColor,
         unselectedItemColor: Colors.white.withOpacity(0.4),
         selectedItemColor: Colors.white,
         currentIndex: _currentIndex,
