@@ -39,6 +39,7 @@ dependencies:
   flutter_svg: ^2.0.17
   dotted_border: ^2.1.0
   lucide_icons: ^0.257.0
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:

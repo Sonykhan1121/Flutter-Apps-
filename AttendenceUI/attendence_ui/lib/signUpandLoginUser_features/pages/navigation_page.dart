@@ -2,8 +2,9 @@ import 'package:attendence_ui/signUpandLoginUser_features/pages/addemployee.dart
 import 'package:attendence_ui/signUpandLoginUser_features/pages/dailyattendence.dart';
 import 'package:attendence_ui/signUpandLoginUser_features/pages/face_attendance_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../Colors/colors.dart';
 import 'employee_list.dart';
 
 class NavigationPage extends StatefulWidget {
@@ -35,8 +36,8 @@ class _NavigationPageState extends State<NavigationPage> {
       backgroundColor: Colors.white,
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF004368),
-        unselectedItemColor: Colors.white.withOpacity(0.2),
+        backgroundColor: Cl.primary_color,
+        unselectedItemColor: Colors.white.withOpacity(0.4),
         selectedItemColor: Colors.white,
         currentIndex: _currentIndex,
 
@@ -49,12 +50,13 @@ class _NavigationPageState extends State<NavigationPage> {
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Employee List'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Devices'),
         ],
-        selectedLabelStyle: TextStyle(fontSize: 14),
-        unselectedLabelStyle: TextStyle(fontSize: 12),
-        iconSize: 24,
+        selectedLabelStyle: TextStyle(fontSize: 8.sp),
+        unselectedLabelStyle: TextStyle(fontSize: 8.sp),
+        iconSize: 24.sp,
       ),
     );
   }
+
 }
 
 // Dummy screen widgets for each tab

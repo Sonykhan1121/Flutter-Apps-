@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../Colors/colors.dart';
 
 class EmployeeList extends StatefulWidget {
   @override
@@ -17,6 +20,7 @@ class _EmployeeListState extends State<EmployeeList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading:IconButton(
           icon: Icon(Icons.arrow_back),
@@ -24,7 +28,8 @@ class _EmployeeListState extends State<EmployeeList> {
             // Navigate to login screen
           },
         ) ,
-        title: Text("Employee List"),
+        title: Text("Employee List",style: TextStyle(fontSize: 20.sp,color: Colors.black.withOpacity(0.6)),),
+        centerTitle: true,
       ),
       body: Padding(
         padding: EdgeInsets.all(20),
@@ -45,7 +50,7 @@ class _EmployeeListState extends State<EmployeeList> {
               padding: const EdgeInsets.all(20.0),
               child: SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 50.h,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
@@ -56,7 +61,7 @@ class _EmployeeListState extends State<EmployeeList> {
                   ),
                   child: Text(
                     "Add Employee",
-                    style: TextStyle(fontSize: 15, color: Colors.white),
+                    style: TextStyle(fontSize: 15.sp, color: Colors.white),
                   ),
                 ),
               ),
@@ -77,30 +82,41 @@ class ProfileRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      child: ListTile(
-        key: _key,
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage("https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg"),
-          radius: 20,
+
+     return GestureDetector(
+       key: _key,
+       onLongPress: (){
+         _showPopupMenu(context);
+       },
+       child: Container(
+        height: 60.h,  // Set height to 60px
+        margin: EdgeInsets.symmetric(vertical: 6),  // Spacing between items
+        padding: EdgeInsets.symmetric(horizontal: 12), // Padding inside the container
+        decoration: BoxDecoration(
+          color: Colors.white,  // Background color
+          borderRadius: BorderRadius.circular(9),  // Border radius
+          border: Border.all(color: Color(0x1A004368)), // 1px solid rgba(0, 67, 104, 0.10)
         ),
-        title: Text(name,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF004368),
-            )),
-        trailing: Icon(Icons.more_vert, color: Color(0xFF004368)),
-        onTap: () {
-          // Define action on tap, e.g., open settings or show more options
-          print('More options for $name');
-        },
-        onLongPress: (){
-          _showPopupMenu(context);
-        },
-      ),
-    );
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between items
+          crossAxisAlignment: CrossAxisAlignment.center, // Center align vertically
+          children: [
+            CircleAvatar(
+              radius: 25.h,  // Image size 50px (diameter)
+              backgroundImage: NetworkImage("https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg"),
+            ),
+            SizedBox(width: 10.w), // Spacing between avatar and text
+            Expanded(
+              child: Text(
+                name,
+                style: TextStyle(fontSize: 15.sp),
+              ),
+            ),
+            Icon(Icons.more_vert, size: 24.w),
+          ],
+        ),
+           ),
+     );
   }
   void _showPopupMenu(BuildContext context) async {
     final RenderBox renderBox = _key.currentContext!.findRenderObject() as RenderBox;
@@ -109,8 +125,8 @@ class ProfileRow extends StatelessWidget {
 
     // Calculate the left and right coordinates to center the menu horizontally
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double left = (screenWidth / 2) - (150 / 2); // Assuming menu width is about 150, adjust if necessary
-    final double right = screenWidth - left - 150; // Same width assumption
+    final double left = (screenWidth / 2) - (150.w / 2); // Assuming menu width is about 150, adjust if necessary
+    final double right = screenWidth - left - 150.w; // Same width assumption
 
     final selection = await showMenu(
       context: context,
@@ -124,15 +140,15 @@ class ProfileRow extends StatelessWidget {
         PopupMenuItem(
           value: 'edit',
           child: ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Edit'),
+            leading: Icon(Icons.edit,color: Cl.primary_color,),
+            title: Text('Edit',style:TextStyle(fontSize:12.sp,fontWeight: FontWeight.w500,color: Cl.primary_color)),
           ),
         ),
         PopupMenuItem(
           value: 'delete',
           child: ListTile(
-            leading: Icon(Icons.delete),
-            title: Text('Delete'),
+            leading: Icon(Icons.delete,color: Cl.primary_color,),
+            title: Text('Delete',style:TextStyle(fontSize:12.sp,fontWeight: FontWeight.w500,color: Cl.primary_color)),
           ),
         ),
       ],
@@ -154,17 +170,17 @@ class ProfileRow extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          title: Icon(Icons.warning_amber_rounded, size: 40, color: Colors.blue), // Adjust color as needed
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+          title: Icon(Icons.warning_amber_rounded, size: 28.sp, color: Colors.blue), // Adjust color as needed
           content: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Are you sure?", style: TextStyle(fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
-              Text("Do you want to delete this Employee?"),
-              SizedBox(height: 20,),
+              Text("Are you sure?", style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.w500)),
+              SizedBox(height: 6.h),
+              Text("Do you want to delete this Employee?",style: TextStyle(color: Colors.black.withOpacity(0.4),fontSize: 12.sp),),
+              SizedBox(height: 26.h,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -172,19 +188,19 @@ class ProfileRow extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF004368).withOpacity(0.3), // Dark grey
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop(); // Dismiss the dialog but don't delete
                     },
-                    child: Text("Cancel", style: TextStyle(color: Colors.black)),
+                    child: Text("Cancel", style: TextStyle(fontSize:15.sp,color: Cl.primary_color)),
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red, // Dark grey
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                     onPressed: () {
@@ -192,7 +208,7 @@ class ProfileRow extends StatelessWidget {
                       // Implement your delete functionality here
                       print('Employee $name deleted');
                     },
-                    child: Text("Delete", style: TextStyle(color: Colors.white)),
+                    child: Text("Delete", style: TextStyle(fontSize:15.sp,color: Colors.white)),
                   ),
                 ],
               )

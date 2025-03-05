@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../Colors/colors.dart';
+import '../widgets/attendence_list_screen.dart';
 
 
 class TabViews extends StatefulWidget {
@@ -26,13 +30,26 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(text: 'Present'),
-            Tab(text: 'Absent'),
-            Tab(text: 'Overtime'),
-          ],
+        bottom: PreferredSize(
+          
+          preferredSize: Size.fromHeight(26.h),
+          child: TabBar(
+            controller: _tabController,
+
+            tabs: [
+              Tab(text: 'Present',),
+              Tab(text: 'Absent'),
+              Tab(text: 'Overtime'),
+            ],
+            unselectedLabelColor: Cl.primary_color.withOpacity(0.6) ,
+            labelStyle: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w500),
+            labelColor: Cl.primary_color,
+
+
+
+            // Better spacing
+            
+          ),
         ),
 
       ),
@@ -48,39 +65,3 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
   }
 }
 
-class AttendanceListScreen extends StatelessWidget {
-  final String status;
-
-  AttendanceListScreen({required this.status});
-
-  final List<Map<String, String>> data = [
-    {"name": "Devon Lane", "image": "https://via.placeholder.com/150"},
-    {"name": "Theresa Webb", "image": "https://via.placeholder.com/150"},
-    {"name": "Annette Black", "image": "https://via.placeholder.com/150"},
-    {"name": "Eleanor Pena", "image": "https://via.placeholder.com/150"},
-    {"name": "Kathryn Murphy", "image": "https://via.placeholder.com/150"},
-    {"name": "Cameron Williamson", "image": "https://via.placeholder.com/150"},
-    {"name": "Bessie Cooper", "image": "https://via.placeholder.com/150"},
-    {"name": "Albert Flores", "image": "https://via.placeholder.com/150"},
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(data[index]['image']!),
-          ),
-          title: Text(data[index]['name']!),
-          trailing: Icon(Icons.more_vert),
-          onTap: () {
-            // Define action on tap
-            print('Selected ${data[index]['name']}');
-          },
-        );
-      },
-    );
-  }
-}

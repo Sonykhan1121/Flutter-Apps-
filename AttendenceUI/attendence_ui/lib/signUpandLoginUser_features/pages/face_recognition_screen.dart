@@ -1,6 +1,9 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../Colors/colors.dart';
 
 class FaceRecognitionScreen extends StatelessWidget {
   @override
@@ -11,7 +14,7 @@ class FaceRecognitionScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: Cl.primary_color),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -20,9 +23,9 @@ class FaceRecognitionScreen extends StatelessWidget {
         title: Text(
           "Face recognize",
           style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey.shade500,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w500,
+            color: Colors.black.withOpacity(0.6),
           ),
         ),
       ),
@@ -31,17 +34,14 @@ class FaceRecognitionScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 10),
+            SizedBox(height: 57.h),
 
             // Description
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                "Please complete face verification to securely confirm your identity.\n"
-                "Your privacy is protected, and this ensures safe access to your account.",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 8, color: Colors.black),
-              ),
+            Text(
+              "Please complete face verification to securely confirm your identity.\n"
+              "Your privacy is protected, and this ensures safe access to your account.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 8.sp, color: Colors.black),
             ),
 
             // Circular image with dotted border
@@ -52,11 +52,11 @@ class FaceRecognitionScreen extends StatelessWidget {
                 DottedBorder(
                   color: Color(0xFF00FB46),
                   borderType: BorderType.Oval,
-                  strokeWidth: 6,
+                  strokeWidth: 7.w,
                   dashPattern: [5,3],
                   child: Container(
-                    width: 276, // Set explicit width
-                    height: 398, // Set explicit height
+                    width: 276.h, // Set explicit width
+                    height: 398.h, // Set explicit height
                   ),
                 ),
 
@@ -64,8 +64,8 @@ class FaceRecognitionScreen extends StatelessWidget {
                 ClipOval(
                   child: Image.asset(
                     "assets/images/profile.png",
-                    width: 266,  // Slightly smaller than border
-                    height: 388,
+                    width: 266.h,  // Slightly smaller than border
+                    height: 388.h,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -75,7 +75,7 @@ class FaceRecognitionScreen extends StatelessWidget {
             // Instruction text
             Text(
               "Keep your face in center",
-              style: TextStyle(fontSize: 12, color: Colors.black),
+              style: TextStyle(fontSize: 12.sp, color: Colors.black),
             ),
 
             SizedBox(height: 30),
@@ -85,18 +85,18 @@ class FaceRecognitionScreen extends StatelessWidget {
               padding: const EdgeInsets.all(20.0),
               child: SizedBox(
                 width: double.infinity,
-                height: 50,
+                height: 50.h,
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF004368), // Dark blue
+                    backgroundColor: Cl.primary_color, // Dark blue
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(6.w),
                     ),
                   ),
                   child: Text(
                     "Enroll Employee",
-                    style: TextStyle(fontSize: 15, color: Colors.white),
+                    style: TextStyle(fontSize: 15.sp, color: Colors.white),
                   ),
                 ),
               ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../Colors/colors.dart';
 
 class DatePicker extends StatelessWidget {
   final DateTime selectedDate;
@@ -9,7 +12,7 @@ class DatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.only(bottom: 0, top: 23.0,left: 25,right: 25),
       child: InkWell(
         onTap: () async {
           DateTime? newDate = await showDatePicker(
@@ -23,20 +26,22 @@ class DatePicker extends StatelessWidget {
           }
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(9.0),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.calendar_month, color: Colors.grey),
+              Icon(Icons.calendar_month, color: Cl.primary_color,size: 20.w,),
+              SizedBox(width: 20.w,),
               Text(
                 "${formatDate(selectedDate)}",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500,color: Cl.primary_color),
               ),
-              Icon(Icons.arrow_drop_down, color: Colors.grey),
+              Spacer(),
+              Icon(Icons.arrow_drop_down, color: Cl.primary_color.withOpacity(0.6),),
             ],
           ),
         ),
