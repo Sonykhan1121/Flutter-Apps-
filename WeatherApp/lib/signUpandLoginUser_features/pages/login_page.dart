@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/signUpandLoginUser_features/pages/singup_page.dart';
 
 import '../providers/user_provider.dart';
 
@@ -78,10 +79,23 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _login,
-                child: Text('Log In'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: _login,
+                    child: Text('Log In'),
+                  ),
+                  ElevatedButton(
+                    onPressed: (){
+                      // Navigate to Sign Up page
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage()));
+                    },
+                    child: Text('SignUp'),
+                  ),
+                ],
               ),
+
               Consumer<UserProvider>(builder: (_,pro,_){
                 return Text('User: ${pro.message}');
               }),

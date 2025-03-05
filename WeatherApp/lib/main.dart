@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/signUpandLoginUser_features/pages/login_page.dart';
 import 'package:weather_app/providers/current_weather_provider.dart';
 import 'package:weather_app/providers/themeprovider.dart';
+import 'package:weather_app/signUpandLoginUser_features/pages/login_page.dart';
 import 'package:weather_app/signUpandLoginUser_features/pages/singup_page.dart';
+import 'package:weather_app/signUpandLoginUser_features/pages/verifyaccountpage.dart';
 import 'package:weather_app/signUpandLoginUser_features/providers/user_provider.dart';
-import 'package:weather_app/views/current_weather_screen.dart';
-import 'package:weather_app/views/homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Weather App',
           theme: value.themeData,
-          home:  SignupPage(), // Set HomeScreen as the home
+          home:  LoginPage(), // Set HomeScreen as the home
         );
       },),
     );

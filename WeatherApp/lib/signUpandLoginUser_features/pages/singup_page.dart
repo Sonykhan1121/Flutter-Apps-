@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/signUpandLoginUser_features/pages/verifyaccountpage.dart';
 
 import '../models/user.dart';
 import '../providers/user_provider.dart';
@@ -139,6 +140,20 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
               ),
+               ElevatedButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyAccountPage()));
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text(
+                  'Verification page',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+
               Consumer<UserProvider>(
                 builder: (context, provider, child) {
                   return Text(provider.message);

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
@@ -70,6 +71,20 @@ class UserProvider with ChangeNotifier {
         _message = "Something went wrong";
     }
 
+    notifyListeners();
+  }
+  Future<void> verifyUser(String code) async
+  {
+    _isLoading = true;
+    notifyListeners();
+    http.Response response = await _userService.verifyAccount(code);
+    _isLoading = false;
+
+    if (response.statusCode == 200) {
+      _message = "User verified succesfully";
+    } else {
+      _message  ="Verification failed. Please try again.";
+    }
     notifyListeners();
   }
 
