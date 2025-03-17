@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:attendence_ui/signUpandLoginUser_features/pages/face_recognition_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../Colors/colors.dart';
+import 'face_detection_screen.dart';
 
 class AddEmployee extends StatefulWidget {
   const AddEmployee({super.key});
@@ -13,6 +17,33 @@ class AddEmployee extends StatefulWidget {
 }
 
 class _AddEmployeeState extends State<AddEmployee> {
+   File? _image;
+
+
+
+  Future<void> _pickImage() async {
+    try {
+      final imgFile = await Navigator.push<File?>(
+        context,
+        MaterialPageRoute(builder: (context) => FaceDetectionScreen()),
+      );
+
+      if (imgFile == null) {
+        Fluttertoast.showToast(msg: "⚠️ No image selected!", backgroundColor: Colors.orange);
+        return;
+      }
+
+      // final croppedFace = await cropFace(imgFile);
+      setState(() => _image =imgFile); // Use cropped face or original
+
+      if (_image == null) {
+        Fluttertoast.showToast(msg: "⚠️ Face not detected properly!", backgroundColor: Colors.orange);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(msg: "⚠️ Error picking image: $e", backgroundColor: Colors.red);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,50 +67,56 @@ class _AddEmployeeState extends State<AddEmployee> {
         child: Column(
 
           children: [
-            Stack(
-              clipBehavior: Clip.none, // Allow overlapping
-              children: [
-                // Circular Profile Avatar
-                Container(
-                  width: 158.w,
-                  height: 158.h,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1.w,color: Cl.primaryColor),
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent, // Top color
-                        Cl.primaryColor.withOpacity(0.6), // Bottom quarter color
-                      ],
-                      stops: [0.75, 1.0], // 75% is blue, 25% is red
-                    ),
-                  ),
-                  child: Center(
-                    child: Icon(Icons.person, color: Colors.blue.shade900, size: 100.sp),
-                  ),
-                ),
-                // Camera Icon Positioned at Bottom-Center
-                Positioned(
-
-                  bottom: 5,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Container(
-                      width: 30,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        // border: Border.all(width: 1),
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(5),
+            GestureDetector(
+              onTap: _pickImage,
+              child: Stack(
+                clipBehavior: Clip.none, // Allow overlapping
+                children: [
+                  // Circular Profile Avatar
+                  Container(
+                    width: 158.w,
+                    height: 158.h,
+                    
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.w,color: Cl.primaryColor),
+                      shape: BoxShape.circle,
+                      image: _image!=null?DecorationImage(image: FileImage(_image!)):null,
+                      
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent, // Top color
+                          Cl.primaryColor.withOpacity(0.6), // Bottom quarter color
+                        ],
+                        stops: [0.75, 1.0], // 75% is blue, 25% is red
                       ),
-                      child: Icon(Icons.camera_alt, color: Colors.white, size: 16),
+                    ),
+                    child: Center(
+                      child: Icon(_image==null?Icons.person:null, color: Colors.blue.shade900, size: 100.sp),
                     ),
                   ),
-                ),
-              ],
+                  // Camera Icon Positioned at Bottom-Center
+                  Positioned(
+              
+                    bottom: 5,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Container(
+                        width: 30,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          // border: Border.all(width: 1),
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Icon(Icons.camera_alt, color: Colors.white, size: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
 
             SizedBox(height: 10),
@@ -102,7 +139,15 @@ class _AddEmployeeState extends State<AddEmployee> {
               height: 48.h,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>FaceRecognitionScreen()));
+                  Fluttertoast.showToast(
+                    msg: "This is a Toast message",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 },
                 icon: SvgPicture.asset(
                   "assets/icons/button_icon.svg",  // Path to your SVG
@@ -110,7 +155,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                   height: 20.h,
                   colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),  // Set color
                 ),
-                label: Text("Recognize Face", style: TextStyle(fontSize: 15.sp, color: Colors.white)),
+                label: Text("Save Employee", style: TextStyle(fontSize: 15.sp, color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF004368),
                   shape: RoundedRectangleBorder(

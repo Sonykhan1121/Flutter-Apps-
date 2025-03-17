@@ -29,7 +29,9 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         bottom: PreferredSize(
           
           preferredSize: Size.fromHeight(26.h),

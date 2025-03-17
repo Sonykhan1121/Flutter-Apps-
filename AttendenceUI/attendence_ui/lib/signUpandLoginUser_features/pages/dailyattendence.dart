@@ -20,12 +20,16 @@ class _DailyAttendanceState extends State<DailyAttendence> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Daily Attendance",style: TextStyle(fontSize: 20.sp,color: Colors.black.withOpacity(0.6)),),
         centerTitle: true,
+        backgroundColor: Colors.white,
 
       ),
       body: Column(
+
         children:[
           DatePicker(selectedDate: selectedDate, onSelectDate: (newDate) {
             setState(() {

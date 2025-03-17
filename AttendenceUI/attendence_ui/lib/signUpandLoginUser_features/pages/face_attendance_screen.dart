@@ -106,7 +106,7 @@ class FaceAttendanceScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16.w,
                 mainAxisSpacing: 16.h,
-                childAspectRatio: (width<430)?1.2:1.3,
+                childAspectRatio: (width<430)?1.1:1.3,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   attendanceCard('Total Employee', '150', LucideIcons.briefcase),
