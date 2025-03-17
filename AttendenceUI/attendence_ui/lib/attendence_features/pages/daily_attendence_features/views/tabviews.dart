@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../Colors/colors.dart';
-import '../widgets/attendence_list_screen.dart';
+import '../../../Colors/colors.dart';
+import 'attendence_list_screen.dart';
 
 
 class TabViews extends StatefulWidget {

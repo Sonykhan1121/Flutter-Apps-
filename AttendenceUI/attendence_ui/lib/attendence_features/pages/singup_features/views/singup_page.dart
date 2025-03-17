@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user.dart';
-import '../providers/user_provider.dart';
+import '../../../models/user.dart';
+import '../../../providers/user_provider.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

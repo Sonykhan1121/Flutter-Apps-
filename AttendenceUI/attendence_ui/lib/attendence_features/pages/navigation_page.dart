@@ -1,11 +1,13 @@
-import 'package:attendence_ui/signUpandLoginUser_features/pages/addemployee.dart';
-import 'package:attendence_ui/signUpandLoginUser_features/pages/dailyattendence.dart';
-import 'package:attendence_ui/signUpandLoginUser_features/pages/face_attendance_screen.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../Colors/colors.dart';
-import 'employee_list.dart';
+import 'add_employee_features/views/addemployee.dart';
+import 'daily_attendence_features/views/dailyattendence.dart';
+import 'employee_list_features/views/employee_list.dart';
+import 'homepage_features/views/homebar.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
@@ -16,8 +18,8 @@ class _NavigationPageState extends State<NavigationPage> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [
-    FaceAttendanceScreen(),
-    DailyAttendence(),
+    HomeBar(),
+    DailyAttendance(),
     AddEmployee(),
     EmployeeList(),
     DeviceSettingsScreen(),

@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:attendence_ui/signUpandLoginUser_features/pages/face_recognition_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../Colors/colors.dart';
+import '../../../Colors/colors.dart';
 import 'face_detection_screen.dart';
 
 class AddEmployee extends StatefulWidget {
