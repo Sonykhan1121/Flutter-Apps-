@@ -385,14 +385,17 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                     return Positioned(
                       left: rect.left - 20,
                       top: rect.top - 70,
-                      child: ClipOval(
-                        child: Container(
-                          width: rect.width * 0.7 * sx, // Maintain the same width and height as needed
-                          height: rect.height * 0.9 * sy,
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 2),
-
+                      child: Container(
+                        width: rect.width * 0.7 * sx, // Maintain the same width and height as needed
+                        height: rect.height * 0.9 * sy,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blue, // Border color
+                            width: 2, // Border width
                           ),
+                          borderRadius: BorderRadius.circular(50),
+
+
                         ),
                       ),
                     );
@@ -404,7 +407,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                       height: _validationRect.height,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: _isValidFace ? Colors.blue : Colors.red,
+                          color: _isValidFace ? Colors.transparent : Colors.transparent,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(8),

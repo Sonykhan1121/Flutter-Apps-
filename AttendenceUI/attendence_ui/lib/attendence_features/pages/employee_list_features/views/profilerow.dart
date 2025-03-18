@@ -134,7 +134,7 @@ class _ProfileRowState extends State<ProfileRow> {
                       ),
                       onPressed: () {
                         Navigator.of(context).pop(); // Close bottom sheet
-                        widget.onDelete(); // Call delete function
+                      // Call delete function
                       },
                       child: Text("Delete", style: TextStyle(color: Colors.white)),
                     ),

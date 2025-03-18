@@ -95,9 +95,18 @@ class _HomeBarState extends State<HomeBar> {
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
-                      elevation: 5,
+                      elevation: 00.5,
+
+                    ).copyWith(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          // Set the border radius here
+                        ),
+                      ),
                     ),
-                  ),
+                  )
+
                 ],
               ),
               SizedBox(height: 20.h),
@@ -160,11 +169,11 @@ class _HomeBarState extends State<HomeBar> {
       padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 20.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            blurRadius: 12,
+            blurRadius: 8,
             offset: Offset(0, 4),
           ),
         ],
