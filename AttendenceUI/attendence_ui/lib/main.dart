@@ -1,4 +1,4 @@
-
+import 'package:attendence_ui/attendence_features/pages/add_employee_features/provider/add_employee_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,12 +17,13 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-      ChangeNotifierProvider(create: (_)=>UserProvider()),
-      ChangeNotifierProvider(create: (_)=>HomeBarProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => HomeBarProvider()),
         ChangeNotifierProvider(create: (_) => DailyAttendanceProvider()),
         ChangeNotifierProvider(create: (_) => EmployeeProvider()),
-    ],
-    child: MyApp(),
+        ChangeNotifierProvider(create: (_) => AddEmployeeProvider()),
+      ],
+      child: MyApp(),
     ),
   );
 }
@@ -37,14 +38,13 @@ class MyApp extends StatelessWidget {
       designSize: Size(390, 844),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context,child) {
+      builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-          home:  NavigationPage(),
+          home: NavigationPage(),
         );
       },
-
     );
   }
 }

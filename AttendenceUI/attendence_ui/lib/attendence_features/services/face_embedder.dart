@@ -88,9 +88,7 @@ class FaceEmbedder {
       throw Exception('Invalid output shape: ${output.shape}');
     }
     // CHANGE: More specific type check using TfLiteType
-    if (input.type != TfLiteType.kTfLiteFloat32) {
-      throw Exception('Input tensor must be Float32');
-    }
+
   }
 
   void dispose() {

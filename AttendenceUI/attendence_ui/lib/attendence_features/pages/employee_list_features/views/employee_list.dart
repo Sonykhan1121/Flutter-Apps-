@@ -1,15 +1,21 @@
+import 'dart:io';
+
+import 'package:attendence_ui/attendence_features/pages/add_employee_features/views/addemployee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/views/profilerow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../../navigation_page.dart';
 import '../provider/employee_provider.dart';
 
 
 class EmployeeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final employeeProvider = Provider.of<EmployeeProvider>(context);
+    final employeeProvider = Provider.of<EmployeeProvider>(context,listen: true);
+
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -36,7 +42,7 @@ class EmployeeList extends StatelessWidget {
                     imageUrl: employeeProvider.profiles[index]['image'],
                     onDelete: () => employeeProvider.deleteEmployee(employeeProvider.profiles[index]['name']),
                     onEdit: (newName, newImage) => employeeProvider.editEmployee(
-                        employeeProvider.profiles[index]['name'], newName, newImage),
+                        employeeProvider.profiles[index]['name'], newName, newImage!),
                   );
                 },
               ),
@@ -49,7 +55,10 @@ class EmployeeList extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Add a new employee (you can modify this to show a form)
-                    employeeProvider.addEmployee('New Employee', 'image_url');
+                    final navPage = context.findAncestorStateOfType<NavigationPageState>();
+                    if (navPage != null) {
+                      navPage.onTabTapped(2); // 2 is the index of the "Add Employee" tab
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF004368),

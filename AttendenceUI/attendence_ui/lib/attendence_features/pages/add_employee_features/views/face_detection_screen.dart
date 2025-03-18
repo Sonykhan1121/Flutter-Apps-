@@ -386,18 +386,13 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                       left: rect.left - 20,
                       top: rect.top - 70,
                       child: ClipOval(
-                        child: TweenAnimationBuilder(
-                          tween: Tween<double>(begin: 0, end: 1),
-                          duration: const Duration(seconds: 2),
-                          builder: (context, value, child) {
-                            return Container(
-                              width: _validationRect.width,
-                              height: 5, // Height of the scanning line
-                              decoration: BoxDecoration(
-                                color: _isValidFace ? Colors.green : Colors.red,
-                              ),
-                            );
-                          },
+                        child: Container(
+                          width: rect.width * 0.7 * sx, // Maintain the same width and height as needed
+                          height: rect.height * 0.9 * sy,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 2),
+
+                          ),
                         ),
                       ),
                     );
@@ -409,7 +404,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                       height: _validationRect.height,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: _isValidFace ? Colors.transparent : Colors.white,
+                          color: _isValidFace ? Colors.blue : Colors.red,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(8),
@@ -429,7 +424,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                   ),
                 ],
               )
-              : const Center(child: CircularProgressIndicator()),
+              :  Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -465,35 +460,3 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
     );
   }
 }
-// class FacePainter extends CustomPainter {
-//   final List<Face> faces;
-//   final Rect validationRect;
-//
-//   FacePainter({required this.faces, required this.validationRect});
-//
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final paint = Paint()
-//       ..color = Colors.red
-//       ..style = PaintingStyle.stroke
-//       ..strokeWidth = 3.0;
-//
-//     final validPaint = Paint()
-//       ..color = Colors.green
-//       ..style = PaintingStyle.stroke
-//       ..strokeWidth = 4.0;
-//
-//     // Draw validation rectangle
-//     canvas.drawRect(validationRect, validPaint);
-//
-//     // Draw face bounding boxes
-//     for (var face in faces) {
-//       canvas.drawRect(face.boundingBox, paint);
-//     }
-//   }
-//
-//   @override
-//   bool shouldRepaint(FacePainter oldDelegate) {
-//     return oldDelegate.faces != faces || oldDelegate.validationRect != validationRect;
-//   }
-// }

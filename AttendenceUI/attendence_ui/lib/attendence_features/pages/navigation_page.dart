@@ -11,10 +11,10 @@ import 'homepage_features/views/homebar.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
-  _NavigationPageState createState() => _NavigationPageState();
+  NavigationPageState createState() => NavigationPageState();
 }
 
-class _NavigationPageState extends State<NavigationPage> {
+class NavigationPageState extends State<NavigationPage> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [

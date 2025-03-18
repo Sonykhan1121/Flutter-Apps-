@@ -9,6 +9,11 @@ class DailyAttendanceProvider extends ChangeNotifier {
     {"name": "Theresa Webb", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Absent"},
     {"name": "Annette Black", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Overtime"},
     {"name": "Eleanor Pena", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Present"},
+    {"name": "Kathryn Murphy", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Overtime"},
+    {"name": "Kathryn Murphy", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Overtime"},
+    {"name": "Kathryn Murphy", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Overtime"},
+    {"name": "Kathryn Murphy", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Overtime"},
+    {"name": "Kathryn Murphy", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Absent"},
     {"name": "Kathryn Murphy", "image": "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-female-user-profile-vector-illustration-isolated-background-women-profile-sign-business-concept_157943-38866.jpg", "status": "Absent"},
   ];
 
