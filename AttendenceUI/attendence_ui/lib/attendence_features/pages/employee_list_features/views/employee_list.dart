@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:attendence_ui/attendence_features/pages/add_employee_features/views/addemployee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/views/profilerow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,13 +6,10 @@ import 'package:provider/provider.dart';
 import '../../navigation_page.dart';
 import '../provider/employee_provider.dart';
 
-
 class EmployeeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final employeeProvider = Provider.of<EmployeeProvider>(context,listen: true);
-
-
+    final employeeProvider = Provider.of<EmployeeProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,7 +20,13 @@ class EmployeeList extends StatelessWidget {
             // Navigate to login screen
           },
         ),
-        title: Text("Employee List", style: TextStyle(fontSize: 20.sp, color: Colors.black.withOpacity(0.6))),
+        title: Text(
+          "Employee List",
+          style: TextStyle(
+            fontSize: 20.sp,
+            color: Colors.black.withOpacity(0.6),
+          ),
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -38,33 +38,38 @@ class EmployeeList extends StatelessWidget {
                 itemCount: employeeProvider.profiles.length,
                 itemBuilder: (context, index) {
                   return ProfileRow(
-                    name: employeeProvider.profiles[index]['name'],
-                    imageUrl: employeeProvider.profiles[index]['image'],
-                    onDelete: () => employeeProvider.deleteEmployee(employeeProvider.profiles[index]['name']),
-                    onEdit: (newName, newImage) => employeeProvider.editEmployee(
-                        employeeProvider.profiles[index]['name'], newName, newImage!),
+                    employee: employeeProvider.profiles[index],
+
                   );
                 },
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(20.0),
               child: SizedBox(
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton(
                   onPressed: () {
                     // Add a new employee (you can modify this to show a form)
-                    final navPage = context.findAncestorStateOfType<NavigationPageState>();
+                    final navPage =
+                        context.findAncestorStateOfType<NavigationPageState>();
                     if (navPage != null) {
-                      navPage.onTabTapped(2); // 2 is the index of the "Add Employee" tab
+                      navPage.onTabTapped(
+                        2,
+                      ); // 2 is the index of the "Add Employee" tab
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF004368),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                  child: Text("Add Employee", style: TextStyle(fontSize: 15.sp, color: Colors.white)),
+                  child: Text(
+                    "Add Employee",
+                    style: TextStyle(fontSize: 15.sp, color: Colors.white),
+                  ),
                 ),
               ),
             ),

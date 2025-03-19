@@ -24,12 +24,7 @@ class DailyAttendance extends StatelessWidget {
         builder: (context, attendanceProvider, child) {
           return Column(
             children: [
-              DatePicker(
-                selectedDate: attendanceProvider.selectedDate,
-                onSelectDate: (newDate) {
-                  attendanceProvider.updateSelectedDate(newDate);
-                },
-              ),
+              DatePicker(),
               Expanded(child: TabViews()),
             ],
           );

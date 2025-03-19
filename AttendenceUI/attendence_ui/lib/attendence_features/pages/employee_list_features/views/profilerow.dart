@@ -1,16 +1,13 @@
-import 'dart:io';
-import 'dart:typed_data';
-
+import 'package:attendence_ui/attendence_features/models/employee.dart';
+import 'package:attendence_ui/attendence_features/pages/employee_list_features/provider/employee_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 class ProfileRow extends StatefulWidget {
-  final String name;
-  final Uint8List? imageUrl;
-  final Function onDelete;
-  final Function(String, File?) onEdit;
+  final Employee employee;
 
-  ProfileRow({required this.name, required this.imageUrl, required this.onDelete, required this.onEdit});
+  ProfileRow({required this.employee});
 
   @override
   State<ProfileRow> createState() => _ProfileRowState();
@@ -19,6 +16,8 @@ class ProfileRow extends StatefulWidget {
 class _ProfileRowState extends State<ProfileRow> {
   @override
   Widget build(BuildContext context) {
+    print("salary : ${widget.employee.salary}");
+
     final GlobalKey _key = GlobalKey();
 
     return Container(
@@ -36,67 +35,121 @@ class _ProfileRowState extends State<ProfileRow> {
         children: [
           CircleAvatar(
             radius: 25.h,
-            backgroundImage: widget.imageUrl == null
-                ? AssetImage("assets/images/profile_1.png")
-                : MemoryImage(widget.imageUrl!), // Use MemoryImage to load image from bytes
+            backgroundImage:
+                widget.employee.imageFile == null
+                    ? AssetImage("assets/images/profile_1.png")
+                    : MemoryImage(
+                      widget.employee.imageFile,
+                    ), // Use MemoryImage to load image from bytes
           ),
           SizedBox(width: 10.w),
           Expanded(
-            child: Text(widget.name, style: TextStyle(fontSize: 15.sp)),
+            child: Text(
+              widget.employee.name,
+              style: TextStyle(fontSize: 15.sp),
+            ),
           ),
           GestureDetector(
-              key: _key,
-              onTap: () => _showPopupMenu(context, _key),
-              child: Icon(Icons.more_vert, size: 24.w)
+            key: _key,
+            onTap: () => _showPopupMenu(context, _key),
+            child: Icon(Icons.more_vert, size: 24.w),
           ),
-
         ],
       ),
     );
   }
 
   void _showPopupMenu(BuildContext context, GlobalKey key) async {
-    final RenderBox renderBox = key.currentContext?.findRenderObject() as RenderBox;
-    final offset = renderBox.localToGlobal(Offset.zero); // Get the position of the widget
+    final RenderBox renderBox =
+        key.currentContext?.findRenderObject() as RenderBox;
+    final offset = renderBox.localToGlobal(
+      Offset.zero,
+    ); // Get the position of the widget
     final size = renderBox.size; // Get the size of the widget
     print("${size.height},${size.width}");
     final selection = await showMenu(
       context: context,
       position: RelativeRect.fromLTRB(
-        (MediaQuery.of(context).size.width/2) ,  // X position, centered
-        offset.dy-10 + 2*size.height,  // Y position, just below the widget
-        (MediaQuery.of(context).size.width/2),
-          offset.dy + size.height + 100,
+        (MediaQuery.of(context).size.width / 2), // X position, centered
+        offset.dy - 10 + 2 * size.height, // Y position, just below the widget
+        (MediaQuery.of(context).size.width / 2),
+        offset.dy + size.height + 100,
       ),
       items: [
         PopupMenuItem(
           value: 'edit',
-          child: ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Edit'),
-          ),
+          child: ListTile(leading: Icon(Icons.edit), title: Text('Edit')),
         ),
         PopupMenuItem(
           value: 'delete',
-          child: ListTile(
-            leading: Icon(Icons.delete),
-            title: Text('Delete'),
-          ),
+          child: ListTile(leading: Icon(Icons.delete), title: Text('Delete')),
         ),
       ],
       elevation: 8.0,
     );
 
     if (selection == 'edit') {
-      // Edit functionality (you can pass new name/image to onEdit)
-      widget.onEdit('New Name', null);
-    } else if (selection == 'delete') {
-       // Close menu before opening the delete dialog
-      _showDeleteDialog(context);
+      _showPopupDialog();
 
+      // pop dialog text field will open
+      // Open a dialog with input field for the new name
+    } else if (selection == 'delete') {
+      // Close menu before opening the delete dialog
+      _showDeleteDialog(context);
     }
   }
+
+  void _showPopupDialog() {
+    TextEditingController nameController = TextEditingController();
+
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Enter New Name"),
+          content: TextField(
+
+            controller: nameController,
+            decoration: InputDecoration(
+              hintText: "New Name",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close dialog
+              },
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final employeeProvider = Provider.of<EmployeeProvider>(
+                  context,
+                  listen: false,
+                );
+
+                employeeProvider.editEmployee(
+                  widget.employee.id!,
+                  widget.employee.name!,
+                  nameController.text.toString(),
+                );
+                Navigator.pop(context);
+              },
+              child: Text("Save"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showDeleteDialog(BuildContext context) {
+    final employeeProvider = Provider.of<EmployeeProvider>(
+      context,
+      listen: false,
+    );
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -104,11 +157,13 @@ class _ProfileRowState extends State<ProfileRow> {
       ),
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(30),
+
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.warning_rounded, size: 50, color: Colors.blueAccent), // Top icon
+              Icon(Icons.warning_rounded, size: 50, color: Color(0xFF004368)),
+              // Top icon
               SizedBox(height: 10),
               Text(
                 "Are you sure?",
@@ -118,7 +173,7 @@ class _ProfileRowState extends State<ProfileRow> {
               Text(
                 "Do you want to delete this employee?",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: TextStyle(fontSize: 14, color: Color(0xFF004368)),
               ),
               SizedBox(height: 20),
               Row(
@@ -133,10 +188,16 @@ class _ProfileRowState extends State<ProfileRow> {
                         padding: EdgeInsets.symmetric(vertical: 12),
                       ),
                       onPressed: () {
+                        print('id : ${widget.employee.id}');
+
+                        employeeProvider.deleteEmployee(widget.employee.id!);
                         Navigator.of(context).pop(); // Close bottom sheet
-                      // Call delete function
+                        // Call delete function
                       },
-                      child: Text("Delete", style: TextStyle(color: Colors.white)),
+                      child: Text(
+                        "Delete",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -152,7 +213,10 @@ class _ProfileRowState extends State<ProfileRow> {
                       onPressed: () {
                         Navigator.of(context).pop(); // Close bottom sheet
                       },
-                      child: Text("Cancel", style: TextStyle(color: Colors.black)),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ),
                 ],
@@ -163,5 +227,4 @@ class _ProfileRowState extends State<ProfileRow> {
       },
     );
   }
-
 }

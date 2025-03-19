@@ -10,9 +10,16 @@ import 'attendence_features/pages/homepage_features/provider/homeprovider.dart';
 import 'attendence_features/pages/navigation_page.dart';
 import 'attendence_features/providers/user_provider.dart';
 
-void main() {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Keep the splash screen visible while app is initializing
+  FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+
+  // Your initialization code here (e.g., loading resources, async tasks)
+  await Future.delayed(Duration(seconds: 1));  // Simulating some delay
+
+  // Once the initialization is done, remove the splash screen
   FlutterNativeSplash.remove();
   runApp(
     MultiProvider(

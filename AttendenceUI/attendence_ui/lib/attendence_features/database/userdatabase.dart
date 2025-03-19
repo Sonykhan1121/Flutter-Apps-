@@ -51,7 +51,7 @@ class UserDatabase {
         $columnSalary REAL NOT NULL,
         $columnOvertimeRate REAL NOT NULL,
         $columnEmbedding BLOB NOT NULL,
-        $columnImageFile BLOB NOT NULL  -- Image file column set to NOT NULL
+        $columnImageFile BLOB NOT NULL  
       )
     ''');
 
@@ -131,20 +131,28 @@ class UserDatabase {
   }
 
   // Update an existing user
-  Future<void> updateUser(String oldName, String newName, File? newImageFile) async {
+  Future<void> updateUser(int columnId ,String oldName, String newName) async {
     final db = await database;
-    if (newImageFile == null) {
-      throw Exception("Image file is required for update");
-    }
+
 
     await db.update(
       table,
       {
         columnName: newName,
-        columnImageFile: _fileToBytes(newImageFile), // Update image file (NOT NULL)
+
       },
-      where: '$columnName = ?',
-      whereArgs: [oldName],
+      where: '$columnId = ?',
+      whereArgs: [columnId],
+    );
+  }
+  Future<void> deleteUser(int cid) async
+  {
+    final db = await database;
+
+    await db.delete(
+      table,
+      where: '$columnId = ?',
+      whereArgs: [cid],
     );
   }
 
@@ -166,20 +174,6 @@ class UserDatabase {
     );
   }
 
-  // Convert a File to bytes (for storing images as BLOB)
-  Future<Uint8List> _fileToBytes(File? file) async {
-    if (file == null) {
-      throw Exception("File is required");
-    }
-    return await file.readAsBytes(); // Convert file to bytes
-  }
-
-  // Convert BLOB back to a File (if needed)
-  File? _bytesToFile(Uint8List bytes) {
-    if (bytes.isEmpty) return null;
-    // For demonstration, create a file from the bytes (you could adjust path or use temporary storage)
-    return File('path_to_file'); // Modify as per your app's file management
-  }
 
   // Close the database
   Future<void> close() async {

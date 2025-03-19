@@ -1,10 +1,14 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image/image.dart' as img;
+import 'package:permission_handler/permission_handler.dart';
 
 class FaceDetectionScreen extends StatefulWidget {
   const FaceDetectionScreen({Key? key}) : super(key: key);
@@ -26,7 +30,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
   double _validationSize = 512;
   late double _validationwidthSize;
   late double _validationheightSize;
-  double sx =0,sy=0;
+  double sx = 0, sy = 0;
 
   // Fix: Initialize _validationRect with a default value to avoid late initialization error
   Rect _validationRect = Rect.zero;
@@ -34,7 +38,8 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
   @override
   void initState() {
     super.initState();
-    _initializeCamera();
+
+    _requestCameraPermission();
   }
 
   @override
@@ -55,21 +60,46 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
         enableLandmarks: true,
         enableClassification: true,
         enableTracking: true,
-        minFaceSize: 0.25,
+        minFaceSize: 0.7,
       ),
     );
   }
 
+  void showToast(String msg) {
+    Fluttertoast.showToast(msg: msg);
+  }
+
+  Future<void> _requestCameraPermission() async {
+    PermissionStatus status = await Permission.camera.status;
+
+    if (status.isDenied) {
+      // showToast("We need camera access for face detection.");
+      status = await Permission.camera.request();
+    }
+
+    if (status.isGranted) {
+      // showToast("Camera permission granted.");
+      _initializeCamera();
+    } else if (status.isPermanentlyDenied) {
+      showToast("Camera permission permanently denied. Opening settings...");
+      await openAppSettings();
+    } else {
+      showToast("Camera permission denied.");
+    }
+  }
+
+
   Future<void> _initializeCamera() async {
     try {
+
+
       final cameras = await availableCameras();
-      // Ensure we have a front camera
       final frontCamera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.front,
         orElse: () => cameras.first,
       );
 
-      _controller = CameraController(frontCamera, ResolutionPreset.high);
+      _controller = CameraController(frontCamera, ResolutionPreset.ultraHigh);
 
       await _controller.initialize();
       if (!mounted) return;
@@ -80,14 +110,9 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
         _isCameraInitialized = true;
       });
 
-      // We need to get the screen dimensions after the first frame
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
-
-        // Calculate the validation rectangle based on screen dimensions
         _calculateValidationRect();
-
-        // Start the image stream after calculating the validation rectangle
         _controller.startImageStream(_processCameraImage);
       });
     } catch (e) {
@@ -113,7 +138,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
     // Calculate scaling factors
     double scaleX = screenWidth / previewWidth;
     double scaleY = screenHeight / previewHeight;
-    sx  = scaleX;
+    sx = scaleX;
     sy = scaleY;
     // Set validation rectangle dynamically
     _validationwidthSize = previewWidth * 0.7 * scaleX;
@@ -375,8 +400,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                 children: [
                   Positioned.fill(
                     child: RotatedBox(
-                      quarterTurns:
-                          4, // Rotate 270 degrees (90 counter-clockwise)
+                      quarterTurns: 4, // Rotate camera
                       child: SizedBox.expand(child: CameraPreview(_controller)),
                     ),
                   ),
@@ -384,18 +408,15 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                     final rect = face.boundingBox;
                     return Positioned(
                       left: rect.left - 20,
-                      top: rect.top - 70,
-                      child: Container(
-                        width: rect.width * 0.7 * sx, // Maintain the same width and height as needed
-                        height: rect.height * 0.9 * sy,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.blue, // Border color
-                            width: 2, // Border width
-                          ),
-                          borderRadius: BorderRadius.circular(50),
-
-
+                      top: rect.top - 100,
+                      child: DottedBorder(
+                        color: Color(0xFF00FB46),
+                        borderType: BorderType.Oval,
+                        strokeWidth: 7.w,
+                        dashPattern: [5, 3],
+                        child: Container(
+                          width: rect.width * 0.7 * sx, // Set explicit width
+                          height: rect.height * 0.9 * sy, // Set explicit height
                         ),
                       ),
                     );
@@ -407,7 +428,10 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                       height: _validationRect.height,
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: _isValidFace ? Colors.transparent : Colors.transparent,
+                          color:
+                              _isValidFace
+                                  ? Colors.transparent
+                                  : Colors.transparent,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(8),
@@ -427,7 +451,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
                   ),
                 ],
               )
-              :  Center(child: CircularProgressIndicator()),
+              : Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -439,7 +463,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
       child: Column(
         children: [
           Text(
-            _isValidFace ? "Hold still..." : "Align face in the square",
+            _isValidFace ? "Hold still..." : "Keep your face in center",
             style: TextStyle(
               color: _isValidFace ? Colors.green : Colors.white,
               fontSize: 20,

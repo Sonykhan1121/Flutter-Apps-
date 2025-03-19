@@ -1,71 +1,69 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../../../database/userdatabase.dart';
- // Assuming UserDatabase class is imported from the file above
+import '../../../models/employee.dart';
+// Assuming Employee class is in this file
 
 class EmployeeProvider with ChangeNotifier {
   final UserDatabase _userDatabase = UserDatabase();
 
-  List<Map<String, dynamic>> _profiles = [
-    {
-      "name": "test1",
-      "image": null, // Assuming 'image' field contains a valid file path
-    },
-    {
-      "name": "test2",
-      "image": null, // Assuming 'image' field contains a valid file path
-    },
-    {
-      "name": "test3",
-      "image": null, // Assuming 'image' field contains a valid file path
-    },
-  ];
+  List<Employee> _profiles = []; // Change from List<Map<String, dynamic>> to List<Employee>
 
-  List<Map<String, dynamic>> get profiles => _profiles;
-  EmployeeProvider()
-  {
+  List<Employee> get profiles => _profiles;
+
+  EmployeeProvider() {
     loadProfiles();
   }
 
-  // Load profiles from database
   Future<void> loadProfiles() async {
+    // Fetch all users from the database
     final users = await _userDatabase.getUsers();
-    _profiles.addAll(users.map((user) {
-      return {
-        "name": user['name'],
-        "image": user['imageFile'], // Assuming 'image' field contains a valid file path
-      };
-    }).toList());
+
+    // Map users data to Employee objects using fromMap
+    _profiles = users.map((user) {
+      return Employee.fromMap(user);
+    }).toList();
+
+    // Notify listeners that the profiles have been updated
     notifyListeners();
   }
 
-  // Function to add an employee
+  Future<bool> emailExists(String email) async {
+    return await _userDatabase.emailExists(email);
+  }
 
+  Future<void> insertUser(Employee employee) async {
+    // Convert the Employee object to a Map<String, dynamic>
+    final Map<String, dynamic> map = {
+      UserDatabase.columnName: employee.name,
+      UserDatabase.columnEmployeeId: employee.employeeId,
+      UserDatabase.columnDesignation: employee.designation,
+      UserDatabase.columnAddress: employee.address,
+      UserDatabase.columnEmail: employee.email,
+      UserDatabase.columnContactNumber: employee.contactNumber,
+      UserDatabase.columnSalary: employee.salary,
+      UserDatabase.columnOvertimeRate: employee.overtimeRate,
+      UserDatabase.columnEmbedding: employee.embedding,
+      UserDatabase.columnImageFile: employee.imageFile,
+    };
 
-  // Function to delete an employee
-  Future<void> deleteEmployee(String name) async {
-    // Remove the employee from the database
+    // Pass the map to the database insertion function
+    await _userDatabase.insertUser(map);
 
-
-    // Reload profiles from the database
+    // Reload profiles after inserting the new user
     await loadProfiles();
   }
 
-  // Function to update an employee's name or image
-  Future<void> editEmployee(String oldName, String newName, File newImage) async {
-    if (newImage == null) {
-      throw Exception("Image cannot be null");
-    }
 
-    // Convert the new image to BLOB
-    final newImageBytes = await newImage.readAsBytes();
+  Future<void> deleteEmployee(int id) async {
+    await _userDatabase.deleteUser(id);
 
-    // Update the employee data in the database
+    await loadProfiles();
+  }
 
+  Future<void> editEmployee(int id, String oldName, String newName) async {
+    await _userDatabase.updateUser(id, oldName, newName);
 
-    // Reload profiles from the database
     await loadProfiles();
   }
 }

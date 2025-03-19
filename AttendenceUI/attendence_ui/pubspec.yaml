@@ -33,17 +33,19 @@ dependencies:
   google_ml_kit: ^0.19.0
   fluttertoast: ^8.2.10
   google_mlkit_face_detection: ^0.12.0
+  permission_handler: ^11.4.0
 
 flutter_native_splash:
-  color: "#FFFFFF"  # Background color
-  image: "assets/icons/app_logo.png"  # Path to your splash logo
+  color: "#004368"  # Background color
   android: true
   ios: true
+  android_12:
+    color: "#004368"  # Required for Android 12+
 
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icons/app_logo.png"  # Path to your logo (512x512 recommended)
+  image_path: "assets/images/face-scan.png"  # Path to your logo (512x512 recommended)
 
 
 dev_dependencies:

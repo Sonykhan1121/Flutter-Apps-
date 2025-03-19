@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'dart:math';
+
+import 'package:attendence_ui/attendence_features/models/employee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/provider/employee_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import '../../../Colors/colors.dart';
 
+import '../../../Colors/colors.dart';
 import '../../../database/userdatabase.dart';
-import '../../../services/face_embedder.dart';
 import '../provider/add_employee_provider.dart';
 import 'face_detection_screen.dart';
 
@@ -22,27 +22,27 @@ class AddEmployee extends StatefulWidget {
 }
 
 class _AddEmployeeState extends State<AddEmployee> {
-  String alreadyregisteruserName = "";
+  String? alreadyregisteruserName;
+
   bool _isProcessing = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Provider.of<AddEmployeeProvider>(context, listen: false);
+  }
+
+  void showToast(String msg) {
+    Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
   }
 
   Future<void> _registerUser(
-    AddEmployeeProvider provider,
+    AddEmployeeProvider addemployeeProvider,
     BuildContext context,
   ) async {
-    if (!_formKey.currentState!.validate() || provider.image == null) {
-      Fluttertoast.showToast(
-        msg: "⚠️ Please fill up all the fields",
-        textColor: Colors.red,
-        backgroundColor: Colors.white,
-      );
+    if (!_formKey.currentState!.validate() ||
+        addemployeeProvider.image == null) {
+      showToast("⚠️ Please fill up all the fields");
       return;
     }
 
@@ -51,7 +51,7 @@ class _AddEmployeeState extends State<AddEmployee> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
+      builder: (context) => Center(child: CircularProgressIndicator()),
     );
     await Future.delayed(Duration(seconds: 2));
 
@@ -61,101 +61,92 @@ class _AddEmployeeState extends State<AddEmployee> {
         context,
         listen: false,
       );
-      if (await db.emailExists(provider.emailController.text)) {
+      if (await employeeprovider.emailExists(
+        addemployeeProvider.emailController.text,
+      )) {
         Navigator.pop(context); // Close loading dialog
-        Fluttertoast.showToast(
-          msg: "Email already registered!",
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        showToast("Email already registered!");
+
         setState(() => _isProcessing = false);
         return;
       }
 
-      final embedder = FaceEmbedder();
-      await embedder.initialize();
-      final embedding = await embedder.getEmbedding(provider.image!);
-      embedder.dispose();
-      Uint8List? byteimage = await provider.image?.readAsBytes();
-      if (await checkthisfacealreadyregisterorNot(embedding)) {
+      final embedding = await addemployeeProvider.getEmbedding();
+
+      Uint8List? byteimage = await addemployeeProvider.ImagetoByteImage();
+      alreadyregisteruserName = (await addemployeeProvider
+          .checkFaceAlreadyRegisterOrNot(embedding));
+      if (alreadyregisteruserName != null) {
         Navigator.pop(context);
-        Fluttertoast.showToast(msg: 'This face is already registered here.named:$alreadyregisteruserName');
+        showToast(
+          'This face is already registered here.named:$alreadyregisteruserName',
+        );
         return;
       }
 
-      final userId = await db.insertUser({
-        UserDatabase.columnName: provider.nameController.text,
-        UserDatabase.columnEmployeeId: provider.employeeIdController.text,
-        UserDatabase.columnDesignation: provider.designationController.text,
-        UserDatabase.columnAddress: provider.addressController.text,
-        UserDatabase.columnEmail: provider.emailController.text.toLowerCase(),
-        UserDatabase.columnContactNumber: provider.contactController.text,
-        UserDatabase.columnSalary: double.parse(provider.salaryController.text),
-        UserDatabase.columnOvertimeRate: double.parse(
-          provider.overtimeRateController.text,
+      final Employee employee = Employee(
+        name: addemployeeProvider.nameController.text,
+        employeeId: addemployeeProvider.employeeIdController.text,
+        designation: addemployeeProvider.designationController.text,
+        address: addemployeeProvider.addressController.text,
+        email: addemployeeProvider.emailController.text.toLowerCase(),
+        contactNumber: addemployeeProvider.contactController.text,
+        salary: double.parse(addemployeeProvider.salaryController.text),
+        overtimeRate: double.parse(
+          addemployeeProvider.overtimeRateController.text,
         ),
-        UserDatabase.columnEmbedding: embedding,
-        UserDatabase.columnImageFile: byteimage,
-        // This remains the same, assuming 'embedding' is a List<double>
-      });
-      print('inserted');
-
-      Navigator.pop(context); // Close loading dialog
-      employeeprovider.loadProfiles();
-      Fluttertoast.showToast(
-        msg: "A new Employeed added Successfully",
-        toastLength: Toast.LENGTH_LONG,
+        embedding: embedding,
+        imageFile: byteimage!,
       );
-      provider.clearFields();
+
+      //insert user
+      employeeprovider.insertUser(employee);
+
+      // Close loading dialog
+
+      employeeprovider.loadProfiles();
+
+      Navigator.pop(context);
+      hideKeyboard(context);
+
+      showSuccessPopup(context);
+
+      addemployeeProvider.clearFields();
     } catch (e) {
       Navigator.pop(context);
-      Fluttertoast.showToast(
-        msg: "Registration failed: ${e.toString()}",
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      showToast("Registration failed: ${e.toString()}");
     } finally {
       setState(() => _isProcessing = false);
     }
   }
 
-  Future<bool> checkthisfacealreadyregisterorNot(List<double> embedding) async {
-    final _db = UserDatabase();
-    String? matchedUserName;
-    final users = await _db.getUsers();
-    double maxSimilarity = 0.0;
-    for (var user in users) {
-      List<double> storedEmbedding = user[UserDatabase.columnEmbedding];
-      double similarity = _calculateSimilarity(embedding, storedEmbedding);
+  void showSuccessPopup(BuildContext context) {
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          Icon(Icons.check_circle, color: Colors.white),
+          SizedBox(width: 10),
+          Text("Employee added successfully!"),
+        ],
+      ),
+      backgroundColor: Color(0xFF004368),
+      // Primary color
+      duration: Duration(seconds: 2),
+      // Auto-dismiss after 2 seconds
+      behavior: SnackBarBehavior.floating,
+      // Floating style
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    );
 
-      if (similarity > maxSimilarity) {
-        maxSimilarity = similarity;
-        matchedUserName = user[UserDatabase.columnName];
-      }
-    }
-    if (maxSimilarity >= 0.7 && matchedUserName != null) {
-      setState(() {
-        alreadyregisteruserName = matchedUserName!;
-      });
-      return true;
-    }
-    return false;
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  double _calculateSimilarity(List<double> emb1, List<double> emb2) {
-    double dotProduct = 0.0, normA = 0.0, normB = 0.0;
-    for (int i = 0; i < emb1.length; i++) {
-      dotProduct += emb1[i] * emb2[i];
-      normA += emb1[i] * emb1[i];
-      normB += emb2[i] * emb2[i];
-    }
-    return dotProduct / (sqrt(normA) * sqrt(normB));
+  void hideKeyboard(BuildContext context) {
+    FocusScope.of(context).unfocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<AddEmployeeProvider>(context);
-
     return Consumer<AddEmployeeProvider>(
       builder: (BuildContext context, provider, Widget? child) {
         return Scaffold(
@@ -254,16 +245,45 @@ class _AddEmployeeState extends State<AddEmployee> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  buildTextField("Full Name", provider.nameController),
-                  buildTextField("Employee ID", provider.employeeIdController),
-                  buildTextField("Designation", provider.designationController),
-                  buildTextField("Address", provider.addressController),
-                  buildTextField("Email Address", provider.emailController),
-                  buildTextField("Contact Number", provider.contactController),
-                  buildTextField("Salary", provider.salaryController),
+                  buildTextField(
+                    "Full Name",
+                    provider.nameController,
+                    TextInputType.text,
+                  ),
+                  buildTextField(
+                    "Employee ID",
+                    provider.employeeIdController,
+                    TextInputType.number,
+                  ),
+                  buildTextField(
+                    "Designation",
+                    provider.designationController,
+                    TextInputType.text,
+                  ),
+                  buildTextField(
+                    "Address",
+                    provider.addressController,
+                    TextInputType.streetAddress,
+                  ),
+                  buildTextField(
+                    "Email Address",
+                    provider.emailController,
+                    TextInputType.emailAddress,
+                  ),
+                  buildTextField(
+                    "Contact Number",
+                    provider.contactController,
+                    TextInputType.number,
+                  ),
+                  buildTextField(
+                    "Salary",
+                    provider.salaryController,
+                    TextInputType.number,
+                  ),
                   buildTextField(
                     "Overtime Rate",
                     provider.overtimeRateController,
+                    TextInputType.number,
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -306,7 +326,11 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
   }
 
-  Widget buildTextField(String label, TextEditingController controller) {
+  Widget buildTextField(
+    String label,
+    TextEditingController controller,
+    TextInputType textInputType,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -323,6 +347,7 @@ class _AddEmployeeState extends State<AddEmployee> {
           const SizedBox(height: 5),
           TextFormField(
             controller: controller,
+            keyboardType: textInputType,
             decoration: InputDecoration(
               hintText: label,
               labelStyle: TextStyle(

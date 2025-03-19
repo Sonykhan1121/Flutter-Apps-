@@ -74,6 +74,7 @@ class FaceEmbedder {
     return embedding.map((x) => x / norm).toList();
   }
 
+
   void _verifyModel() {
     final input = _interpreter.getInputTensor(0);
     final output = _interpreter.getOutputTensor(0);
