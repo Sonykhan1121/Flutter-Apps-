@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print('height X weight ${MediaQuery.of(context).size.height} X ${MediaQuery.of(context).size.width}');
     return ScreenUtilInit(
       designSize: Size(390, 844),
       minTextAdapt: true,

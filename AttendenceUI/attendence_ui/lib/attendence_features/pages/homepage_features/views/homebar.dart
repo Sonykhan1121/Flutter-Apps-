@@ -143,7 +143,7 @@ class _HomeBarState extends State<HomeBar> {
                       childAspectRatio:
                           width < 430
                               ? 1.0
-                              : (width < 500)
+                              : (width < 750)
                               ? 1.1
                               : 1.3,
                     ),
