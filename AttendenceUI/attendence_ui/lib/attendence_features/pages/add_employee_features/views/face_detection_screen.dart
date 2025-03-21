@@ -91,6 +91,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
       showToast("Camera permission denied.");
     }
   }
+
   Future<void> _loadCameras() async {
     try {
       _cameras = await availableCameras();
@@ -99,6 +100,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
       debugPrint("Error loading cameras: $e");
     }
   }
+
   // Switch camera
   Future<void> _switchCamera() async {
     if (_cameras.isEmpty) return;
@@ -113,35 +115,35 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
     await _controller.dispose();
 
     // Toggle between front and back camera
-    _currentLensDirection = _currentLensDirection == CameraLensDirection.front
-        ? CameraLensDirection.back
-        : CameraLensDirection.front;
+    _currentLensDirection =
+        _currentLensDirection == CameraLensDirection.front
+            ? CameraLensDirection.back
+            : CameraLensDirection.front;
 
     await _initializeCamera();
   }
 
-
-
   Future<void> _initializeCamera() async {
     try {
-
       if (_cameras.isEmpty) {
         showToast("No cameras available");
         return;
       }
 
-
       // Find the requested camera direction
       final selectedCamera = _cameras.firstWhere(
-            (camera) => camera.lensDirection == _currentLensDirection,
+        (camera) => camera.lensDirection == _currentLensDirection,
         orElse: () => _cameras.first,
       );
 
       _controller = CameraController(
         selectedCamera,
-        ResolutionPreset.high,
+        ResolutionPreset.ultraHigh,
         enableAudio: false,
-        imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
+        imageFormatGroup:
+            Platform.isAndroid
+                ? ImageFormatGroup.nv21
+                : ImageFormatGroup.bgra8888,
       );
 
       await _controller.initialize();
@@ -438,176 +440,182 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: _isCameraInitialized
-          ? Stack(
-        children: [
-          // Camera Preview
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white24, width: 1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              // margin: EdgeInsets.symmetric(horizontal: 16),
-              child: ClipRRect(
-                // borderRadius: BorderRadius.circular(12),
-                child: RotatedBox(
-                  quarterTurns: 4,
-                  child: AspectRatio(
-                    aspectRatio: 9/16,
-                    child: CameraPreview(_controller),
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          // Face Detection Overlays
-          ..._faces.map((face) {
-            final rect = face.boundingBox;
-            final scaledLeft = rect.left * sx;
-            final scaledTop = rect.top * sy;
-            final scaledWidth = rect.width * sx*0.7;
-            final scaledHeight = rect.height * sy*0.9;
-
-            return Positioned(
-              left: scaledLeft +(scaledLeft*0.5),
-              top: scaledTop,
-              child: DottedBorder(
-                color: Color(0xFF00FB46),
-                borderType: BorderType.Oval,
-                strokeWidth: 2.5.sp,
-                dashPattern: [6, 3],
-                child: Container(
-                  width: scaledWidth  ,
-                  height: scaledHeight,
-                ),
-              ),
-            );
-          }).toList(),
-
-          // Validation Rectangle (can be invisible but functional)
-          Center(
-            child: Container(
-              width: _validationRect.width,
-              height: _validationRect.height,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.transparent,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-
-          // Status bar at top
-          SafeArea(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 50),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.black54, Colors.transparent],
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body:
+          _isCameraInitialized
+              ? Stack(
                 children: [
-                  // Back Button
-                  CircleAvatar(
-                    backgroundColor: Colors.black38,
-                    radius: 20,
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () => Navigator.pop(context),
+                  // Camera Preview
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white24, width: 1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      // margin: EdgeInsets.symmetric(horizontal: 16),
+                      child: ClipRRect(
+                        // borderRadius: BorderRadius.circular(12),
+                        child: RotatedBox(
+                          quarterTurns: 4,
+                          child: AspectRatio(
+                            aspectRatio: 1/_controller.value.aspectRatio,
+                            child: CameraPreview(_controller),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
 
-                  // Title
-                  Text(
-                    "Face Verification",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                  // Face Detection Overlays
+                  ..._faces.map((face) {
+                    final rect = face.boundingBox;
+                    final scaledLeft = rect.left * sx;
+                    final scaledTop = rect.top * sy;
+                    final scaledWidth = rect.width * sx * 0.7;
+                    final scaledHeight = rect.height * sy * 0.9;
+
+                    return Positioned(
+                      left: scaledLeft + (scaledLeft * 0.5),
+                      top: scaledTop,
+                      child: DottedBorder(
+                        color: Color(0xFF00FB46),
+                        borderType: BorderType.Oval,
+                        strokeWidth: 2.5.sp,
+                        dashPattern: [6, 3],
+                        child: Container(
+                          width: scaledWidth,
+                          height: scaledHeight,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+
+                  // Validation Rectangle (can be invisible but functional)
+                  Center(
+                    child: Container(
+                      width: _validationRect.width,
+                      height: _validationRect.height,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.transparent, width: 2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
 
-                  // Camera Switch Button
-                  _cameras.length > 1
-                      ? CircleAvatar(
-                    backgroundColor: Colors.black38,
-                    radius: 20,
-                    child: IconButton(
-                      icon: Icon(Icons.flip_camera_ios, color: Colors.white),
-                      onPressed: _switchCamera,
+                  // Status bar at top
+                  SafeArea(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 50,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.black54, Colors.transparent],
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Back Button
+                          CircleAvatar(
+                            backgroundColor: Colors.black38,
+                            radius: 20,
+                            child: IconButton(
+                              icon: Icon(Icons.arrow_back, color: Colors.white),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                          ),
+
+                          // Title
+                          Text(
+                            "Face Verification",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+
+                          // Camera Switch Button
+                          _cameras.length > 1
+                              ? CircleAvatar(
+                                backgroundColor: Colors.black38,
+                                radius: 20,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.flip_camera_ios,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: _switchCamera,
+                                ),
+                              )
+                              : SizedBox(width: 40),
+                        ],
+                      ),
                     ),
-                  )
-                      : SizedBox(width: 40),
+                  ),
+
+                  // Face Guide Overlay
+                  Center(
+                    child: Container(
+                      width: 220,
+                      height: 220,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color:
+                              _isValidFace
+                                  ? Colors.transparent
+                                  : Colors.transparent,
+                          width: 2,
+                          style: BorderStyle.solid,
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+
+                  // Instructions Panel
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [Colors.black87, Colors.transparent],
+                        ),
+                      ),
+                      child: _buildInstructions(),
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ),
-
-          // Face Guide Overlay
-          Center(
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: _isValidFace ? Colors.transparent : Colors.transparent,
-                  width: 2,
-                  style: BorderStyle.solid,
-                ),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-
-          // Instructions Panel
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 24),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [Colors.black87, Colors.transparent],
+              )
+              : Container(
+                color: Colors.black,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(0xFF00FB46),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        "Initializing camera...",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              child: _buildInstructions(),
-            ),
-          ),
-        ],
-      )
-          : Container(
-        color: Colors.black,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00FB46)),
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Initializing camera...",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -618,7 +626,10 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
           duration: Duration(milliseconds: 300),
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           decoration: BoxDecoration(
-            color: _isValidFace ? Color(0xFF00FB46).withOpacity(0.2) : Colors.black38,
+            color:
+                _isValidFace
+                    ? Color(0xFF00FB46).withOpacity(0.2)
+                    : Colors.black38,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
               color: _isValidFace ? Color(0xFF00FB46) : Colors.white24,
@@ -637,7 +648,9 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
               SizedBox(width: 12),
               Flexible(
                 child: Text(
-                  _isValidFace ? "Hold still..." : "Position your face in the circle",
+                  _isValidFace
+                      ? "Hold still..."
+                      : "Position your face in the circle",
                   style: TextStyle(
                     color: _isValidFace ? Color(0xFF00FB46) : Colors.white,
                     fontSize: 16,
@@ -651,21 +664,17 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
         SizedBox(height: 20),
         _isValidFace
             ? Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
-            shape: BoxShape.circle,
-          ),
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00FB46)),
-            strokeWidth: 3,
-          ),
-        )
-            : Icon(
-          Icons.arrow_upward,
-          size: 36,
-          color: Colors.white70,
-        ),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF00FB46)),
+                strokeWidth: 3,
+              ),
+            )
+            : Icon(Icons.arrow_upward, size: 36, color: Colors.white70),
       ],
     );
   }

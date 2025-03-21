@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:attendence_ui/attendence_features/models/employee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/provider/employee_provider.dart';
@@ -30,6 +31,8 @@ class _AddEmployeeState extends State<AddEmployee> {
   @override
   void initState() {
     super.initState();
+    final provider = Provider.of<AddEmployeeProvider>(context,listen: false);
+    provider.employeeIdController.text = generateRandomEmployeeId();
   }
 
   void showToast(String msg) {
@@ -143,11 +146,17 @@ class _AddEmployeeState extends State<AddEmployee> {
   void hideKeyboard(BuildContext context) {
     FocusScope.of(context).unfocus();
   }
+  String generateRandomEmployeeId() {
+    final random = Random();
+    // Generate a random number (you can adjust the range as per your requirement)
+    int randomNumber = random.nextInt(10000)+1111; // Random number up to 999999
+    return "${randomNumber.toString().padLeft(5, '0')}"; // Format it with "TG-" and a 6-digit number
+  }
 
   void showWarningToast(String message) {
     Fluttertoast.showToast(
       msg: message,
-      toastLength: Toast.LENGTH_SHORT,
+      toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.red,
       textColor: Colors.white,
@@ -355,6 +364,7 @@ class _AddEmployeeState extends State<AddEmployee> {
     TextInputType textInputType, {
     String? prefix,
   }) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
