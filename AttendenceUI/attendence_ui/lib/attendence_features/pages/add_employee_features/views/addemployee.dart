@@ -104,14 +104,13 @@ class _AddEmployeeState extends State<AddEmployee> {
 
       // Close loading dialog
 
-      employeeprovider.loadProfiles();
-
       Navigator.pop(context);
-      hideKeyboard(context);
+
 
       showSuccessPopup(context);
 
       addemployeeProvider.clearFields();
+      hideKeyboard(context);
     } catch (e) {
       Navigator.pop(context);
       showToast("Registration failed: ${e.toString()}");
@@ -143,6 +142,17 @@ class _AddEmployeeState extends State<AddEmployee> {
 
   void hideKeyboard(BuildContext context) {
     FocusScope.of(context).unfocus();
+  }
+
+  void showWarningToast(String message) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
   @override
@@ -178,7 +188,19 @@ class _AddEmployeeState extends State<AddEmployee> {
                         ),
                       );
                       if (imgFile != null) {
-                        provider.pickImage(imgFile);
+                        final embedding = await provider.getEmbeddingfromfile(
+                          imgFile,
+                        );
+                        String? name = (await provider
+                            .checkFaceAlreadyRegisterOrNot(embedding));
+                        if (name != null) {
+                          provider.pickImage(null);
+                          showWarningToast(
+                            'Hey $name you are already registered',
+                          );
+                        } else {
+                          provider.pickImage(imgFile);
+                        }
                       }
                     },
                     child: Stack(
@@ -254,6 +276,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                     "Employee ID",
                     provider.employeeIdController,
                     TextInputType.number,
+                    prefix: "TG-",
                   ),
                   buildTextField(
                     "Designation",
@@ -329,8 +352,9 @@ class _AddEmployeeState extends State<AddEmployee> {
   Widget buildTextField(
     String label,
     TextEditingController controller,
-    TextInputType textInputType,
-  ) {
+    TextInputType textInputType, {
+    String? prefix,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -350,6 +374,9 @@ class _AddEmployeeState extends State<AddEmployee> {
             keyboardType: textInputType,
             decoration: InputDecoration(
               hintText: label,
+              prefixText: prefix,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+
               labelStyle: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.black.withOpacity(0.6),

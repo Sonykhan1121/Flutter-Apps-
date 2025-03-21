@@ -28,7 +28,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
 
   // Camera selection
   List<CameraDescription> _cameras = [];
-  CameraLensDirection _currentLensDirection = CameraLensDirection.front;
+  CameraLensDirection _currentLensDirection = CameraLensDirection.back;
 
   // Initialize validation rectangle with a default value
   double _validationSize = 512;
@@ -464,28 +464,28 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
           ),
 
           // Face Detection Overlays
-          // ..._faces.map((face) {
-          //   final rect = face.boundingBox;
-          //   final scaledLeft = rect.left * sx;
-          //   final scaledTop = rect.top * sy;
-          //   final scaledWidth = rect.width * sx;
-          //   final scaledHeight = rect.height * sy;
-          //
-          //   return Positioned(
-          //     left: scaledLeft,
-          //     top: scaledTop,
-          //     child: DottedBorder(
-          //       color: Color(0xFF00FB46),
-          //       borderType: BorderType.Oval,
-          //       strokeWidth: 2.5,
-          //       dashPattern: [6, 3],
-          //       child: Container(
-          //         width: scaledWidth - 30,
-          //         height: scaledHeight,
-          //       ),
-          //     ),
-          //   );
-          // }).toList(),
+          ..._faces.map((face) {
+            final rect = face.boundingBox;
+            final scaledLeft = rect.left * sx;
+            final scaledTop = rect.top * sy;
+            final scaledWidth = rect.width * sx*0.7;
+            final scaledHeight = rect.height * sy*0.9;
+
+            return Positioned(
+              left: scaledLeft +(scaledLeft*0.5),
+              top: scaledTop,
+              child: DottedBorder(
+                color: Color(0xFF00FB46),
+                borderType: BorderType.Oval,
+                strokeWidth: 2.5.sp,
+                dashPattern: [6, 3],
+                child: Container(
+                  width: scaledWidth  ,
+                  height: scaledHeight,
+                ),
+              ),
+            );
+          }).toList(),
 
           // Validation Rectangle (can be invisible but functional)
           Center(
@@ -559,7 +559,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
               height: 220,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: _isValidFace ? Color(0xFF00FB46) : Colors.white60,
+                  color: _isValidFace ? Colors.transparent : Colors.transparent,
                   width: 2,
                   style: BorderStyle.solid,
                 ),

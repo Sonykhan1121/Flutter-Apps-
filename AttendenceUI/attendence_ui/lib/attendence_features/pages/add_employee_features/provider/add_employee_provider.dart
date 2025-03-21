@@ -1,8 +1,11 @@
+import 'dart:typed_data';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:attendence_ui/attendence_features/database/userdatabase.dart';
+import 'package:attendence_ui/attendence_features/models/employee.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../services/face_embedder.dart';
 
@@ -22,7 +25,7 @@ class AddEmployeeProvider with ChangeNotifier {
   final TextEditingController salaryController = TextEditingController();
   final TextEditingController overtimeRateController = TextEditingController();
 
-  void pickImage(File img) {
+  void pickImage(File? img) {
     _image = img;
     notifyListeners();
   }
@@ -39,12 +42,52 @@ class AddEmployeeProvider with ChangeNotifier {
     overtimeRateController.clear();
     _image = null;
   }
+  void setalltextcontroller(Employee employee) async
+  {
+    nameController.text = employee.name;
+    employeeIdController.text = employee.employeeId;
+    designationController.text = employee.designation;
+    addressController.text = employee.address;
+    emailController.text = employee.email;
+    contactController.text = employee.contactNumber;
+    salaryController.text = employee.salary.toString();
+    overtimeRateController.text = employee.overtimeRate.toString();
+    _image = await convertUint8ListToFile(employee.imageFile);
+  }
+  Future<File> convertUint8ListToFile(Uint8List data) async {
+    // Get the directory for storing the file (e.g., documents directory)
+    Directory directory = await getApplicationDocumentsDirectory();
+
+    // Generate a unique file name (e.g., using a timestamp)
+    String fileName = 'file_${DateTime.now().millisecondsSinceEpoch}.bin';
+
+    // Create the full file path
+    String filePath = '${directory.path}/$fileName';
+
+    // Create a File object
+    File file = File(filePath);
+
+    // Write the Uint8List data to the file
+    await file.writeAsBytes(data);
+
+    print('File saved at: $filePath');
+    return file;
+  }
 
   Future<dynamic> getEmbedding() async {
     await embedder.initialize();
     if (_image == null) return null;
 
     return await embedder.getEmbedding(_image!);
+  }
+  Future<dynamic> getEmbeddingfromfile(File? imgFile) async {
+    if(imgFile==null) {
+      return null;
+    }
+    await embedder.initialize();
+
+
+    return await embedder.getEmbedding(imgFile);
   }
 
   Future<dynamic> ImagetoByteImage() async {
