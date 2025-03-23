@@ -251,7 +251,8 @@ class _HomeBarState extends State<HomeBar> {
   Widget leaveSummary(String title, String count) {
     return Card(
       color: Colors.white,
-      elevation: 4,
+      elevation: 1,
+
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Row(
