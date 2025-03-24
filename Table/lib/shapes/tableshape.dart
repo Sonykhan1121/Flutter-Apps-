@@ -29,247 +29,256 @@ class TableShape extends CanvasShape {
     required Function(double) onRotate,
     required VoidCallback onDelete,
   }) {
-    return Positioned(
-      left: position.dx,
-      top: position.dy,
-      child: GestureDetector(
-        onTap: onSelect,
-        onPanUpdate: (details) {
-          onMove(details.delta.dx, details.delta.dy);
-        },
-        child: Transform.rotate(
-          angle: rotation,
-          child: Stack(
-            children: [
-              // Main table widget
-              Container(
-                width: size.width,
-                height: size.height,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: isSelected ? Colors.blue : Colors.grey),
-                  boxShadow: isSelected
-                      ? [BoxShadow(color: Colors.blue.withOpacity(0.3), blurRadius: 5)]
-                      : null,
-                ),
-                child: Column(
+    return Stack(
+        children:[
+          Positioned(
+            left: position.dx,
+            top: position.dy,
+            child: GestureDetector(
+              onTap: onSelect,
+              onPanUpdate: (details) {
+                onMove(details.delta.dx, details.delta.dy);
+              },
+              child: Transform.rotate(
+                angle: rotation,
+                child: Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    // Table header with controls
+                    // Main table widget with transparent background and black border
                     Container(
-                      height: 30,
-                      color: Colors.grey[200],
-                      child: Row(
-                        children: [
-                          // Expand/collapse button
-                          IconButton(
-                            icon: Icon(
-                              isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                              size: 16,
-                            ),
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            onPressed: () {
-                              _toggleExpand();
-                            },
-                          ),
-                          Expanded(
-                            child: Center(
-                              child: Text('Table', style: TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                          // Add column button
-                          IconButton(
-                            icon: Icon(Icons.add_box_outlined, size: 16),
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            onPressed: () {
-                              _addColumn();
-                            },
-                          ),
-                        ],
+                      width: size.width,
+                      height: size.height,
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(
+                            color: Colors.black,
+                            width: isSelected ? 2.0 : 1.0
+                        ),
                       ),
-                    ),
-
-                    // Table content
-                    if (isExpanded)
-                      Expanded(
-                        child: Row(
-                          children: [
-                            // Table cells
-                            Expanded(
-                              child: Column(
+                      child: isExpanded
+                          ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          // Table rows
+                          ...List.generate(cells.length, (rowIndex) {
+                            return IntrinsicHeight(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  // Table rows
-                                  ...List.generate(cells.length, (rowIndex) {
-                                    return Expanded(
-                                      child: Row(
-                                        children: [
-                                          ...List.generate(cells[0].length, (colIndex) {
-                                            return Expanded(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.grey[300]!),
-                                                ),
-                                                child: TextField(
-                                                  decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    contentPadding: EdgeInsets.all(4),
-                                                  ),
-                                                  controller: TextEditingController(text: cells[rowIndex][colIndex]),
-                                                  onChanged: (value) {
-                                                    cells[rowIndex][colIndex] = value;
-                                                  },
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                        ],
-                                      ),
-                                    );
-                                  }),
-                                ],
-                              ),
-                            ),
-
-                            // Add row buttons column
-                            Container(
-                              width: 24,
-                              child: Column(
-                                children: [
-                                  ...List.generate(cells.length, (index) {
+                                  ...List.generate(cells[0].length, (colIndex) {
                                     return Expanded(
                                       child: Container(
-                                        alignment: Alignment.center,
                                         decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.grey[300]!),
+                                          border: Border.all(color: Colors.grey, width: 0.5),
+                                          color: Colors.white,
                                         ),
-                                        child: index == cells.length - 1
-                                            ? IconButton(
-                                          icon: Icon(Icons.add, size: 16),
-                                          padding: EdgeInsets.zero,
-                                          constraints: BoxConstraints(),
-                                          onPressed: () {
-                                            _addRow();
+                                        // Fit the content precisely
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                                            isDense: true,
+                                          ),
+                                          style: TextStyle(fontSize: 14),
+                                          textAlign: TextAlign.start,
+                                          maxLines: 1,
+                                          controller: TextEditingController(text: cells[rowIndex][colIndex]),
+                                          onChanged: (value) {
+
+                                              cells[rowIndex][colIndex] = value;
+
                                           },
-                                        )
-                                            : null,
+                                        ),
                                       ),
                                     );
                                   }),
                                 ],
                               ),
+                            );
+                          }),
+                        ],
+                      )
+                          : Container(
+                        width: size.width,
+                        height: 30,
+                        color: Colors.grey[200],
+                        child: Row(
+                          children: [
+                            // Expand/collapse button
+                            IconButton(
+                              icon: Icon(
+                                isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                                size: 16,
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: BoxConstraints(),
+                              onPressed: () {
+                                _toggleExpand();
+                              },
                             ),
+                            Spacer(),
                           ],
                         ),
                       ),
+                    ),
+
+                    // Dynamic resize handles (only shown when selected)
+                    if (isSelected) ...[
+                      // Left resize handle - dynamically positioned
+                      Positioned(
+                        left: -10,
+                        top: size.height / 2,
+                        child: _buildResizeHandle(
+                          onDrag: (delta) => onResize(ResizeDirection.left, delta),
+                        ),
+                      ),
+
+                      // Right resize handle - dynamically positioned
+                      Positioned(
+                        right: -10,
+                        top: size.height / 2,
+                        child: _buildResizeHandle(
+                          onDrag: (delta) => onResize(ResizeDirection.right, delta),
+                        ),
+                      ),
+
+                      // Top resize handle - dynamically positioned
+                      Positioned(
+                        left: size.width / 2,
+                        top: -10,
+                        child: _buildResizeHandle(
+                          onDrag: (delta) => onResize(ResizeDirection.top, delta),
+                        ),
+                      ),
+
+                      // Bottom resize handle - dynamically positioned
+                      Positioned(
+                        left: size.width / 2,
+                        bottom: -10,
+                        child: _buildResizeHandle(
+                          onDrag: (delta) => onResize(ResizeDirection.bottom, delta),
+                        ),
+                      ),
+
+                      // Delete button (top-left)
+                      Positioned(
+                        left: -15,
+                        top: -15,
+                        child: GestureDetector(
+                          onTap: onDelete,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.close, size: 16, color: Colors.white),
+                          ),
+                        ),
+                      ),
+
+                      // Add column button - positioned to the right of the table
+                      Positioned(
+                        left: size.width + 15,
+                        top: size.height / 2 - 15,
+                        child: GestureDetector(
+                          onTap: () {
+                            _addColumn();
+                          },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                                Icons.add_box_outlined,
+                                size: 16,
+                                color: Colors.white
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      // Add row button - positioned below the table
+                      Positioned(
+                        left: size.width / 2 - 15,
+                        top: size.height + 15,
+                        child: GestureDetector(
+                          onTap: () {
+                            _addRow();
+                          },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                                Icons.add_box,
+                                size: 16,
+                                color: Colors.white
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),
-
-              // Resize handles (only shown when selected)
-              if (isSelected) ...[
-                // Left resize handle
-                Positioned(
-                  left: 0,
-                  top: size.height / 2,
-                  child: _buildResizeHandle(
-                    onDrag: (delta) => onResize(ResizeDirection.left, delta),
-                  ),
-                ),
-
-                // Right resize handle
-                Positioned(
-                  right: 0,
-                  top: size.height / 2,
-                  child: _buildResizeHandle(
-                    onDrag: (delta) => onResize(ResizeDirection.right, delta),
-                  ),
-                ),
-
-                // Top resize handle
-                Positioned(
-                  left: size.width / 2,
-                  top: 0,
-                  child: _buildResizeHandle(
-                    onDrag: (delta) => onResize(ResizeDirection.top, delta),
-                  ),
-                ),
-
-                // Bottom resize handle
-                Positioned(
-                  left: size.width / 2,
-                  bottom: 0,
-                  child: _buildResizeHandle(
-                    onDrag: (delta) => onResize(ResizeDirection.bottom, delta),
-                  ),
-                ),
-
-                // Rotation handle (top-right)
-                Positioned(
-                  right: -15,
-                  top: -15,
-                  child: GestureDetector(
-                    onPanUpdate: (details) {
-                      // Calculate center of the shape
-                      final centerX = size.width / 2;
-                      final centerY = size.height / 2;
-
-                      // Calculate the angle between the center and the new position
-                      final dx = details.localPosition.dx - centerX;
-                      final dy = details.localPosition.dy - centerY;
-                      final angle = math.atan2(dy, dx);
-
-                      onRotate(angle);
-                    },
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.5),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.rotate_right, size: 16, color: Colors.white),
-                    ),
-                  ),
-                ),
-
-                // Delete button (top-left)
-                Positioned(
-                  left: -15,
-                  top: -15,
-                  child: GestureDetector(
-                    onTap: onDelete,
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.close, size: 16, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ],
+            ),
           ),
-        ),
-      ),
+          // Rotation button positioned outside the table
+          Positioned(
+            top: position.dy - 50, // Positioned above the table
+            left: position.dx + size.width / 2 - 25, // Centered horizontally
+            child: GestureDetector(
+              onTap: () {
+                print('Click Rotation');
+                onRotate(rotation + math.pi / 2); // Rotate by 90 degrees
+              },
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.blue.withOpacity(0.5) : Colors.transparent,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                    Icons.rotate_right,
+                    size: 24,
+                    color: isSelected ? Colors.white : Colors.transparent
+                ),
+              ),
+            ),
+          ),
+        ]
     );
   }
 
-  // Resize handle widget
+  // Resize handle widget with improved visual appearance
   Widget _buildResizeHandle({required Function(Offset) onDrag}) {
     return GestureDetector(
       onPanUpdate: (details) {
         onDrag(details.delta);
       },
       child: Container(
-        width: 12,
-        height: 12,
+        width: 20,
+        height: 20,
         decoration: BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 3,
+              offset: Offset(1, 1),
+            ),
+          ],
         ),
       ),
     );

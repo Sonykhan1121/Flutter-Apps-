@@ -29,25 +29,25 @@ class _HomePageState extends State<HomePage> {
 
                 SizedBox(height:10),
                 Container(color: Colors.grey[200]),
-                Positioned(
-                  left: position.dx,
-                  top: position.dy,
-                  child: GestureDetector(
-                    onPanUpdate : (value)
-                    {
-                      setState(() {
-                        position+= value.delta;
-                      });
-
-                    },
-                    child: Container(
-                      height: 100,
-                      width: 100,
-                      color: Colors.red,
-                      child: Center(child: Text('Red')),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   left: position.dx,
+                //   top: position.dy,
+                //   child: GestureDetector(
+                //     onPanUpdate : (value)
+                //     {
+                //       setState(() {
+                //         position+= value.delta;
+                //       });
+                //
+                //     },
+                //     child: Container(
+                //       height: 100,
+                //       width: 100,
+                //       color: Colors.red,
+                //       child: Center(child: Text('Red')),
+                //     ),
+                //   ),
+                // ),
                 ...shapes.map(
                   (shape) => shape.buildWidget(
                     isSelected: shape == selectedShape,
@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> {
 
   void _resizeShape(CanvasShape shape, ResizeDirection dir, Offset off) {
     setState(() {
+
       shape.resize(dir, off);
     });
   }
