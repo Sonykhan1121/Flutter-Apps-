@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -11,12 +13,20 @@ class _MyHomePageState extends State<MyHomePage> {
   double dx = 50;
   double dy = 100;
   double tableWidth = 300;
-  double tableHeight = 500;
+  double tableHeight = 100;
+  double perRow = 4;
+  double rotate = 0;
+
+  // Store table data dynamically
+  List<List<String>> tableData = [
+    [" ", " "],
+    [" ", " "],
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Table')),
+      appBar: AppBar(title: Text('Dynamic Table')),
       body: Column(
         children: [
           Expanded(
@@ -33,7 +43,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       dy += details.delta.dy;
                     });
                   },
-                  child: buildTable(),
+                  child: Transform.rotate(
+                      angle:rotate,
+                      child: buildTable()
+                  ),
                 ),
               ),
             ]),
@@ -44,22 +57,50 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  ElevatedButton.icon(onPressed: (){
+                    setState(() {
+                      rotate+=(pi/2);
+                    });
+                  }, label: Icon(Icons.rotate_right_sharp)),
                   ElevatedButton(
-                    onPressed: () {},
-                    child: Text("Add Table"),
+                    onPressed: () {
+                      setState(() {
+                        tableData.add(List.generate(tableData[0].length, (index) => " "));
+                      });
+                    },
+                    child: Text("Add Row"),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
-                    child: Icon(Icons.rotate_right),
+                    onPressed: () {
+                      setState(() {
+                        if (tableData.length > 1) {
+                          tableData.removeLast();
+                        }
+                      });
+                    },
+                    child: Text("Remove Row"),
                   ),
-
                   ElevatedButton(
-                    onPressed: () {},
-                    child: Icon(Icons.keyboard_double_arrow_left),
+                    onPressed: () {
+                      setState(() {
+                        for (var row in tableData) {
+                          row.add(" ");
+                        }
+                      });
+                    },
+                    child: Text("Add Column"),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
-                    child: Icon(Icons.keyboard_double_arrow_right),
+                    onPressed: () {
+                      setState(() {
+                        if (tableData[0].length > 1) {
+                          for (var row in tableData) {
+                            row.removeLast();
+                          }
+                        }
+                      });
+                    },
+                    child: Text("Remove Column"),
                   ),
                 ],
               ),
@@ -76,74 +117,46 @@ class _MyHomePageState extends State<MyHomePage> {
       height: tableHeight,
       child: Stack(
         children: [
-          // Main Table Content
-          Table(
-            border: TableBorder.all(color: Colors.black, width: 2),
-            columnWidths: {
-              0: FlexColumnWidth(0.2),
-              1: FlexColumnWidth(0.4),
-              2: FlexColumnWidth(0.4),
+          LayoutBuilder(
+            builder: (_, constraints) {
+              tableHeight = constraints.maxHeight;
+
+              return Table(
+                border: TableBorder.all(color: Colors.black, width: 2),
+                columnWidths: Map.fromIterable(
+                  List.generate(tableData[0].length, (index) => index),
+                  key: (index) => index,
+                  value: (index) => FlexColumnWidth(1),
+                ),
+                children: tableData.map((row) {
+                  return TableRow(
+                    children: row.map((cell) => buildEditableTableCell(cell)).toList(),
+                  );
+                }).toList(),
+              );
             },
-            children: [
-              TableRow(
-                decoration: BoxDecoration(color: Colors.blue.shade700),
-                children: [
-                  buildEditableTableCell("Id", isHeader: true),
-                  buildEditableTableCell("Name", isHeader: true),
-                  buildEditableTableCell("Status", isHeader: true),
-                ],
-              ),
-              TableRow(
-                children: [
-                  buildEditableTableCell("1"),
-                  buildEditableTableCell("Alice"),
-                  buildEditableTableCell("Active"),
-                ],
-              ),
-              TableRow(
-                children: [
-                  buildEditableTableCell("2"),
-                  buildEditableTableCell("Bob"),
-                  buildEditableTableCell("Inactive"),
-                ],
-              ),
-              TableRow(
-                children: [
-                  buildEditableTableCell("3"),
-                  buildEditableTableCell("Charlie"),
-                  buildEditableTableCell("Active"),
-                ],
-              ),
-            ],
           ),
 
-          // Resize Handle - Always positioned at bottom right
-          Positioned(
-            right: 0,
-            bottom: 0,
+          // Resize Handle - Positioned at bottom-right
+          Align(
+            alignment: Alignment.bottomRight,
             child: GestureDetector(
               onPanUpdate: (details) {
                 setState(() {
-                  // Implement resize logic with clamped values
                   tableWidth = (tableWidth + details.delta.dx).clamp(200.0, 500.0);
                   tableHeight = (tableHeight + details.delta.dy).clamp(100.0, 400.0);
+                  perRow += details.delta.dy;
                 });
               },
               child: Container(
-                width: 30,  // Slightly larger touch area
-                height: 30, // Slightly larger touch area
+                width: 30,
+                height: 30,
                 decoration: BoxDecoration(
                   color: Colors.blue.withOpacity(0.7),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                  ),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10)),
                 ),
                 child: Center(
-                  child: Icon(
-                    Icons.open_with,
-                    color: Colors.white,
-                    size: 20,
-                  ),
+                  child: Icon(Icons.open_with, color: Colors.white, size: 20),
                 ),
               ),
             ),
@@ -153,21 +166,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildEditableTableCell(String text, {bool isHeader = false}) {
+  Widget buildEditableTableCell(String text) {
     return Center(
       child: TextField(
         controller: TextEditingController(text: text),
         decoration: InputDecoration(
-          border: isHeader ? InputBorder.none : OutlineInputBorder(),
-          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: perRow.clamp(4, 100)),
         ),
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: isHeader ? 18 : 16,
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-          color: isHeader ? Colors.white : Colors.black,
-        ),
-        readOnly: isHeader, // Make headers non-editable
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black),
       ),
     );
   }
