@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:attendence_ui/attendence_features/services/network_status.dart';
 import 'package:attendence_ui/attendence_features/services/pending_sync_service.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
 import '../../../database/userdatabase.dart';
@@ -87,5 +90,19 @@ class EmployeeProvider with ChangeNotifier {
     // await apiService.updateEmployee(id, updatedEmployee);
 
     await loadProfiles();
+  }
+  Future<String?> getDeviceId() async {
+    final DeviceInfoPlugin  deviceInfo = DeviceInfoPlugin();
+    if(Platform.isAndroid)
+      {
+        AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+        return androidDeviceInfo.id;
+      }
+    else if(Platform.isIOS)
+      {
+        IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+        return iosDeviceInfo.identifierForVendor;
+      }
+    return null;
   }
 }
