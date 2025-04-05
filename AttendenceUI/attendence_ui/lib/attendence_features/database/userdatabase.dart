@@ -182,4 +182,10 @@ class UserDatabase {
       _database = null;
     }
   }
+
+  Future<void> clearUsers() async {
+    final db = await database;
+    await db.delete('users'); // replace 'users' with your actual table name
+  }
+
 }

@@ -7,6 +7,9 @@ class PeriodicSyncService{
   {
     Timer.periodic(Duration(minutes: 5), (timer) async{
       await BackgroundSyncService.syncPendingUsers();
+
+
+
     });
   }
 }

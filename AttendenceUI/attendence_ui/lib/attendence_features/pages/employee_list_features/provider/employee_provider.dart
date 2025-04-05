@@ -21,6 +21,8 @@ class EmployeeProvider with ChangeNotifier {
 
   EmployeeProvider() {
     loadProfiles();
+
+    // syncFromServer();
   }
 
   Future<void> loadProfiles() async {
@@ -36,6 +38,26 @@ class EmployeeProvider with ChangeNotifier {
     // Notify listeners that the profiles have been updated
     notifyListeners();
   }
+  Future<void> syncFromServer() async {
+    try {
+      if (await NetworkStatus.inOnline()) {
+        final serverUsers = await apiService.getEmployees();
+
+        // Optional: clear local DB and reinsert (if needed)
+        await _userDatabase.clearUsers();
+
+        for (final user in serverUsers) {
+          await _userDatabase.insertUser(user.toMap());
+        }
+      }
+    } catch (e) {
+      print('Error syncing from server: $e');
+    }
+
+    // Always load from local DB to update UI
+    await loadProfiles();
+  }
+
 
   Future<bool> emailExists(String email) async {
     return await _userDatabase.emailExists(email);
@@ -47,18 +69,7 @@ class EmployeeProvider with ChangeNotifier {
 
   Future<void> insertUser(Employee employee) async {
     // Convert the Employee object to a Map<String, dynamic>
-    final Map<String, dynamic> map = {
-      UserDatabase.columnName: employee.name,
-      UserDatabase.columnEmployeeId: employee.employeeId,
-      UserDatabase.columnDesignation: employee.designation,
-      UserDatabase.columnAddress: employee.address,
-      UserDatabase.columnEmail: employee.email,
-      UserDatabase.columnContactNumber: employee.contactNumber,
-      UserDatabase.columnSalary: employee.salary,
-      UserDatabase.columnOvertimeRate: employee.overtimeRate,
-      UserDatabase.columnEmbedding: employee.embedding,
-      UserDatabase.columnImageFile: employee.imageFile,
-    };
+    final Map<String, dynamic> map = employee.toMap();
 
     // Pass the map to the database insertion function
     await _userDatabase.insertUser(map);
