@@ -1,3 +1,5 @@
+import 'package:attendence_ui/attendence_features/services/network_status.dart';
+import 'package:attendence_ui/attendence_features/services/pending_sync_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../../database/userdatabase.dart';
@@ -7,9 +9,10 @@ import '../../../services/employee_api_service.dart';
 
 class EmployeeProvider with ChangeNotifier {
   final UserDatabase _userDatabase = UserDatabase();
-  final apiService   = EmployeeApiService();
+  final apiService = EmployeeApiService();
 
-  List<Employee> _profiles = []; // Change from List<Map<String, dynamic>> to List<Employee>
+  List<Employee> _profiles =
+      []; // Change from List<Map<String, dynamic>> to List<Employee>
 
   List<Employee> get profiles => _profiles;
 
@@ -22,49 +25,19 @@ class EmployeeProvider with ChangeNotifier {
     final users = await _userDatabase.getUsers();
 
     // Map users data to Employee objects using fromMap
-    _profiles = users.map((user) {
-      return Employee.fromMap(user);
-    }).toList();
+    _profiles =
+        users.map((user) {
+          return Employee.fromMap(user);
+        }).toList();
 
     // Notify listeners that the profiles have been updated
     notifyListeners();
   }
 
-  // Future<void> loadProfiles() async {
-  //   try {
-  //     // Fetch all users from the server using the API
-  //     List<Employee> apiProfiles = await apiService.getEmployees();
-  //
-  //     // Get all users from the local database
-  //     final localUsers = await _userDatabase.getUsers();
-  //
-  //     // Check and sync data: Compare local and server data based on email
-  //     for (var apiProfile in apiProfiles) {
-  //       bool emailExistsLocally = localUsers.any((user) => user['email'] == apiProfile.email);
-  //
-  //       if (emailExistsLocally) {
-  //         // Update the local user if there's a mismatch
-  //         await _userDatabase.updateUser(apiProfile); // Update logic to update the user in the local DB
-  //       } else {
-  //         // Insert the user into the local database
-  //         await _userDatabase.insertUser(apiProfile.toMap());
-  //       }
-  //     }
-  //
-  //     // After syncing, update the profiles list
-  //     _profiles = apiProfiles;
-  //
-  //     // Notify listeners that the profiles have been updated
-  //     notifyListeners();
-  //   } catch (e) {
-  //     print('Error loading profiles: $e');
-  //     // Handle any error cases, e.g., if the API call fails
-  //   }
-  // }
-
   Future<bool> emailExists(String email) async {
     return await _userDatabase.emailExists(email);
   }
+
   Future<bool> emailExistsinServer(String email) async {
     return await apiService.checkEmployeeExist(email);
   }
@@ -87,12 +60,19 @@ class EmployeeProvider with ChangeNotifier {
     // Pass the map to the database insertion function
     await _userDatabase.insertUser(map);
     // add to server
-    // await apiService.createEmployee(employee);
+    // if (await NetworkStatus.inOnline()) {
+    //   try {
+    //     await apiService.createEmployee(employee);
+    //   } catch (e) {
+    //     print('Error sending user to server from provider');
+    //   }
+    // } else {
+    //   PendingSyncService.addUsertoQueue(employee);
+    // }
 
     // Reload profiles after inserting the new user
     await loadProfiles();
   }
-
 
   Future<void> deleteEmployee(int id) async {
     await _userDatabase.deleteUser(id);

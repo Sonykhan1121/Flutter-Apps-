@@ -1,4 +1,5 @@
 import 'package:attendence_ui/attendence_features/pages/add_employee_features/provider/add_employee_provider.dart';
+import 'package:attendence_ui/attendence_features/services/periodic_sync_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +22,10 @@ void main() async {
 
   // Once the initialization is done, remove the splash screen
   FlutterNativeSplash.remove();
+
+  //start the syncing process of local and server
+  // PeriodicSyncService.startSyncing();
+
   runApp(
     MultiProvider(
       providers: [
