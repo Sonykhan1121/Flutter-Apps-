@@ -1,7 +1,7 @@
 import 'dart:typed_data';
-import 'dart:io';
-import 'package:sqflite/sqflite.dart';
+
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class UserDatabase {
   static final _databaseName = "users.db";
@@ -15,8 +15,11 @@ class UserDatabase {
   static final columnAddress = "address";
   static final columnEmail = "email";
   static final columnContactNumber = "contactNumber";
+  static final columnDeviceId = 'deviceId';
   static final columnSalary = "salary";
   static final columnOvertimeRate = "overtimeRate";
+  static final columnStartDate = 'startDate';
+  static final columnStartTime = 'startTime';
   static final columnEmbedding = "embedding";
   static final columnImageFile = "imageFile"; // New column for storing file (NOT NULL)
 
@@ -48,8 +51,11 @@ class UserDatabase {
         $columnAddress TEXT NOT NULL,
         $columnEmail TEXT NOT NULL UNIQUE,
         $columnContactNumber TEXT NOT NULL,
+        $columnDeviceId TEXT NOT NULL UNIQUE,
         $columnSalary REAL NOT NULL,
         $columnOvertimeRate REAL NOT NULL,
+        $columnStartDate DATE,
+        $columnStartTime TIME,
         $columnEmbedding BLOB NOT NULL,
         $columnImageFile BLOB NOT NULL  
       )
@@ -88,8 +94,11 @@ class UserDatabase {
         columnAddress: user[columnAddress],
         columnEmail: user[columnEmail],
         columnContactNumber: user[columnContactNumber],
+        columnDeviceId: user[columnDeviceId],
         columnSalary: user[columnSalary],
         columnOvertimeRate: user[columnOvertimeRate],
+        columnStartDate: user[columnStartDate],
+        columnStartTime: user[columnStartTime],
         columnEmbedding: _floatListToBytes(user[columnEmbedding] as List<double>),
         columnImageFile: user[columnImageFile], // Store image as BLOB (NOT NULL)
       },
@@ -122,8 +131,11 @@ class UserDatabase {
         columnAddress: row[columnAddress],
         columnEmail: row[columnEmail],
         columnContactNumber: row[columnContactNumber],
+        columnDeviceId : row[columnDeviceId],
         columnSalary: row[columnSalary],
         columnOvertimeRate: row[columnOvertimeRate],
+        columnStartDate: row[columnStartDate],
+        columnStartTime: row[columnStartTime],
         columnEmbedding: _bytesToFloatList(row[columnEmbedding] as Uint8List),
         columnImageFile: row[UserDatabase.columnImageFile], // Convert BLOB back to file
       };

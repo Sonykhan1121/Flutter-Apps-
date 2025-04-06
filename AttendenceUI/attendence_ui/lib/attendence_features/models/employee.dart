@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 class Employee {
   int? id;
   String name;
@@ -7,8 +8,12 @@ class Employee {
   String address;
   String email;
   String contactNumber;
+  String deviceId;
   double salary;
   double overtimeRate;
+  String startDate;
+  String startTime;
+
   List<double> embedding;
   Uint8List imageFile;
 
@@ -20,8 +25,11 @@ class Employee {
     required this.address,
     required this.email,
     required this.contactNumber,
+    required this.deviceId,
     required this.salary,
     required this.overtimeRate,
+    required this.startDate,
+    required this.startTime,
     required this.embedding,
     required this.imageFile,
   });
@@ -36,10 +44,16 @@ class Employee {
       address: map['address'],
       email: map['email'],
       contactNumber: map['contactNumber'],
+      deviceId: map['deviceId'],
       salary: map['salary'],
       overtimeRate: map['overtimeRate'],
-      embedding: List<double>.from(map['embedding']), // Assuming embedding is stored as List<double>
-      imageFile: map['imageFile'], // Assuming imageFile is stored as Uint8List (binary data)
+      startDate: map['startDate'],
+      startTime: map['startTime'],
+      // Assuming startTime is stored as String (time in 24-hour format)
+      embedding: List<double>.from(map['embedding']),
+      // Assuming embedding is stored as List<double>
+      imageFile:
+          map['imageFile'], // Assuming imageFile is stored as Uint8List (binary data)
     );
   }
 
@@ -53,10 +67,16 @@ class Employee {
       'address': address,
       'email': email,
       'contactNumber': contactNumber,
+      'deviceId': deviceId,
       'salary': salary,
       'overtimeRate': overtimeRate,
-      'embedding': embedding, // Assuming embedding is a List<double>
-      'imageFile': imageFile, // Assuming imageFile is Uint8List (binary data)
+      'startDate': startDate,
+      'startTime': startTime,
+      // Assuming startTime is stored as String (time in 12-hour format)
+      'embedding': embedding,
+      // Assuming embedding is a List<double>
+      'imageFile': imageFile,
+      // Assuming imageFile is Uint8List (binary data)
     };
   }
 }

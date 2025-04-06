@@ -10,6 +10,29 @@ import 'package:path_provider/path_provider.dart';
 import '../../../services/face_embedder.dart';
 
 class AddEmployeeProvider with ChangeNotifier {
+
+  final List<String> designations = [
+    'Project Manager',
+    'Product Manager',
+    'Team Lead',
+    'Software Engineer',
+    'QA Engineer',
+    'UX/UI Designer',
+    'Business Analyst',
+    'HR Executive',
+    'HR Manager',
+    'Worker',
+    'Marketing Manager',
+    'Sales Executive',
+    'Finance Manager',
+    'Customer Support',
+    'Intern',
+    'Junior Developer',
+    'DevOps Engineer',
+    'Database Administrator',
+    'Security Analyst',
+
+  ];
   File? _image;
 
   File? get image => _image;
@@ -18,7 +41,7 @@ class AddEmployeeProvider with ChangeNotifier {
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController employeeIdController = TextEditingController();
-  final TextEditingController designationController = TextEditingController();
+   String _designation ="Project Manager" ;
   final TextEditingController addressController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
@@ -29,24 +52,30 @@ class AddEmployeeProvider with ChangeNotifier {
     _image = img;
     notifyListeners();
   }
+  void set_designation(String des)
+  {
+    _designation = des;
+    notifyListeners();
+  }
+  String get designation => _designation;
 
   void clearFields() {
     // Clear all the fields
     nameController.clear();
     employeeIdController.clear();
-    designationController.clear();
     addressController.clear();
+    _designation ="Project Manager" ;
     emailController.clear();
     contactController.clear();
     salaryController.clear();
     overtimeRateController.clear();
     _image = null;
   }
-  void setalltextcontroller(Employee employee) async
+  void setAllTextController(Employee employee) async
   {
     nameController.text = employee.name;
     employeeIdController.text = employee.employeeId;
-    designationController.text = employee.designation;
+
     addressController.text = employee.address;
     emailController.text = employee.email;
     contactController.text = employee.contactNumber;
@@ -156,7 +185,7 @@ class AddEmployeeProvider with ChangeNotifier {
   void dispose() {
     nameController.dispose();
     employeeIdController.dispose();
-    designationController.dispose();
+
     addressController.dispose();
     emailController.dispose();
     contactController.dispose();

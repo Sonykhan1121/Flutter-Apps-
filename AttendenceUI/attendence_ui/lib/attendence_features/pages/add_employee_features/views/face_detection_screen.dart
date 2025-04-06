@@ -271,8 +271,6 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
   InputImageRotation _rotationFromCamera() {
     // For front camera, we need to adjust the rotation
     final sensorOrientation = _controller.description.sensorOrientation;
-    final isFrontCamera =
-        _controller.description.lensDirection == CameraLensDirection.front;
 
     // Adjust rotation based on camera direction and sensor orientation
     switch (sensorOrientation) {

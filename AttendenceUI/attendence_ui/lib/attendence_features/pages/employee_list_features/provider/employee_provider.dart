@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:attendence_ui/attendence_features/services/network_status.dart';
-import 'package:attendence_ui/attendence_features/services/pending_sync_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 

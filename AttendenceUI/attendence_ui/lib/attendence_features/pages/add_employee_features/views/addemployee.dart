@@ -3,15 +3,16 @@ import 'dart:math';
 
 import 'package:attendence_ui/attendence_features/models/employee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/provider/employee_provider.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Colors/colors.dart';
-import '../../../database/userdatabase.dart';
 import '../provider/add_employee_provider.dart';
 import 'face_detection_screen.dart';
 
@@ -34,9 +35,40 @@ class _AddEmployeeState extends State<AddEmployee> {
     final provider = Provider.of<AddEmployeeProvider>(context,listen: false);
     provider.employeeIdController.text = generateRandomEmployeeId();
   }
+  Future<String> getDeviceId() async
+  {
+    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    if(Platform.isAndroid)
+      {
+        AndroidDeviceInfo androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+        return androidDeviceInfo.id;
+      }else if(Platform.isIOS)
+        {
+          IosDeviceInfo iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+          return iosDeviceInfo.identifierForVendor ?? "ios device id not found";
+        }
+    else
+      {
+        return 'Unknown Device';
+      }
+
+
+  }
 
   void showToast(String msg) {
     Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
+  }
+  String get_formattedDate()
+  {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    return formattedDate;
+  }
+  String get_formattedTime()
+  {
+    DateTime now = DateTime.now();
+    String formattedTime = DateFormat('hh:mm a').format(now);
+    return formattedTime;
   }
 
   Future<void> _registerUser(
@@ -59,7 +91,7 @@ class _AddEmployeeState extends State<AddEmployee> {
     await Future.delayed(Duration(seconds: 2));
 
     try {
-      final db = UserDatabase();
+
       final employeeprovider = Provider.of<EmployeeProvider>(
         context,
         listen: false,
@@ -86,18 +118,22 @@ class _AddEmployeeState extends State<AddEmployee> {
         );
         return;
       }
+      String dId = await getDeviceId();
 
       final Employee employee = Employee(
         name: addemployeeProvider.nameController.text,
         employeeId: addemployeeProvider.employeeIdController.text,
-        designation: addemployeeProvider.designationController.text,
+        designation: addemployeeProvider.designation,
         address: addemployeeProvider.addressController.text,
         email: addemployeeProvider.emailController.text.toLowerCase(),
         contactNumber: addemployeeProvider.contactController.text,
+        deviceId: dId,
         salary: double.parse(addemployeeProvider.salaryController.text),
         overtimeRate: double.parse(
           addemployeeProvider.overtimeRateController.text,
         ),
+        startDate: get_formattedDate(),
+        startTime: get_formattedTime(),
         embedding: embedding,
         imageFile: byteimage!,
       );
@@ -287,11 +323,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                     TextInputType.number,
                     prefix: "TG-",
                   ),
-                  buildTextField(
-                    "Designation",
-                    provider.designationController,
-                    TextInputType.text,
-                  ),
+                  DesignationDropdown(provider,"Designation"),
                   buildTextField(
                     "Address",
                     provider.addressController,
@@ -316,6 +348,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                     "Overtime Rate",
                     provider.overtimeRateController,
                     TextInputType.number,
+                    hintText: "e.g., 15.50",
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
@@ -363,6 +396,7 @@ class _AddEmployeeState extends State<AddEmployee> {
     TextEditingController controller,
     TextInputType textInputType, {
     String? prefix,
+        String? hintText
   }) {
 
     return Padding(
@@ -383,7 +417,7 @@ class _AddEmployeeState extends State<AddEmployee> {
             controller: controller,
             keyboardType: textInputType,
             decoration: InputDecoration(
-              hintText: label,
+              hintText: hintText ?? label,
               prefixText: prefix,
               floatingLabelBehavior: FloatingLabelBehavior.never,
 
@@ -422,5 +456,62 @@ class _AddEmployeeState extends State<AddEmployee> {
       return errorMessage;
     }
     return null; // Validation successful
+  }
+  Widget DesignationDropdown(AddEmployeeProvider addemployeeProvider,String label)
+  {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.sp,
+            color: Cl.primaryColor,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 5),
+        DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+
+            labelStyle: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.black.withOpacity(0.6),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 9,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(9),
+              borderSide: BorderSide(color: Colors.grey.shade400),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(9),
+              borderSide: const BorderSide(color: Color(0x66004368)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(9),
+              borderSide: const BorderSide(color: Colors.blue),
+            ),
+          ),
+          value: addemployeeProvider.designation,
+          onChanged: (value) {
+            addemployeeProvider.set_designation(value!);
+          },
+          items: addemployeeProvider.designations.map((designation) {
+            return DropdownMenuItem<String>(
+              value: designation,
+              child: Text(designation),
+            );
+          }).toList(),
+          validator: (value) =>
+          value == null ? 'Please select a designation' : null,
+        ),
+      ],
+    );
   }
 }
