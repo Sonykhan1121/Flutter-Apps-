@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'attendence_features/pages/daily_attendence_features/provider/daily_attendence_provider.dart';
 import 'attendence_features/pages/employee_list_features/provider/employee_provider.dart';
+import 'attendence_features/pages/employee_profile_features/emp_details.dart';
 import 'attendence_features/pages/homepage_features/provider/homeprovider.dart';
 import 'attendence_features/pages/navigation_page.dart';
 import 'attendence_features/providers/user_provider.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
-          home: NavigationPage(),
+          home: EmpDetails(employeeIndex: 0,),
         );
       },
     );

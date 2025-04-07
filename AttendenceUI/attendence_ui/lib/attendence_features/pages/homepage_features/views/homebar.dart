@@ -22,6 +22,7 @@ class _HomeBarState extends State<HomeBar> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    // print('height X width : $height $width');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -118,6 +119,8 @@ class _HomeBarState extends State<HomeBar> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           elevation: 00.5,
+                          padding: EdgeInsets.symmetric(horizontal: 20.sp, vertical: 5.sp),
+
                         ).copyWith(
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
@@ -143,7 +146,7 @@ class _HomeBarState extends State<HomeBar> {
                       childAspectRatio:
                           width < 430
                               ? 1.0
-                              : (width < 750)
+                              : (width < 801)
                               ? 1.1
                               : 1.3,
                     ),
