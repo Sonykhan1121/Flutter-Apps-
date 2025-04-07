@@ -25,10 +25,14 @@ class _EmpDetailsState extends State<EmpDetails> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController idController = TextEditingController();
-  TextEditingController salaryController = TextEditingController();
+  TextEditingController employeeNameController = TextEditingController();
+  TextEditingController monthlySalaryController = TextEditingController();
   TextEditingController otherSalaryController = TextEditingController();
   TextEditingController overtimeController = TextEditingController();
+  TextEditingController maxOvertimeHourController = TextEditingController();
   TextEditingController selectedShift = TextEditingController();
+  TextEditingController shiftController = TextEditingController();
+  TextEditingController activeStatusController = TextEditingController();
   TextEditingController _selectedStatus = TextEditingController();
   String payPeriod = '';
 
@@ -175,7 +179,6 @@ class _EmpDetailsState extends State<EmpDetails> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
                       ],
                     ),
                   ),
@@ -268,14 +271,15 @@ class _EmpDetailsState extends State<EmpDetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
+                                  padding: EdgeInsets.all(7),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Color(0xFFccd9e1),
                                   ),
                                   child: SvgPicture.asset(
                                     'assets/icons/work-history.svg',
-                                    width: 50.0,
-                                    height: 50.0,
+                                    width: 30.sp,
+                                    height: 30.sp,
                                   ),
                                 ),
                                 Text(
@@ -290,6 +294,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                                   style: TextStyle(
                                     color: Cl.primaryColor,
                                     fontSize: 16.sp,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
@@ -300,14 +305,15 @@ class _EmpDetailsState extends State<EmpDetails> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
+                                  padding: EdgeInsets.all(7),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: Color(0xFFccd9e1),
                                   ),
-                                  child: Image.asset(
-                                    'assets/icons/Vector-1.png',
-                                    width: 50,
-                                    height: 50,
+                                  child: SvgPicture.asset(
+                                    'assets/icons/clock.svg',
+                                    width: 30.sp,
+                                    height: 30.sp,
                                   ),
                                 ),
                                 Text(
@@ -315,7 +321,6 @@ class _EmpDetailsState extends State<EmpDetails> {
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 10.sp,
-
                                   ),
                                 ),
                                 Text(
@@ -337,26 +342,40 @@ class _EmpDetailsState extends State<EmpDetails> {
               ),
               SizedBox(height: 16),
               _buildDetailTile(
-                icon: Image.asset(
-                  'assets/icons/emp22.png',
-                  width: 25.0,
-                  height: 25.0,
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/Vector.svg',
+                  width: 25.sp,
+                  height: 25.sp,
                 ),
-                title: "Employee ID",
+                title: "Employee Name",
                 child: _buildEditableText(
                   context: context,
-                  controller: idController,
+                  controller: employeeNameController,
                   enabled: false,
                 ),
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
-                icon: Image.asset(
-                  'assets/icons/Vector-2.png',
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/montly_salary.svg',
                   width: 25.0,
                   height: 25.0,
                 ),
-                title: "Mir Sultan",
+                title: "Monthly Salary",
+                child: _buildEditableText(
+                  context: context,
+                  controller: monthlySalaryController,
+                  enabled: false,
+                ),
+              ),
+              Divider(color: Colors.grey.shade200, thickness: 1),
+              _buildDetailTile(
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/hourly_rate.svg',
+                  width: 25.0,
+                  height: 25.0,
+                ),
+                title: "Hourly rate",
                 child: _buildEditableText(
                   context: context,
                   controller: nameController,
@@ -365,57 +384,54 @@ class _EmpDetailsState extends State<EmpDetails> {
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
-                icon: Image.asset('assets/icons/emp3.png'),
-                title: "Salary",
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/overtime_rate.svg',
+                ),
+                title: "Overtime rate",
                 child: _buildEditableText(
                   context: context,
-                  controller: salaryController,
+                  controller: overtimeController,
                   enabled: false,
                 ),
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
-                icon: Image.asset('assets/icons/emp193.png'),
-                title: "shift",
-                child: Text('dropdown'),
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/max_overtime_hour.svg',
+                ),
+                title: "Max Overtime hour",
+                child: _buildEditableText(
+                  context: context,
+                  controller: maxOvertimeHourController,
+                  enabled: false,
+                ),
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
-              ListTile(
-                contentPadding: EdgeInsets.all(0),
-                leading: Image.asset(
-                  'assets/icons/Group_189.png',
-                  width: 24.0,
-                  height: 24.0,
+              _buildDetailTile(
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/active_status.svg',
                 ),
-                title: Text(
-                  "Pay Period",
-                  style: Theme.of(context).textTheme.bodyLarge,
+                title: "Active status",
+                child: _buildEditableText(
+                  context: context,
+                  controller: activeStatusController,
+                  enabled: false,
                 ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      localizedPayPeriod,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    const SizedBox(width: 10),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => PayPeriod(empID: widget.employeeIndex),
-                    ),
-                  );
-                },
               ),
+
+              Divider(color: Colors.grey.shade200, thickness: 1),
+              _buildDetailTile(
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/shift.svg',
+                ),
+                title: "Shift",
+                child: _buildEditableText(
+                  context: context,
+                  controller: shiftController,
+                  enabled: false,
+                ),
+              ),
+
               Divider(color: Colors.grey.shade200, thickness: 1),
               ListTile(
                 contentPadding: EdgeInsets.all(0),
@@ -449,82 +465,83 @@ class _EmpDetailsState extends State<EmpDetails> {
                   );
                 },
               ),
-              SizedBox(height: 16),
+              Divider(color: Colors.grey.shade200, thickness: 1),
+              _buildDetailTile(
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/employee_qr_code.svg',
+                ),
+                title: "Employee QR Code",
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Text(''),
+                ),
+              ),
+              Divider(color: Colors.grey.shade200, thickness: 1),
+              SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 2),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 3,
+                    Expanded(
                       child: ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 7,
-                            horizontal: 16,
+                          backgroundColor: Cl.primaryColor,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.sp,
+                            horizontal: 20.sp,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7),
                           ),
                         ),
                         child: Text(
                           "PastData",
-                          style: const TextStyle(
-                            fontSize: 18,
+                          style: TextStyle(
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    if (isEditing)
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 3,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 7,
-                              horizontal: 20,
-                            ), // Adjust padding as needed
-                          ),
-                          child: Text(
-                            "Update",
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      )
-                    else
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 3,
-                        child: ElevatedButton(
-                          onPressed: () {
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (!isEditing) {
                             setState(() {
                               isEditing = true;
                             });
-                            // Navigator.of(context).pop(); // Close dialog,
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 7,
-                              horizontal: 16,
-                            ), // Adjust padding as needed
-                            backgroundColor: Color(0xFFFFFFFF),
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.sp,
+                            horizontal: 20.sp,
                           ),
-                          child: Text(
-                            "Edit",
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFF004368),
-                              fontWeight: FontWeight.bold,
-                            ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          side: BorderSide(color: Cl.primaryColor),
+                        ),
+                        child: Text(
+                          isEditing ? "Update" : "Edit",
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Cl.primaryColor,
                           ),
                         ),
                       ),
+                    ),
                   ],
                 ),
               ),
+
+
+              SizedBox(height: 8),
             ],
           ),
         ),
