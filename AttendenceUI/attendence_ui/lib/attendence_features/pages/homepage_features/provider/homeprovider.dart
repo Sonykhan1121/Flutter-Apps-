@@ -11,10 +11,10 @@ class HomeBarProvider extends ChangeNotifier {
 
 
   final List<Map<String, dynamic>> attendanceData = [
-    {'title': 'Total Employee', 'count': '150', 'icon': LucideIcons.briefcase},
-    {'title': 'Present Employee', 'count': '130', 'icon': LucideIcons.armchair},
-    {'title': 'Absent Employee', 'count': '15', 'icon': LucideIcons.settings},
-    {'title': 'Late Punch', 'count': '05', 'icon': LucideIcons.alarmClock},
+    {'title': 'Total Employee', 'count': '150', 'icon': "assets/icons/briefcase.svg"},
+    {'title': 'Present Employee', 'count': '130', 'icon': "assets/icons/arm_chair.svg"},
+    {'title': 'Absent Employee', 'count': '15', 'icon': "assets/icons/settings.svg"},
+    {'title': 'Late Punch', 'count': '05', 'icon': "assets/icons/alarm.svg"},
   ];
 
   final List<Map<String, String>> leaveSummaryData = [

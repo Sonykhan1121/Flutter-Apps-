@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Colors/colors.dart';
@@ -211,7 +212,7 @@ class _HomeBarState extends State<HomeBar> {
     }
   }
 
-  Widget attendanceCard(String title, String count, IconData icon) {
+  Widget attendanceCard(String title, String count, String svgAssets) {
     Color color = getIconColor(title);
 
     return Container(
@@ -231,13 +232,14 @@ class _HomeBarState extends State<HomeBar> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            padding: EdgeInsets.all(10),
             height: 40.h,
             width: 40.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: color.withOpacity(0.1),
             ),
-            child: Icon(icon, size: 20.sp, color: color),
+            child: SvgPicture.asset(svgAssets, height: 20.sp),
           ),
           SizedBox(height: 16.h),
           Text(title, style: TextStyle(fontSize: 12.sp, color: Colors.black)),

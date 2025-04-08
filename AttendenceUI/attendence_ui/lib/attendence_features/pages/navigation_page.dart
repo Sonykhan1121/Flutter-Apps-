@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../Colors/colors.dart';
 import 'add_employee_features/views/addemployee.dart';
 import 'daily_attendence_features/views/dailyattendence.dart';
+import 'device_settings_features/views/device_setting_screen.dart';
 import 'employee_list_features/views/employee_list.dart';
 import 'homepage_features/views/homebar.dart';
 
@@ -71,9 +72,3 @@ class NavigationPageState extends State<NavigationPage> {
 
 
 
-class DeviceSettingsScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Device Settings Screen'));
-  }
-}

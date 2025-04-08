@@ -1,8 +1,12 @@
 import 'package:attendence_ui/attendence_features/models/employee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/provider/employee_provider.dart';
+import 'package:attendence_ui/attendence_features/pages/employee_profile_features/emp_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+
+import '../../../Colors/colors.dart';
 
 class ProfileRow extends StatefulWidget {
   final Employee employee;
@@ -20,41 +24,56 @@ class _ProfileRowState extends State<ProfileRow> {
 
     final GlobalKey _key = GlobalKey();
 
-    return Container(
-      height: 60.h,
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(9),
-        border: Border.all(color: Color(0x1A004368)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 25.h,
-            backgroundImage:
-                widget.employee.imageFile == null
-                    ? AssetImage("assets/images/profile_1.png")
-                    : MemoryImage(
-                      widget.employee.imageFile,
-                    ), // Use MemoryImage to load image from bytes
-          ),
-          SizedBox(width: 10.w),
-          Expanded(
-            child: Text(
-              widget.employee.name,
-              style: TextStyle(fontSize: 15.sp),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EmpDetails(employeeIndex: 0)),
+        );
+      },
+      child: Container(
+        height: 60.h,
+        margin: EdgeInsets.symmetric(vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(9),
+          border: Border.all(color: Color(0x1A004368)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 25.h,
+              backgroundImage:
+                  widget.employee.imageFile == null
+                      ? AssetImage("assets/images/profile_1.png")
+                      : MemoryImage(
+                        widget.employee.imageFile,
+                      ), // Use MemoryImage to load image from bytes
             ),
-          ),
-          GestureDetector(
-            key: _key,
-            onTap: () => _showPopupMenu(context, _key),
-            child: Icon(Icons.more_vert, size: 24.w),
-          ),
-        ],
+            SizedBox(width: 10.w),
+            Expanded(
+              child: Text(
+                widget.employee.name,
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Cl.primaryColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            GestureDetector(
+              key: _key,
+              onTap: () => _showPopupMenu(context, _key),
+              child: SvgPicture.asset(
+                'assets/icons/employee_profile/row_icon.svg',
+                height: 24.h,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -102,14 +121,12 @@ class _ProfileRowState extends State<ProfileRow> {
   void _showPopupDialog() {
     TextEditingController nameController = TextEditingController();
 
-
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text("Enter New Name"),
           content: TextField(
-
             controller: nameController,
             decoration: InputDecoration(
               hintText: "New Name",

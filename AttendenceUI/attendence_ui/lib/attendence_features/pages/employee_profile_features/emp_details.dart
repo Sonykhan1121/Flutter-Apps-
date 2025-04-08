@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:attendence_ui/attendence_features/pages/employee_profile_features/pay_period.dart';
-import 'package:attendence_ui/attendence_features/pages/employee_profile_features/rules.dart';
+import 'package:attendence_ui/attendence_features/pages/employee_qr_features/employee_qr_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -166,7 +165,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                         Text(
                           'Welcome',
                           style: TextStyle(
-                            color: Colors.black54,
+                            color: Colors.black.withOpacity(0.6),
                             fontSize: 12.sp,
                           ),
                         ),
@@ -348,11 +347,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                   height: 25.sp,
                 ),
                 title: "Employee Name",
-                child: _buildEditableText(
-                  context: context,
-                  controller: employeeNameController,
-                  enabled: false,
-                ),
+
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
@@ -362,11 +357,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                   height: 25.0,
                 ),
                 title: "Monthly Salary",
-                child: _buildEditableText(
-                  context: context,
-                  controller: monthlySalaryController,
-                  enabled: false,
-                ),
+
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
@@ -376,11 +367,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                   height: 25.0,
                 ),
                 title: "Hourly rate",
-                child: _buildEditableText(
-                  context: context,
-                  controller: nameController,
-                  enabled: isEditing,
-                ),
+
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
@@ -388,11 +375,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                   'assets/icons/employee_profile/overtime_rate.svg',
                 ),
                 title: "Overtime rate",
-                child: _buildEditableText(
-                  context: context,
-                  controller: overtimeController,
-                  enabled: false,
-                ),
+
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
@@ -400,54 +383,24 @@ class _EmpDetailsState extends State<EmpDetails> {
                   'assets/icons/employee_profile/max_overtime_hour.svg',
                 ),
                 title: "Max Overtime hour",
-                child: _buildEditableText(
-                  context: context,
-                  controller: maxOvertimeHourController,
-                  enabled: false,
-                ),
-              ),
-              Divider(color: Colors.grey.shade200, thickness: 1),
-              _buildDetailTile(
-                icon: SvgPicture.asset(
-                  'assets/icons/employee_profile/active_status.svg',
-                ),
-                title: "Active status",
-                child: _buildEditableText(
-                  context: context,
-                  controller: activeStatusController,
-                  enabled: false,
-                ),
-              ),
 
-              Divider(color: Colors.grey.shade200, thickness: 1),
-              _buildDetailTile(
-                icon: SvgPicture.asset(
-                  'assets/icons/employee_profile/shift.svg',
-                ),
-                title: "Shift",
-                child: _buildEditableText(
-                  context: context,
-                  controller: shiftController,
-                  enabled: false,
-                ),
               ),
-
               Divider(color: Colors.grey.shade200, thickness: 1),
               ListTile(
                 contentPadding: EdgeInsets.all(0),
-                leading: Image.asset(
-                  'assets/icons/att_new.png',
+                leading: SvgPicture.asset(
+                  'assets/icons/employee_profile/active_status.svg',
                   width: 24.0,
                   height: 24.0,
                 ),
                 title: Text(
-                  "Salary Rules",
+                  "Active status",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("list", style: Theme.of(context).textTheme.bodyLarge),
+                    Text("Active", style: Theme.of(context).textTheme.bodyLarge),
                     SizedBox(width: 10),
                     const Icon(
                       Icons.arrow_forward_ios,
@@ -456,24 +409,44 @@ class _EmpDetailsState extends State<EmpDetails> {
                     ),
                   ],
                 ),
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Rules(empID: widget.employeeIndex),
-                    ),
-                  );
+                onTap: ()  {
+
                 },
               ),
+
+
               Divider(color: Colors.grey.shade200, thickness: 1),
               _buildDetailTile(
                 icon: SvgPicture.asset(
-                  'assets/icons/employee_profile/employee_qr_code.svg',
+                  'assets/icons/employee_profile/shift.svg',
                 ),
-                title: "Employee QR Code",
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text(''),
+                title: "Shift",
+
+              ),
+
+              Divider(color: Colors.grey.shade200, thickness: 1),
+              _buildDetailTile(
+                icon: SvgPicture.asset(
+                  'assets/icons/employee_profile/salary_rules.svg',
+                ),
+                title: "Salary Rules",
+
+              ),
+
+              Divider(color: Colors.grey.shade200, thickness: 1),
+              GestureDetector(
+                onLongPress: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeQrPage(show: true,)));
+                },
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeQrPage(show: false,)));
+
+                },
+                child: _buildDetailTile(
+                  icon: SvgPicture.asset(
+                    'assets/icons/employee_profile/employee_qr_code.svg',
+                  ),
+                  title: "Employee QR Code",
                 ),
               ),
               Divider(color: Colors.grey.shade200, thickness: 1),
@@ -592,22 +565,25 @@ class _EmpDetailsState extends State<EmpDetails> {
   Widget _buildDetailTile({
     required Widget icon,
     required String title,
-    required Widget child,
+     Widget? child,
   }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        // Fixed width for the icon
-        SizedBox(width: 24, child: icon),
-        const SizedBox(width: 16),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          // Fixed width for the icon
+          SizedBox(width: 24, child: icon),
+          const SizedBox(width: 16),
 
-        Expanded(
-          flex: 1,
-          child: Text(title, style: Theme.of(context).textTheme.bodyLarge),
-        ),
+          Expanded(
+            flex: 1,
+            child: Text(title, style: Theme.of(context).textTheme.bodyLarge),
+          ),
 
-        Expanded(flex: 1, child: child),
-      ],
+         if(child!=null) Expanded(flex: 1, child: child),
+        ],
+      ),
     );
   }
 }
