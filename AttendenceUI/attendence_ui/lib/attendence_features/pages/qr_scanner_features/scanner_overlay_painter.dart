@@ -6,7 +6,7 @@ class ScannerOverlayPainter extends CustomPainter {
     final width = size.width;
     final height = size.height;
     final Paint paint = Paint()
-      ..color = Colors.blue.shade800
+      ..color = Colors.green
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.5;
 

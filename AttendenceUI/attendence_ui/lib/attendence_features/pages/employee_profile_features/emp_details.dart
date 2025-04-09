@@ -7,11 +7,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 import '../../Colors/colors.dart';
+import '../../models/employee.dart';
 
 class EmpDetails extends StatefulWidget {
-  final int employeeIndex;
+  final Employee  employee;
 
-  const EmpDetails({super.key, required this.employeeIndex});
+   EmpDetails({super.key, required this.employee});
 
   @override
   State<EmpDetails> createState() => _EmpDetailsState();
@@ -132,6 +133,18 @@ class _EmpDetailsState extends State<EmpDetails> {
         localizedPayPeriod = ''; // Default or handle unknown payPeriod
         break;
     }
+    String getday(String s)
+    {
+      DateTime date = DateTime.parse(s);
+      int day = date.day;
+      return day.toString();
+    }
+    String getMonth(String s)
+    {
+      DateTime date = DateTime.parse(s);
+      String monthName = DateFormat.MMMM().format(date);
+      return monthName;
+    }
     return Scaffold(
       appBar: AppBar(title: Text('Employee')),
       body: Padding(
@@ -148,10 +161,12 @@ class _EmpDetailsState extends State<EmpDetails> {
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.grey[200],
-                            backgroundImage: AssetImage(
-                              'assets/icons/profilepic.png',
-                            ),
+                            backgroundImage: (widget.employee.imageFile == null)
+                                ? AssetImage('assets/icons/profilepic.png')
+                                : MemoryImage(widget.employee.imageFile),
+
                             radius: 50.sp,
+                            // child: Text( widget.employee.imageFile.toString()),
                           ),
                         ],
                       ),
@@ -171,7 +186,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'Mir Sultan',
+                          widget.employee.name,
                           style: TextStyle(
                             color: Cl.primaryColor,
                             fontSize: 25.sp,
@@ -191,7 +206,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                   Expanded(
                     flex: 1,
                     child: Container(
-                      height: 120.h,
+                      height: 130.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(13),
                         color: Colors.white,
@@ -208,7 +223,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                         spacing: 1,
                         children: [
                           Container(
-                            height: 50,
+                            height: 50.h,
                             decoration: BoxDecoration(
                               color: Cl.primaryColor,
                               borderRadius: const BorderRadius.vertical(
@@ -218,7 +233,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                             ),
                             child: Center(
                               child: Text(
-                                month,
+                                getMonth(widget.employee.startDate),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18.sp,
@@ -229,11 +244,11 @@ class _EmpDetailsState extends State<EmpDetails> {
                           ),
                           Center(
                             child: Text(
-                              day,
+                              getday(widget.employee.startDate),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Cl.primaryColor,
-                                fontSize: 45.sp,
+                                fontSize: 40.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -247,7 +262,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                   Expanded(
                     flex: 2,
                     child: Container(
-                      height: 120.h,
+                      height: 130.h,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: Colors.white,
@@ -395,12 +410,12 @@ class _EmpDetailsState extends State<EmpDetails> {
                 ),
                 title: Text(
                   "Active status",
-                  style: Theme.of(context).textTheme.bodyLarge,
+                    style:TextStyle(fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize?.sp)
                 ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("Active", style: Theme.of(context).textTheme.bodyLarge),
+                    Text("Active", style:TextStyle(fontSize: Theme.of(context).textTheme.bodyLarge?.fontSize?.sp) ),
                     SizedBox(width: 10),
                     const Icon(
                       Icons.arrow_forward_ios,
@@ -439,7 +454,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeQrPage(show: true,)));
                 },
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeQrPage(show: false,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeQrPage(show: false,data:"employee id : ${widget.employee.employeeId} \n\nDevice Id:${widget.employee.deviceId}")));
 
                 },
                 child: _buildDetailTile(
@@ -538,7 +553,7 @@ class _EmpDetailsState extends State<EmpDetails> {
               floatingLabelBehavior: FloatingLabelBehavior.never,
             ),
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               color: enabled ? Colors.black : Colors.grey,
             ),
           ),
@@ -552,7 +567,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                 floatingLabelBehavior: FloatingLabelBehavior.never,
               ),
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 color: enabled ? Colors.black : Colors.grey,
               ),
               textAlign: TextAlign.center,
@@ -578,7 +593,7 @@ class _EmpDetailsState extends State<EmpDetails> {
 
           Expanded(
             flex: 1,
-            child: Text(title, style: Theme.of(context).textTheme.bodyLarge),
+            child: Text(title, style:TextStyle(fontSize:Theme.of(context).textTheme.bodyLarge?.fontSize?.sp), ),
           ),
 
          if(child!=null) Expanded(flex: 1, child: child),

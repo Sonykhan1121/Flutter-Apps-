@@ -30,10 +30,6 @@ class _HomeBarState extends State<HomeBar> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
         title: Text(
           'Face Attendance',
           style: TextStyle(

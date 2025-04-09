@@ -158,7 +158,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                         child: Container(
                           height: 3,
                           decoration: BoxDecoration(
-                            color:  Cl.primaryColor.withOpacity(0.4),
+                            color:  Colors.green,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.blue.shade400.withOpacity(0.5),
@@ -184,6 +184,7 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 // Icon(Icons.phone_android, color: Colors.blue.shade800, size: 20),
                 SvgPicture.asset("assets/icons/landline.svg",height: 20.sp,color: Cl.primaryColor,),
@@ -199,17 +200,15 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Flexible(
-                      child: Text(
-                        deviceSerialNo ?? '',
-                        style: TextStyle(
-                          color: Cl.primaryColor,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        maxLines: 3,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
+                    Text(
+                      deviceSerialNo ?? '',
+                      style: TextStyle(
+                        color: Cl.primaryColor,
+                        fontWeight: FontWeight.w400,
                       ),
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
                     )
 
                   ],

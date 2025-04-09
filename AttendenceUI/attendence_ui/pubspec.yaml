@@ -38,6 +38,7 @@ dependencies:
   device_info_plus: ^11.3.3
   intl: ^0.20.2
   mobile_scanner: ^6.0.7
+  qr_flutter: ^4.1.0
 
 flutter_native_splash:
   color: "#004368"  # Background color

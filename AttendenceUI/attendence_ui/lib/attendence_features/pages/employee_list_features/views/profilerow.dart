@@ -28,7 +28,7 @@ class _ProfileRowState extends State<ProfileRow> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => EmpDetails(employeeIndex: 0)),
+          MaterialPageRoute(builder: (context) => EmpDetails(employee: widget.employee,)),
         );
       },
       child: Container(

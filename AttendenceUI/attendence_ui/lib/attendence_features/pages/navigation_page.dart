@@ -1,5 +1,7 @@
 
 
+import 'package:attendence_ui/attendence_features/pages/device_connect_BluWifi_features/connect_device_page.dart';
+import 'package:attendence_ui/attendence_features/pages/qr_scanner_features/qr_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -57,6 +59,10 @@ class NavigationPageState extends State<NavigationPage> {
         unselectedLabelStyle: TextStyle(fontSize: 8.sp),
         iconSize: 24.sp,
       ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ConnectDevicePage()));
+
+      },child:Icon(Icons.add)),
     );
   }
 

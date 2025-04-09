@@ -11,7 +11,7 @@ import '../../../services/employee_api_service.dart';
 
 class EmployeeProvider with ChangeNotifier {
   final UserDatabase _userDatabase = UserDatabase();
-  final apiService = EmployeeApiService();
+  // final apiService = EmployeeApiService();
 
   List<Employee> _profiles =
       []; // Change from List<Map<String, dynamic>> to List<Employee>
@@ -37,34 +37,34 @@ class EmployeeProvider with ChangeNotifier {
     // Notify listeners that the profiles have been updated
     notifyListeners();
   }
-  Future<void> syncFromServer() async {
-    try {
-      if (await NetworkStatus.inOnline()) {
-        final serverUsers = await apiService.getEmployees();
-
-        // Optional: clear local DB and reinsert (if needed)
-        await _userDatabase.clearUsers();
-
-        for (final user in serverUsers) {
-          await _userDatabase.insertUser(user.toMap());
-        }
-      }
-    } catch (e) {
-      print('Error syncing from server: $e');
-    }
-
-    // Always load from local DB to update UI
-    await loadProfiles();
-  }
+  // Future<void> syncFromServer() async {
+  //   try {
+  //     if (await NetworkStatus.inOnline()) {
+  //       final serverUsers = await apiService.getEmployees();
+  //
+  //       // Optional: clear local DB and reinsert (if needed)
+  //       await _userDatabase.clearUsers();
+  //
+  //       for (final user in serverUsers) {
+  //         await _userDatabase.insertUser(user.toMap());
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print('Error syncing from server: $e');
+  //   }
+  //
+  //   // Always load from local DB to update UI
+  //   await loadProfiles();
+  // }
 
 
   Future<bool> emailExists(String email) async {
     return await _userDatabase.emailExists(email);
   }
 
-  Future<bool> emailExistsinServer(String email) async {
-    return await apiService.checkEmployeeExist(email);
-  }
+  // Future<bool> emailExistsinServer(String email) async {
+  //   return await apiService.checkEmployeeExist(email);
+  // }
 
   Future<void> insertUser(Employee employee) async {
     // Convert the Employee object to a Map<String, dynamic>

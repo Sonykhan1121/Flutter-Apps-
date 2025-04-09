@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../Colors/colors.dart';
 
 class EmployeeQrPage extends StatefulWidget {
   bool show;
-   EmployeeQrPage({required this.show,super.key});
+  String? data;
+   EmployeeQrPage({required this.show,this.data,super.key});
 
   @override
   State<EmployeeQrPage> createState() => _EmployeeQrPageState();
@@ -31,11 +33,17 @@ class _EmployeeQrPageState extends State<EmployeeQrPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SvgPicture.asset(
-              "assets/icons/employee_profile/qr-code.svg",
-              height: 194.sp,
-              width: 194.sp,
+            // SvgPicture.asset(
+            //   "assets/icons/employee_profile/qr-code.svg",
+            //   height: 194.sp,
+            //   width: 194.sp,
+            // ),
+            QrImageView(
+              data: widget.data ?? "testing..",
+              version: QrVersions.auto,
+              size: 200.sp,
             ),
+
             Text(
               "Share this QR code with new employee",
               style: TextStyle(
