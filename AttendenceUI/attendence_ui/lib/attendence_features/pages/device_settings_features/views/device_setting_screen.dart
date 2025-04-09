@@ -1,3 +1,4 @@
+import 'package:attendence_ui/attendence_features/pages/qr_scanner_features/qr_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,42 +22,47 @@ class DeviceSettingsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children:
               [
-                Container(
-                  width: 155.w,
-                  height: 181.h,
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        spreadRadius: 2,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Replace with your own asset
-                      SvgPicture.asset(
-                        'assets/icons/employee_profile/qr-code.svg',
-                        width: 60.w,
-                        height: 60.h,
-                        color: Cl.primaryColor,
-                      ),
-                      SizedBox(height: 18),
-                      Text(
-                        'Connect Device',
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600,
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>QRScannerPage()));
+                  },
+                  child: Container(
+                    width: 155.w,
+                    height: 181.h,
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Replace with your own asset
+                        SvgPicture.asset(
+                          'assets/icons/employee_profile/qr-code.svg',
+                          width: 60.w,
+                          height: 60.h,
                           color: Cl.primaryColor,
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 18),
+                        Text(
+                          'Connect Device',
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Cl.primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(

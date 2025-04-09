@@ -1,6 +1,4 @@
 import 'package:attendence_ui/attendence_features/pages/add_employee_features/provider/add_employee_provider.dart';
-import 'package:attendence_ui/attendence_features/pages/employee_qr_features/employee_qr_page.dart';
-import 'package:attendence_ui/attendence_features/pages/homepage_features/views/homebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'attendence_features/pages/daily_attendence_features/provider/daily_attendence_provider.dart';
 import 'attendence_features/pages/employee_list_features/provider/employee_provider.dart';
-import 'attendence_features/pages/employee_profile_features/emp_details.dart';
 import 'attendence_features/pages/homepage_features/provider/homeprovider.dart';
 import 'attendence_features/pages/navigation_page.dart';
 import 'attendence_features/providers/user_provider.dart';
