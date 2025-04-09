@@ -41,7 +41,7 @@ class EmployeeApiService {
   Future<void> updateEmployee(Employee employee) async {
 
     final response = await http.put(
-      Uri.parse('$_baseUrl/employees/${employee.employeeId}'),
+      Uri.parse('$_baseUrl/api/dev/employee/${employee.employeeId}'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'name': employee.name,
@@ -50,8 +50,11 @@ class EmployeeApiService {
         'address': employee.address,
         'email': employee.email,
         'contactNumber': employee.contactNumber,
+        'deviceId': employee.deviceId,
         'salary': employee.salary,
         'overtimeRate': employee.overtimeRate,
+        'startDate': employee.startDate,
+        'startTime': employee.startTime,
         'embedding': employee.embedding,
         'imageFile': base64Encode(employee.imageFile),
       }),

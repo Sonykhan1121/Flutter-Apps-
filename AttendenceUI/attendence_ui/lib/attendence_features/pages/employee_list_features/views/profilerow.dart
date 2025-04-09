@@ -147,11 +147,13 @@ class _ProfileRowState extends State<ProfileRow> {
                   listen: false,
                 );
 
-                employeeProvider.editEmployee(
-                  widget.employee.id!,
-                  widget.employee.name!,
-                  nameController.text.toString(),
-                );
+                // employeeProvider.editEmployee(
+                //   widget.employee.id!,
+                //   widget.employee.name!,
+                //   nameController.text.toString(),
+                // );
+                widget.employee.name = nameController.text.toString();
+                employeeProvider.updateEmployee(widget.employee);
                 Navigator.pop(context);
               },
               child: Text("Save"),

@@ -40,6 +40,12 @@ class EmployeeList extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     }
+                  if(employeeProvider.profiles.length==0)
+                    {
+                      return Center(
+                        child: Text('No Employees Found'),
+                      );
+                    }
                   return ListView.builder(
                     itemCount: employeeProvider.profiles.length,
                     itemBuilder: (context, index) {
