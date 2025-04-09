@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScannerOverlayPainter extends CustomPainter {
+  // Make the overlay parameters customizable
+  final Color cornerColor;
+  final double strokeWidth;
+  final double cornerLengthRatio; // Corner length as a ratio of total size
+  final double cornerRadiusRatio; // Corner radius as a ratio of total size
+
+  ScannerOverlayPainter({
+    this.cornerColor = Colors.green,
+    this.strokeWidth = 2.5,
+    this.cornerLengthRatio = 0.15, // 15% of the size
+    this.cornerRadiusRatio = 0.03, // 3% of the size
+  });
+
   @override
   void paint(Canvas canvas, Size size) {
     final width = size.width;
     final height = size.height;
     final Paint paint = Paint()
-      ..color = Colors.green
+      ..color = cornerColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5;
+      ..strokeWidth = strokeWidth;
 
-    final double cornerLength = 30;
-    final double cornerRadius = 8;
+    // Calculate corner length and radius based on the size
+    final double cornerLength = size.width * cornerLengthRatio;
+    final double cornerRadius = size.width * cornerRadiusRatio;
 
     // Top left corner
     _drawCorner(

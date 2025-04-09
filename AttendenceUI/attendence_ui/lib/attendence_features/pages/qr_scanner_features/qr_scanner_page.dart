@@ -6,27 +6,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../Colors/colors.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'QR Scanner',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        brightness: Brightness.light,
-      ),
-      home: const QRScannerPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
 class QRScannerPage extends StatefulWidget {
   const QRScannerPage({Key? key}) : super(key: key);
 
@@ -78,6 +57,10 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    // Get screen size to make the scanner responsive
+    final Size screenSize = MediaQuery.of(context).size;
+    final double scannerSize = screenSize.width * 0.8; // 80% of screen width
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -87,136 +70,153 @@ class _QRScannerPageState extends State<QRScannerPage> with SingleTickerProvider
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Scan',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: 16.sp,
+          ),
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          const Text(
-            'Scan QR code for operate attendance machine',
-            style: TextStyle(
-              color: Colors.black54,
-              fontSize: 14,
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(height: 20.h),
+            Text(
+              'Scan QR code for operate attendance machine',
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 14.sp,
+              ),
             ),
-          ),
-          const SizedBox(height: 40),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Scanner view
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: ClipRRect(
+            SizedBox(height: 40.h),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Center(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Calculate the maximum square size that fits in the available space
+                      final double maxSize = constraints.maxWidth < constraints.maxHeight * 0.8
+                          ? constraints.maxWidth
+                          : constraints.maxHeight * 0.8;
 
-                      borderRadius: BorderRadius.circular(8),
-                      child: MobileScanner(
-                        controller: controller,
-
-                        onDetect: (capture) {
-                          final List<Barcode> barcodes = capture.barcodes;
-                          if (barcodes.isNotEmpty) {
-                            // Handle scan result
-                            final String code = barcodes.first.rawValue ?? '';
-                            debugPrint('Barcode found! $code');
-
-                            // Show a snackbar with the scanned value
-                            // ScaffoldMessenger.of(context).showSnackBar(
-                            //   SnackBar(content: Text('Scanned: $code')),
-                            // );
-
-                            setState(() {
-                              deviceSerialNo = code.toString();
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-
-                  // Scanner overlay
-                  CustomPaint(
-                    size:  Size(280, 280),
-                    painter: ScannerOverlayPainter(),
-                  ),
-
-                  // Animated scanning line
-                  AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, child) {
-                      return Positioned(
-                        // Use animation value to move the line up and down within the scan area
-                        top: 250 + (_animation.value * 120), // Adjusts position based on animation
-                        left: 20,
-                        right: 20,
-                        child: Container(
-                          height: 3,
-                          decoration: BoxDecoration(
-                            color:  Colors.green,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.blue.shade400.withOpacity(0.5),
-                                blurRadius: 8,
-                                spreadRadius: 2,
+                      return SizedBox(
+                        width: maxSize,
+                        height: maxSize,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Scanner view
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8.r),
+                              child: MobileScanner(
+                                controller: controller,
+                                onDetect: (capture) {
+                                  final List<Barcode> barcodes = capture.barcodes;
+                                  if (barcodes.isNotEmpty) {
+                                    // Handle scan result
+                                    final String code = barcodes.first.rawValue ?? '';
+                                    debugPrint('Barcode found! $code');
+                                    setState(() {
+                                      deviceSerialNo = code;
+                                    });
+                                  }
+                                },
                               ),
-                            ],
-                          ),
+                            ),
+
+                            // Scanner overlay
+                            CustomPaint(
+                              size: Size(maxSize*0.9, maxSize*0.9),
+                              painter: ScannerOverlayPainter(
+                                cornerColor: Colors.green,
+                                strokeWidth: 2.5,
+                              ),
+                            ),
+
+                            // Animated scanning line
+                            AnimatedBuilder(
+                              animation: _animation,
+                              builder: (context, child) {
+                                return Positioned(
+                                  // Use animation value to move the line up and down within the scan area
+                                  top: maxSize / 2 + (_animation.value * maxSize / 3),
+                                  left: maxSize * 0.05,
+                                  right: maxSize * 0.05,
+                                  child: Container(
+                                    height: 3,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.blue.shade400.withOpacity(0.5),
+                                          blurRadius: 8,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       );
                     },
                   ),
+                ),
+              ),
+            ),
+            SizedBox(height: 40.h),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                color: Cl.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/landline.svg",
+                    height: 20.sp,
+                    color: Cl.primaryColor,
+                  ),
+                  SizedBox(width: 12.w),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Device Serial No',
+                        style: TextStyle(
+                          color: Cl.primaryColor,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        deviceSerialNo ?? '',
+                        style: TextStyle(
+                          color: Cl.primaryColor,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.sp,
+                        ),
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ),
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 60),
-          Container(
-            margin:  EdgeInsets.symmetric(horizontal: 20.sp, vertical: 20.sp),
-            padding:  EdgeInsets.symmetric(horizontal: 16.sp, vertical: 12.sp),
-            decoration: BoxDecoration(
-              color: Cl.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Icon(Icons.phone_android, color: Colors.blue.shade800, size: 20),
-                SvgPicture.asset("assets/icons/landline.svg",height: 20.sp,color: Cl.primaryColor,),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                     Text(
-                      'Device Serial No',
-                      style: TextStyle(
-                        color: Cl.primaryColor,
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      deviceSerialNo ?? '',
-                      style: TextStyle(
-                        color: Cl.primaryColor,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      maxLines: 3,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                    )
-
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+            SizedBox(height: 20.h),
+          ],
+        ),
       ),
     );
   }
