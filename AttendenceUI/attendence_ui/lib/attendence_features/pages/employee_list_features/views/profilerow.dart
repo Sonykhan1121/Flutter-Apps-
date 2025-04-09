@@ -160,6 +160,7 @@ class _ProfileRowState extends State<ProfileRow> {
         );
       },
     );
+
   }
 
   void _showDeleteDialog(BuildContext context) {
@@ -167,78 +168,176 @@ class _ProfileRowState extends State<ProfileRow> {
       context,
       listen: false,
     );
-    showModalBottomSheet(
+    // showModalBottomSheet(
+    //   context: context,
+    //   shape: RoundedRectangleBorder(
+    //     borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+    //   ),
+    //   builder: (BuildContext context) {
+    //     return Padding(
+    //       padding: EdgeInsets.all(30),
+    //
+    //       child: Column(
+    //         mainAxisSize: MainAxisSize.min,
+    //         children: [
+    //           Icon(Icons.warning_rounded, size: 50, color: Color(0xFF004368)),
+    //           // Top icon
+    //           SizedBox(height: 10),
+    //           Text(
+    //             "Are you sure?",
+    //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    //           ),
+    //           SizedBox(height: 8),
+    //           Text(
+    //             "Do you want to delete this employee?",
+    //             textAlign: TextAlign.center,
+    //             style: TextStyle(fontSize: 14, color: Color(0xFF004368)),
+    //           ),
+    //           SizedBox(height: 20),
+    //           Row(
+    //             children: [
+    //               Expanded(
+    //                 child: ElevatedButton(
+    //                   style: ElevatedButton.styleFrom(
+    //                     backgroundColor: Colors.red,
+    //                     shape: RoundedRectangleBorder(
+    //                       borderRadius: BorderRadius.circular(8),
+    //                     ),
+    //                     padding: EdgeInsets.symmetric(vertical: 12),
+    //                   ),
+    //                   onPressed: () {
+    //                     print('id : ${widget.employee.id}');
+    //
+    //                     employeeProvider.deleteEmployee(widget.employee.id!);
+    //                     Navigator.of(context).pop(); // Close bottom sheet
+    //                     // Call delete function
+    //                   },
+    //                   child: Text(
+    //                     "Delete",
+    //                     style: TextStyle(color: Colors.white),
+    //                   ),
+    //                 ),
+    //               ),
+    //               SizedBox(width: 10),
+    //               Expanded(
+    //                 child: OutlinedButton(
+    //                   style: OutlinedButton.styleFrom(
+    //                     side: BorderSide(color: Colors.grey),
+    //                     shape: RoundedRectangleBorder(
+    //                       borderRadius: BorderRadius.circular(8),
+    //                     ),
+    //                     padding: EdgeInsets.symmetric(vertical: 12),
+    //                   ),
+    //                   onPressed: () {
+    //                     Navigator.of(context).pop(); // Close bottom sheet
+    //                   },
+    //                   child: Text(
+    //                     "Cancel",
+    //                     style: TextStyle(color: Colors.black),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ],
+    //       ),
+    //     );
+    //   },
+    // );
+
+    showDialog<bool>(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-      ),
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.all(30),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Avatar with question mark
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue.shade100,
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset("assets/icons/sure.svg",height: 30.sp,),
+                  ),
+                ),
+                const SizedBox(height: 20),
 
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.warning_rounded, size: 50, color: Color(0xFF004368)),
-              // Top icon
-              SizedBox(height: 10),
-              Text(
-                "Are you sure?",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                "Do you want to delete this employee?",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Color(0xFF004368)),
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                // Title text
+                const Text(
+                  'Are you sure?',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Description text
+                Text(
+                  'Do you want to delete this Employee ?',
+                  textAlign: TextAlign.center,
+                  style:  TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Delete button
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('id : ${widget.employee.id}');
+
+                          employeeProvider.deleteEmployee(widget.employee.id!);
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      onPressed: () {
-                        print('id : ${widget.employee.id}');
-
-                        employeeProvider.deleteEmployee(widget.employee.id!);
-                        Navigator.of(context).pop(); // Close bottom sheet
-                        // Call delete function
-                      },
-                      child: Text(
-                        "Delete",
-                        style: TextStyle(color: Colors.white),
+                        child:  Text('Delete'),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    const SizedBox(width: 16),
+
+                    // Cancel button
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.blue,
+                          side: const BorderSide(color: Colors.blue),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close bottom sheet
-                      },
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(color: Colors.black),
+                        child: const Text('Cancel'),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
