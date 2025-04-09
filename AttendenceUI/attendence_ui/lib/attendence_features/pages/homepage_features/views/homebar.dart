@@ -211,6 +211,9 @@ class _HomeBarState extends State<HomeBar> {
   Widget attendanceCard(String title, String count, String svgAssets) {
     Color color = getIconColor(title);
 
+
+
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 20.w),
       decoration: BoxDecoration(
