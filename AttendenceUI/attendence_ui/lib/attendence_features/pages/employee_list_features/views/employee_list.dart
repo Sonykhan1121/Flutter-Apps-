@@ -9,8 +9,6 @@ import '../provider/employee_provider.dart';
 class EmployeeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final employeeProvider = Provider.of<EmployeeProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -34,12 +32,21 @@ class EmployeeList extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: employeeProvider.profiles.length,
-                itemBuilder: (context, index) {
-                  return ProfileRow(
-                    employee: employeeProvider.profiles[index],
-
+              child: Consumer<EmployeeProvider>(
+                builder: (context, employeeProvider, _) {
+                  if(employeeProvider.isLoading)
+                    {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  return ListView.builder(
+                    itemCount: employeeProvider.profiles.length,
+                    itemBuilder: (context, index) {
+                      return ProfileRow(
+                        employee: employeeProvider.profiles[index],
+                      );
+                    },
                   );
                 },
               ),
@@ -51,13 +58,11 @@ class EmployeeList extends StatelessWidget {
                 height: 50.h,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add a new employee (you can modify this to show a form)
+                    // Add a new employee
                     final navPage =
-                        context.findAncestorStateOfType<NavigationPageState>();
+                    context.findAncestorStateOfType<NavigationPageState>();
                     if (navPage != null) {
-                      navPage.onTabTapped(
-                        2,
-                      ); // 2 is the index of the "Add Employee" tab
+                      navPage.onTabTapped(2); // Index of "Add Employee" tab
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -88,6 +88,7 @@ class UserDatabase {
     return await db.insert(
       table,
       {
+
         columnName: user[columnName],
         columnEmployeeId: user[columnEmployeeId],
         columnDesignation: user[columnDesignation],

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:attendence_ui/attendence_features/services/network_status.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
@@ -10,33 +9,52 @@ import '../../../services/employee_api_service.dart';
 // Assuming Employee class is in this file
 
 class EmployeeProvider with ChangeNotifier {
+
   final UserDatabase _userDatabase = UserDatabase();
-  // final apiService = EmployeeApiService();
+  final apiService = EmployeeApiService();
+  bool _isLoading = false;
 
   List<Employee> _profiles =
       []; // Change from List<Map<String, dynamic>> to List<Employee>
 
   List<Employee> get profiles => _profiles;
 
+
+  bool get isLoading => _isLoading;
+
   EmployeeProvider() {
     loadProfiles();
+    print('loadProfile111');
 
     // syncFromServer();
   }
 
   Future<void> loadProfiles() async {
+    _isLoading = true;
     // Fetch all users from the database
-    final users = await _userDatabase.getUsers();
+
+
+    final serverUsers = await apiService.getEmployees();
+    await _userDatabase.clearUsers();
+
+    for (final user in serverUsers) {
+      await _userDatabase.insertUser(user.toMap());
+    }
 
     // Map users data to Employee objects using fromMap
+
+    final users = await _userDatabase.getUsers();
     _profiles =
         users.map((user) {
           return Employee.fromMap(user);
         }).toList();
 
+_isLoading = false;
+
     // Notify listeners that the profiles have been updated
     notifyListeners();
   }
+
   // Future<void> syncFromServer() async {
   //   try {
   //     if (await NetworkStatus.inOnline()) {
@@ -72,6 +90,7 @@ class EmployeeProvider with ChangeNotifier {
 
     // Pass the map to the database insertion function
     await _userDatabase.insertUser(map);
+    await apiService.createEmployee(employee);
     // add to server
     // if (await NetworkStatus.inOnline()) {
     //   try {
@@ -101,6 +120,14 @@ class EmployeeProvider with ChangeNotifier {
 
     await loadProfiles();
   }
+  Future<void> updateEmployee(Employee employee) async {
+    // await _userDatabase.updateUser(id, oldName, newName);
+
+    await apiService.updateEmployee(employee);
+
+    await loadProfiles();
+  }
+
   Future<String?> getDeviceId() async {
     final DeviceInfoPlugin  deviceInfo = DeviceInfoPlugin();
     if(Platform.isAndroid)
