@@ -2,34 +2,34 @@ import 'dart:typed_data';
 
 class Employee {
   int? id;
-  String name;
+  String? name;
   String employeeId;
-  String designation;
-  String address;
+  String? designation;
+  String? address;
   String email;
-  String contactNumber;
+  String? contactNumber;
   String deviceId;
-  double salary;
-  double overtimeRate;
-  String startDate;
-  String startTime;
+  double? salary;
+  double? overtimeRate;
+  String? startDate;
+  String? startTime;
 
   List<double> embedding;
   Uint8List imageFile;
 
   Employee({
     this.id,
-    required this.name,
+    this.name,
     required this.employeeId,
-    required this.designation,
-    required this.address,
+    this.designation,
+    this.address,
     required this.email,
-    required this.contactNumber,
+    this.contactNumber,
     required this.deviceId,
-    required this.salary,
-    required this.overtimeRate,
-    required this.startDate,
-    required this.startTime,
+    this.salary,
+    this.overtimeRate,
+    this.startDate,
+    this.startTime,
     required this.embedding,
     required this.imageFile,
   });
@@ -53,7 +53,7 @@ class Employee {
       embedding: List<double>.from(map['embedding']),
       // Assuming embedding is stored as List<double>
       imageFile:
-          map['imageFile'], // Assuming imageFile is stored as Uint8List (binary data)
+      map['imageFile'], // Assuming imageFile is stored as Uint8List (binary data)
     );
   }
 

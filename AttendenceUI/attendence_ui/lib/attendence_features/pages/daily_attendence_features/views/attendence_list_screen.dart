@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../Colors/colors.dart';
 import '../provider/daily_attendence_provider.dart';
 
 class AttendanceListScreen extends StatefulWidget {
@@ -16,56 +18,184 @@ class AttendanceListScreen extends StatefulWidget {
 class _AttendanceListScreenState extends State<AttendanceListScreen> {
   @override
   Widget build(BuildContext context) {
-
-
     return Consumer<DailyAttendanceProvider>(
       builder: (context, attendanceProvider, child) {
         final List<Map<String, String>> data = attendanceProvider.getAttendanceByStatus(widget.status);
 
-        return ListView.builder(
-          padding: EdgeInsets.only(top: 29, left: 25, right: 25),
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            final GlobalKey _key = GlobalKey();
-            return Container(
-              height: 60.h,
-              margin: EdgeInsets.symmetric(vertical: 6),
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(9),
-                border: Border.all(color: Color(0x1A004368)),
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: Padding(
+            padding: EdgeInsets.only(top: 10.h, left: 25.w, right: 25.w),
+            child: ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final GlobalKey _key = GlobalKey();
+                return Container(
+                  height: 60.h,
+                  margin: EdgeInsets.symmetric(vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(9),
+                    border: Border.all(color: Color(0x1A004368)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 25.h,
+                        backgroundImage: NetworkImage(data[index]['image']!),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          data[index]['name']!,
+                          style: TextStyle(fontSize: 15.sp),
+                        ),
+                      ),
+                      GestureDetector(
+                        key: _key,
+                        onTap: () {
+                         (widget.status=='Absent')? showMessagePopup(context, "Send"):_showPopupMenu(context,_key);
+                        },
+                        child: SvgPicture.asset(
+                          (widget.status=='Absent')?'assets/icons/message.svg':'assets/icons/employee_profile/row_icon.svg',
+                          height: 24.h,
+                        ),
+                        // child: Icon(
+                        //   (widget.status == "Absent") ? Icons.send : Icons.more_vert,
+                        //   size: 24.w,
+                        // ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          bottomNavigationBar: (widget.status == 'Absent')
+              ? Padding(
+            padding: EdgeInsets.all(20.h),
+            child: SizedBox(
+              width: double.infinity,
+              height: 48.h,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showMessagePopup(context, "Send to All");
+                },
+                // icon: Icon(Icons.send, color: Colors.white, size: 18),
+                label: Text(
+                  "Send Message to All",
+                  style: TextStyle(fontSize: 15.sp, color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Cl.primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.w),
+                  ),
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 25.h,
-                    backgroundImage: NetworkImage(data[index]['image']!),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      data[index]['name']!,
-                      style: TextStyle(fontSize: 15.sp),
-                    ),
-                  ),
-                  GestureDetector(
-                    key: _key,
-                    onTap: (){
-                      _showPopupMenu(context, _key);
-                    },
-                      child: Icon(Icons.more_vert, size: 24.w)
-                  ),
-                ],
-              ),
-            );
-          },
+            ),
+          )
+              : null,
         );
       },
     );
   }
+
+  void showMessagePopup(BuildContext context,String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          contentPadding: const EdgeInsets.symmetric(vertical: 16,horizontal: 20),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width ,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Subject',
+                    filled: true,
+                    fillColor: Cl.primaryColor.withOpacity(0.1),
+
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    hintText: 'Write your message',
+                    filled: true,
+                    fillColor: Cl.primaryColor.withOpacity(0.1),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Handle send logic
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child:  Text('Cancel',style: TextStyle(color: Cl.primaryColor,fontSize: 16.sp,),),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Handle send logic
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Cl.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: (message=="Send")?16.sp:14.sp,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
 
 
 
@@ -111,72 +241,110 @@ class _AttendanceListScreenState extends State<AttendanceListScreen> {
     }
   }
   void _showDeleteDialog(BuildContext context) {
-    showModalBottomSheet(
+    // final employeeProvider = Provider.of<EmployeeProvider>(
+    //   context,
+    //   listen: false,
+    // );
+
+    showDialog<bool>(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-      ),
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.warning_rounded, size: 50, color: Colors.blueAccent), // Top icon
-              SizedBox(height: 10),
-              Text(
-                "Are you sure?",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                "Do you want to delete this employee?",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              ),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close bottom sheet
-                       // Call delete function
-                      },
-                      child: Text("Delete", style: TextStyle(color: Colors.white)),
-                    ),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Avatar with question mark
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue.shade100,
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close bottom sheet
-                      },
-                      child: Text("Cancel", style: TextStyle(color: Colors.black)),
-                    ),
+                  child: Center(
+                    child: SvgPicture.asset("assets/icons/sure.svg",height: 30.sp,),
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 20),
+
+                // Title text
+                const Text(
+                  'Are you sure?',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Description text
+                Text(
+                  'Do you want to delete this Employee from overtime ?',
+                  textAlign: TextAlign.center,
+                  style:  TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Delete button
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // print('id : ${widget.employee.employeeId}');
+                          //
+                          // employeeProvider.deleteEmployee(widget.employee.employeeId);
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child:  Text('Delete'),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+
+                    // Cancel button
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.blue,
+                          side: const BorderSide(color: Colors.blue),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        child: const Text('Cancel'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
     );
   }
+
 
 
 

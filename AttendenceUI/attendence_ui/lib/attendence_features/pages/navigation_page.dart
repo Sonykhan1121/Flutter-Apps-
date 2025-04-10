@@ -59,10 +59,7 @@ class NavigationPageState extends State<NavigationPage> {
         unselectedLabelStyle: TextStyle(fontSize: 8.sp),
         iconSize: 24.sp,
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ConnectDevicePage()));
 
-      },child:Icon(Icons.add)),
     );
   }
 

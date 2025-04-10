@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Colors/colors.dart';
+import '../../device_connect_BluWifi_features/connect_device_page.dart';
 import '../provider/homeprovider.dart';
 
 class HomeBar extends StatefulWidget {
@@ -179,6 +180,10 @@ class _HomeBarState extends State<HomeBar> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>ConnectDevicePage()));
+
+      },child:Icon(Icons.add)),
     );
   }
 

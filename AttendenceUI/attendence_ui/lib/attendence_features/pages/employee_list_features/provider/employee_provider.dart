@@ -106,14 +106,17 @@ _isLoading = false;
     await loadProfiles();
   }
 
-  Future<void> deleteEmployee(int id) async {
-    await _userDatabase.deleteUser(id);
-    // await apiService.deleteEmployee(id);
+  Future<void> deleteEmployee(String employeeId) async {
+    _isLoading = true;
+    // await _userDatabase.deleteUser(id);
+    await apiService.deleteEmployee(employeeId);
 
+    _isLoading = false;
     await loadProfiles();
   }
 
   Future<void> editEmployee(int id, String oldName, String newName) async {
+
     await _userDatabase.updateUser(id, oldName, newName);
 
     // await apiService.updateEmployee(id, updatedEmployee);
@@ -122,8 +125,11 @@ _isLoading = false;
   }
   Future<void> updateEmployee(Employee employee) async {
     // await _userDatabase.updateUser(id, oldName, newName);
+    _isLoading = true;
 
     await apiService.updateEmployee(employee);
+
+    _isLoading = false;
 
     await loadProfiles();
   }

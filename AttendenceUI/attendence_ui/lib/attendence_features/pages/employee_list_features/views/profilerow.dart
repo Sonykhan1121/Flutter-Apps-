@@ -56,7 +56,7 @@ class _ProfileRowState extends State<ProfileRow> {
             SizedBox(width: 10.w),
             Expanded(
               child: Text(
-                widget.employee.name,
+                widget.employee.name!,
                 style: TextStyle(
                   fontSize: 15.sp,
                   color: Cl.primaryColor,
@@ -170,82 +170,6 @@ class _ProfileRowState extends State<ProfileRow> {
       context,
       listen: false,
     );
-    // showModalBottomSheet(
-    //   context: context,
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-    //   ),
-    //   builder: (BuildContext context) {
-    //     return Padding(
-    //       padding: EdgeInsets.all(30),
-    //
-    //       child: Column(
-    //         mainAxisSize: MainAxisSize.min,
-    //         children: [
-    //           Icon(Icons.warning_rounded, size: 50, color: Color(0xFF004368)),
-    //           // Top icon
-    //           SizedBox(height: 10),
-    //           Text(
-    //             "Are you sure?",
-    //             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-    //           ),
-    //           SizedBox(height: 8),
-    //           Text(
-    //             "Do you want to delete this employee?",
-    //             textAlign: TextAlign.center,
-    //             style: TextStyle(fontSize: 14, color: Color(0xFF004368)),
-    //           ),
-    //           SizedBox(height: 20),
-    //           Row(
-    //             children: [
-    //               Expanded(
-    //                 child: ElevatedButton(
-    //                   style: ElevatedButton.styleFrom(
-    //                     backgroundColor: Colors.red,
-    //                     shape: RoundedRectangleBorder(
-    //                       borderRadius: BorderRadius.circular(8),
-    //                     ),
-    //                     padding: EdgeInsets.symmetric(vertical: 12),
-    //                   ),
-    //                   onPressed: () {
-    //                     print('id : ${widget.employee.id}');
-    //
-    //                     employeeProvider.deleteEmployee(widget.employee.id!);
-    //                     Navigator.of(context).pop(); // Close bottom sheet
-    //                     // Call delete function
-    //                   },
-    //                   child: Text(
-    //                     "Delete",
-    //                     style: TextStyle(color: Colors.white),
-    //                   ),
-    //                 ),
-    //               ),
-    //               SizedBox(width: 10),
-    //               Expanded(
-    //                 child: OutlinedButton(
-    //                   style: OutlinedButton.styleFrom(
-    //                     side: BorderSide(color: Colors.grey),
-    //                     shape: RoundedRectangleBorder(
-    //                       borderRadius: BorderRadius.circular(8),
-    //                     ),
-    //                     padding: EdgeInsets.symmetric(vertical: 12),
-    //                   ),
-    //                   onPressed: () {
-    //                     Navigator.of(context).pop(); // Close bottom sheet
-    //                   },
-    //                   child: Text(
-    //                     "Cancel",
-    //                     style: TextStyle(color: Colors.black),
-    //                   ),
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ],
-    //       ),
-    //     );
-    //   },
-    // );
 
     showDialog<bool>(
       context: context,
@@ -303,9 +227,9 @@ class _ProfileRowState extends State<ProfileRow> {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('id : ${widget.employee.id}');
+                          print('id : ${widget.employee.employeeId}');
 
-                          employeeProvider.deleteEmployee(widget.employee.id!);
+                          employeeProvider.deleteEmployee(widget.employee.employeeId);
                           Navigator.of(context).pop();
                         },
                         style: ElevatedButton.styleFrom(

@@ -80,12 +80,12 @@ class EmployeeApiService {
 
   }
 
-  Future<void> deleteEmployee(int id) async {
+  Future<void> deleteEmployee(String employeeId) async {
     final response = await http.delete(
-      Uri.parse('$_baseUrl/employees/$id'),
+      Uri.parse('$_baseUrl/api/dev/employee/$employeeId'),
     );
 
-    if (response.statusCode == 204) {
+    if (response.statusCode == 200) {
       print('Employee deleted successfully');
     } else {
       print('Failed to delete employee: ${response.statusCode}');

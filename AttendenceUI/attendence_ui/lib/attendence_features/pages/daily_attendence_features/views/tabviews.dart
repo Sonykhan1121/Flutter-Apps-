@@ -1,3 +1,4 @@
+import 'package:attendence_ui/attendence_features/pages/daily_attendence_features/views/absent_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,7 +18,7 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -39,9 +40,10 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
             controller: _tabController,
 
             tabs: [
-              Tab(text: 'Present',),
+              // Tab(text: 'Present',),
               Tab(text: 'Absent'),
               Tab(text: 'Overtime'),
+
             ],
             unselectedLabelColor: Cl.primaryColor.withOpacity(0.6) ,
             labelStyle: TextStyle(fontSize: 15.sp,fontWeight: FontWeight.w500),
@@ -58,8 +60,8 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
       body: TabBarView(
         controller: _tabController,
         children: [
-          AttendanceListScreen(status: 'Present'),
-          AttendanceListScreen(status: 'Absent'),
+          // AttendanceListScreen(status: 'Present'),
+          AbsentListScreen(status: "Absent"),
           AttendanceListScreen(status: 'Overtime'),
         ],
       ),

@@ -186,7 +186,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          widget.employee.name,
+                          widget.employee.name!,
                           style: TextStyle(
                             color: Cl.primaryColor,
                             fontSize: 25.sp,
@@ -233,7 +233,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                             ),
                             child: Center(
                               child: Text(
-                                getMonth(widget.employee.startDate),
+                                getMonth(widget.employee.startDate!),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18.sp,
@@ -244,7 +244,7 @@ class _EmpDetailsState extends State<EmpDetails> {
                           ),
                           Center(
                             child: Text(
-                              getday(widget.employee.startDate),
+                              getday(widget.employee.startDate!),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Cl.primaryColor,

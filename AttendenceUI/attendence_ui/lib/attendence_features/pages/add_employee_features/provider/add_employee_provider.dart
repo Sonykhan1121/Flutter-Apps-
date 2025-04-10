@@ -73,12 +73,12 @@ class AddEmployeeProvider with ChangeNotifier {
   }
   void setAllTextController(Employee employee) async
   {
-    nameController.text = employee.name;
+    nameController.text = employee.name!;
     employeeIdController.text = employee.employeeId;
 
-    addressController.text = employee.address;
+    addressController.text = employee.address!;
     emailController.text = employee.email;
-    contactController.text = employee.contactNumber;
+    contactController.text = employee.contactNumber!;
     salaryController.text = employee.salary.toString();
     overtimeRateController.text = employee.overtimeRate.toString();
     _image = await convertUint8ListToFile(employee.imageFile);

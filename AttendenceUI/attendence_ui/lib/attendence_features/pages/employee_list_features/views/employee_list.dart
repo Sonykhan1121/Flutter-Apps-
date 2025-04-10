@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/views/profilerow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +8,24 @@ import 'package:provider/provider.dart';
 import '../../navigation_page.dart';
 import '../provider/employee_provider.dart';
 
-class EmployeeList extends StatelessWidget {
+class EmployeeList extends StatefulWidget {
+  @override
+  State<EmployeeList> createState() => _EmployeeListState();
+}
+
+class _EmployeeListState extends State<EmployeeList> {
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Timer.periodic(Duration(seconds: 5),(timer)  {
+      print("Timer Periodic :${DateTime.now().second}");
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,12 +59,12 @@ class EmployeeList extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     }
-                  if(employeeProvider.profiles.length==0)
-                    {
-                      return Center(
-                        child: Text('No Employees Found'),
-                      );
-                    }
+                  if (employeeProvider.profiles.isEmpty) {
+                    return  Center(
+                      child: Text('No Employees Found'),
+                    );
+                  }
+
                   return ListView.builder(
                     itemCount: employeeProvider.profiles.length,
                     itemBuilder: (context, index) {
