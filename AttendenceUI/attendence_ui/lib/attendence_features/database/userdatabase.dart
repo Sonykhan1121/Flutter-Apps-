@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:attendence_ui/attendence_features/models/employee.dart';
+import 'package:attendence_ui/attendence_features/models/sync_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -21,7 +24,8 @@ class UserDatabase {
   static final columnStartDate = 'startDate';
   static final columnStartTime = 'startTime';
   static final columnEmbedding = "embedding";
-  static final columnImageFile = "imageFile"; // New column for storing file (NOT NULL)
+  static final columnImageFile =
+      "imageFile"; // New column for storing file (NOT NULL)
 
   static Database? _database;
 
@@ -67,6 +71,20 @@ class UserDatabase {
     await db.execute(''' 
       CREATE INDEX idx_employeeId ON $table($columnEmployeeId)
     ''');
+
+    await db.execute('''
+      CREATE TABLE sync_table (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        operation TEXT NOT NULL,
+        table_name TEXT NOT NULL,
+        record_id INTEGER NOT NULL,
+        payload TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute(
+      'CREATE INDEX idx_sync_table_name ON sync_table(table_name)',
+    );
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -85,26 +103,38 @@ class UserDatabase {
       throw Exception("Image file is required");
     }
 
-    return await db.insert(
-      table,
-      {
+    final id = await db.insert(table, {
+      columnName: user[columnName],
+      columnEmployeeId: user[columnEmployeeId],
+      columnDesignation: user[columnDesignation],
+      columnAddress: user[columnAddress],
+      columnEmail: user[columnEmail],
+      columnContactNumber: user[columnContactNumber],
+      columnDeviceId: user[columnDeviceId],
+      columnSalary: user[columnSalary],
+      columnOvertimeRate: user[columnOvertimeRate],
+      columnStartDate: user[columnStartDate],
+      columnStartTime: user[columnStartTime],
+      columnEmbedding: _floatListToBytes(user[columnEmbedding] as List<double>),
+      columnImageFile: user[columnImageFile],
+      // Store image as BLOB (NOT NULL)
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
 
-        columnName: user[columnName],
-        columnEmployeeId: user[columnEmployeeId],
-        columnDesignation: user[columnDesignation],
-        columnAddress: user[columnAddress],
-        columnEmail: user[columnEmail],
-        columnContactNumber: user[columnContactNumber],
-        columnDeviceId: user[columnDeviceId],
-        columnSalary: user[columnSalary],
-        columnOvertimeRate: user[columnOvertimeRate],
-        columnStartDate: user[columnStartDate],
-        columnStartTime: user[columnStartTime],
-        columnEmbedding: _floatListToBytes(user[columnEmbedding] as List<double>),
-        columnImageFile: user[columnImageFile], // Store image as BLOB (NOT NULL)
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
+
+    await insertSync(
+      SyncModel(
+        operation: 'insert',
+        tableName: table,
+        recordId: id,
+        payload: jsonEncode(user),
+      ),
     );
+    return id;
+  }
+
+  Future<void> insertSync(SyncModel sync) async {
+    final db = await database;
+    await db.insert('sync_table', sync.toMap());
   }
 
   // Check if an email exists in the database
@@ -132,40 +162,59 @@ class UserDatabase {
         columnAddress: row[columnAddress],
         columnEmail: row[columnEmail],
         columnContactNumber: row[columnContactNumber],
-        columnDeviceId : row[columnDeviceId],
+        columnDeviceId: row[columnDeviceId],
         columnSalary: row[columnSalary],
         columnOvertimeRate: row[columnOvertimeRate],
         columnStartDate: row[columnStartDate],
         columnStartTime: row[columnStartTime],
         columnEmbedding: _bytesToFloatList(row[columnEmbedding] as Uint8List),
-        columnImageFile: row[UserDatabase.columnImageFile], // Convert BLOB back to file
+        columnImageFile: row[UserDatabase.columnImageFile],
+        // Convert BLOB back to file
       };
     }).toList();
   }
 
   // Update an existing user
-  Future<void> updateUser(int columnId ,String oldName, String newName) async {
+  Future<void> updateUser(int id, Employee employee) async {
     final db = await database;
 
+    // Create a modifiable map
+    final data = Map<String, dynamic>.from(employee.toMap());
+
+    // Remove the primary key (we don't update the id)
+    data.remove(columnId);
+
+    // Convert embedding if it's a List<double>
+    if (data[columnEmbedding] is List<double>) {
+      data[columnEmbedding] = _floatListToBytes(data[columnEmbedding]);
+    }
 
     await db.update(
       table,
-      {
-        columnName: newName,
-
-      },
+      data,
       where: '$columnId = ?',
-      whereArgs: [columnId],
+      whereArgs: [id],
+    );
+
+    await insertSync(
+      SyncModel(
+        operation: 'update',
+        tableName: table,
+        recordId: id,
+        payload: jsonEncode(employee.toMap()),
+      ),
     );
   }
-  Future<void> deleteUser(int cid) async
-  {
+
+
+
+  Future<void> deleteUser(int id) async {
     final db = await database;
 
-    await db.delete(
-      table,
-      where: '$columnId = ?',
-      whereArgs: [cid],
+    await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
+
+    await insertSync(
+      SyncModel(operation: 'delete', tableName: table, recordId: id, payload: '{}'),
     );
   }
 
@@ -183,10 +232,9 @@ class UserDatabase {
     final byteData = ByteData.sublistView(bytes);
     return List.generate(
       bytes.length ~/ 4,
-          (i) => byteData.getFloat32(i * 4, Endian.little),
+      (i) => byteData.getFloat32(i * 4, Endian.little),
     );
   }
-
 
   // Close the database
   Future<void> close() async {
@@ -200,5 +248,4 @@ class UserDatabase {
     final db = await database;
     await db.delete('users'); // replace 'users' with your actual table name
   }
-
 }

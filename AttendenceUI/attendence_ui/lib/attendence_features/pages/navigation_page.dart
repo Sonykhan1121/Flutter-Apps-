@@ -1,12 +1,9 @@
 
 
-import 'package:attendence_ui/attendence_features/pages/device_connect_BluWifi_features/connect_device_page.dart';
-import 'package:attendence_ui/attendence_features/pages/qr_scanner_features/qr_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../Colors/colors.dart';
-import 'add_employee_features/views/addemployee.dart';
 import 'daily_attendence_features/views/dailyattendence.dart';
 import 'device_settings_features/views/device_setting_screen.dart';
 import 'employee_list_features/views/employee_list.dart';
@@ -23,7 +20,6 @@ class NavigationPageState extends State<NavigationPage> {
   final List<Widget> _children = [
     HomeBar(),
     DailyAttendance(),
-    AddEmployee(),
     EmployeeList(),
     DeviceSettingsScreen(),
   ];
@@ -51,7 +47,6 @@ class NavigationPageState extends State<NavigationPage> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_today_rounded), label: 'Attendance'),
-          BottomNavigationBarItem(icon: Icon(Icons.person_add), label: 'Add Employee'),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Employee List'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Devices'),
         ],

@@ -153,6 +153,7 @@ class _ProfileRowState extends State<ProfileRow> {
                 //   nameController.text.toString(),
                 // );
                 widget.employee.name = nameController.text.toString();
+                print(' update id : ${widget.employee.id}');
                 employeeProvider.updateEmployee(widget.employee);
                 Navigator.pop(context);
               },
@@ -229,7 +230,7 @@ class _ProfileRowState extends State<ProfileRow> {
                         onPressed: () {
                           print('id : ${widget.employee.employeeId}');
 
-                          employeeProvider.deleteEmployee(widget.employee.employeeId);
+                          employeeProvider.deleteEmployee(widget.employee.id!);
                           Navigator.of(context).pop();
                         },
                         style: ElevatedButton.styleFrom(

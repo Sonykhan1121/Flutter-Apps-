@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:attendence_ui/attendence_features/pages/add_employee_features/views/addemployee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/views/profilerow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,9 +22,9 @@ class _EmployeeListState extends State<EmployeeList> {
     // TODO: implement initState
     super.initState();
 
-    Timer.periodic(Duration(seconds: 5),(timer)  {
-      print("Timer Periodic :${DateTime.now().second}");
-    });
+    // Timer.periodic(Duration(seconds: 5),(timer)  {
+    //   print("Timer Periodic :${DateTime.now().second}");
+    // });
 
   }
   @override
@@ -68,7 +69,9 @@ class _EmployeeListState extends State<EmployeeList> {
                   return ListView.builder(
                     itemCount: employeeProvider.profiles.length,
                     itemBuilder: (context, index) {
+                      print("found id:${employeeProvider.profiles[index].id}");
                       return ProfileRow(
+
                         employee: employeeProvider.profiles[index],
                       );
                     },
@@ -84,11 +87,7 @@ class _EmployeeListState extends State<EmployeeList> {
                 child: ElevatedButton(
                   onPressed: () {
                     // Add a new employee
-                    final navPage =
-                    context.findAncestorStateOfType<NavigationPageState>();
-                    if (navPage != null) {
-                      navPage.onTabTapped(2); // Index of "Add Employee" tab
-                    }
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=>AddEmployee()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF004368),

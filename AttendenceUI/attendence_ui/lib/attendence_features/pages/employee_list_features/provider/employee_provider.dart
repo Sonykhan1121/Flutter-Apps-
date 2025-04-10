@@ -9,7 +9,6 @@ import '../../../services/employee_api_service.dart';
 // Assuming Employee class is in this file
 
 class EmployeeProvider with ChangeNotifier {
-
   final UserDatabase _userDatabase = UserDatabase();
   final apiService = EmployeeApiService();
   bool _isLoading = false;
@@ -18,7 +17,6 @@ class EmployeeProvider with ChangeNotifier {
       []; // Change from List<Map<String, dynamic>> to List<Employee>
 
   List<Employee> get profiles => _profiles;
-
 
   bool get isLoading => _isLoading;
 
@@ -33,23 +31,23 @@ class EmployeeProvider with ChangeNotifier {
     _isLoading = true;
     // Fetch all users from the database
 
-
-    final serverUsers = await apiService.getEmployees();
-    await _userDatabase.clearUsers();
-
-    for (final user in serverUsers) {
-      await _userDatabase.insertUser(user.toMap());
-    }
+    // final serverUsers = await apiService.getEmployees();
+    // await _userDatabase.clearUsers();
+    //
+    // for (final user in serverUsers) {
+    //   await _userDatabase.insertUser(user.toMap());
+    // }
 
     // Map users data to Employee objects using fromMap
 
     final users = await _userDatabase.getUsers();
+
     _profiles =
         users.map((user) {
           return Employee.fromMap(user);
         }).toList();
 
-_isLoading = false;
+    _isLoading = false;
 
     // Notify listeners that the profiles have been updated
     notifyListeners();
@@ -75,7 +73,6 @@ _isLoading = false;
   //   await loadProfiles();
   // }
 
-
   Future<bool> emailExists(String email) async {
     return await _userDatabase.emailExists(email);
   }
@@ -89,8 +86,10 @@ _isLoading = false;
     final Map<String, dynamic> map = employee.toMap();
 
     // Pass the map to the database insertion function
+    _isLoading = true;
     await _userDatabase.insertUser(map);
-    await apiService.createEmployee(employee);
+    // await apiService.createEmployee(employee);
+
     // add to server
     // if (await NetworkStatus.inOnline()) {
     //   try {
@@ -103,49 +102,46 @@ _isLoading = false;
     // }
 
     // Reload profiles after inserting the new user
-    await loadProfiles();
-  }
-
-  Future<void> deleteEmployee(String employeeId) async {
-    _isLoading = true;
-    // await _userDatabase.deleteUser(id);
-    await apiService.deleteEmployee(employeeId);
 
     _isLoading = false;
+    notifyListeners();
     await loadProfiles();
   }
 
-  Future<void> editEmployee(int id, String oldName, String newName) async {
+  Future<void> deleteEmployee(int id) async {
+    _isLoading = true;
+    await _userDatabase.deleteUser(id);
 
-    await _userDatabase.updateUser(id, oldName, newName);
+    // await apiService.deleteEmployee(employeeId);
 
-    // await apiService.updateEmployee(id, updatedEmployee);
-
+    _isLoading = false;
+    notifyListeners();
     await loadProfiles();
   }
+
   Future<void> updateEmployee(Employee employee) async {
     // await _userDatabase.updateUser(id, oldName, newName);
     _isLoading = true;
 
-    await apiService.updateEmployee(employee);
+    // await apiService.updateEmployee(employee);
+
+    await _userDatabase.updateUser(employee.id!, employee);
 
     _isLoading = false;
+    notifyListeners();
 
     await loadProfiles();
   }
 
   Future<String?> getDeviceId() async {
-    final DeviceInfoPlugin  deviceInfo = DeviceInfoPlugin();
-    if(Platform.isAndroid)
-      {
-        AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-        return androidDeviceInfo.id;
-      }
-    else if(Platform.isIOS)
-      {
-        IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-        return iosDeviceInfo.identifierForVendor;
-      }
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
+      return androidDeviceInfo.id;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+      return iosDeviceInfo.identifierForVendor;
+    }
     return null;
   }
 }
