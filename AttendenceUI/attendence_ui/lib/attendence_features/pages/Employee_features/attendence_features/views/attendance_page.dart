@@ -159,6 +159,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                       });
                                     },
                                     activeColor: const Color(0xFF004d71),
+
                                   ),
                                   const SizedBox(width: 4),
                                   SvgPicture.asset("assets/icons/office.svg",height: 20,),
@@ -176,7 +177,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 ),
               ),
 
-              const SizedBox(height: 60),
+               SizedBox(height: 96.h),
 
               // Time display
               Column(
@@ -187,25 +188,25 @@ class _AttendancePageState extends State<AttendancePage> {
                       Text(
                         '08 : 00 : 00 am',
                         style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF004d71),
+                          color: Cl.primaryColor,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                   SizedBox(height: 4.sp),
                   Text(
                     '16 April 2025, Thursday',
                     style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
+                      fontSize: 12.sp,
+                      color: Colors.black,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 40),
+               SizedBox(height: 50.h),
 
               // Action buttons
               Row(
@@ -215,12 +216,12 @@ class _AttendancePageState extends State<AttendancePage> {
                   ElevatedButton.icon(
                     onPressed: () {},
                     icon: SvgPicture.asset("assets/icons/touchpad.svg",height: 20,),
-                    label: const Text(
+                    label:  Text(
                       'Check In',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(fontSize: 12.sp,color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF004d71),
+                      backgroundColor: Cl.primaryColor,
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -231,13 +232,13 @@ class _AttendancePageState extends State<AttendancePage> {
                   // Face attendance button
                   OutlinedButton.icon(
                     onPressed: () {},
-                    icon: SvgPicture.asset("assets/icons/face_id.svg",height: 20,),,
-                    label: const Text(
+                    icon: SvgPicture.asset("assets/icons/face_id.svg",height: 20,),
+                    label:  Text(
                       'Face attendance',
-                      style: TextStyle(color: Color(0xFF004d71)),
+                      style: TextStyle(fontSize:12.sp,color: Cl.primaryColor),
                     ),
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF004d71)),
+                      side: const BorderSide(color: Color(0xffd6e6f0)),
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),

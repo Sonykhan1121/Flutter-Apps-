@@ -93,7 +93,7 @@ class _EmployeeNavigationPageState extends State<EmployeeNavigationPage> {
 
   final List<Widget> _pages = [
     AttendancePage(),
-    MyActivitiyPage(),
+    MyActivityPage(),
     TaskPage(),
     LeavePage(),
   ];
