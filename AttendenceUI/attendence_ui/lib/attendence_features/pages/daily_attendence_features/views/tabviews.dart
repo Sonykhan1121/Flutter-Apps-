@@ -32,6 +32,7 @@ class _DailyAttendanceState extends State<TabViews> with SingleTickerProviderSta
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: Container(),
         backgroundColor: Colors.white,
         bottom: PreferredSize(
           

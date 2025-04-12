@@ -30,6 +30,14 @@ class _AbsentListScreenState extends State<AbsentListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.zero,
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+      ),
+
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(20),

@@ -50,10 +50,11 @@ class _MyActivityPageState extends State<MyActivityPage> {
           icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF0A4E7C)),
           onPressed: () {},
         ),
-        title: const Text(
+        title:  Text(
           'My Activities',
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w500),
+          style: TextStyle(color: Colors.black87),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: SvgPicture.asset(
@@ -362,7 +363,10 @@ class _MyActivityPageState extends State<MyActivityPage> {
             width: 50.w,
             decoration: BoxDecoration(
               color: const Color(0xFF0A4E7C),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                bottomLeft: Radius.circular(8),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

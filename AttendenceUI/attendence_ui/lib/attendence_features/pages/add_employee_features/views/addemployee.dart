@@ -441,7 +441,7 @@ class _AddEmployeeState extends State<AddEmployee> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(9),
-                borderSide: const BorderSide(color: Colors.blue),
+                borderSide:  BorderSide(color: Cl.primaryColor),
               ),
             ),
             validator: (value) => validateInput(value, "required"),

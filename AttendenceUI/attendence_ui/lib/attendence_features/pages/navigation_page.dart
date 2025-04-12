@@ -1,7 +1,10 @@
 
+import 'package:attendence_ui/attendence_features/pages/add_employee_features/views/addemployee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
+import '../Colors/colors.dart';
 import 'daily_attendence_features/views/dailyattendence.dart';
 import 'device_settings_features/views/device_setting_screen.dart';
 import 'employee_list_features/views/employee_list.dart';
@@ -22,14 +25,17 @@ class _NavigationPageState extends State<NavigationPage> {
   final List<Widget> _pages = [
     HomeBar(),
     DailyAttendance(),
+    AddEmployee(),
     EmployeeList(),
     DeviceSettingsScreen(),
   ];
   final List<String> _iconPaths = [
-    'assets/icons/home_icon.png',
-    'assets/icons/attendance_admin.png',
-    'assets/icons/Profile.png',
-    'assets/icons/device_admin.png',
+    'assets/icons/home_admin.svg',
+    'assets/icons/attendance_admin.svg',
+'assets/icons/add_employee_admin.svg',
+    'assets/icons/employee_admin.svg',
+    'assets/icons/management_admin.svg',
+
   ];
 
   void onTabTapped(int index) {
@@ -42,14 +48,14 @@ class _NavigationPageState extends State<NavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // extendBody: true,
-
+      backgroundColor: Colors.white,
       body: _pages[_selectedIndex],
       bottomNavigationBar: Padding(
         padding:  EdgeInsets.only(bottom: 10.h, left: 15.h, right: 15.h),
         child: Container(
           height: 70.h,
           decoration: BoxDecoration(
-            color: Color(0xFFF4F8FF),
+            color: Cl.primaryColor,
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
@@ -65,8 +71,10 @@ class _NavigationPageState extends State<NavigationPage> {
             children: [
               _buildNavItem(0,  'Home'),
               _buildNavItem(1,  'Attendance'),
-              _buildNavItem(2,  'Employee List'),
-              _buildNavItem(3,  'Devices'),
+              _buildNavItem(2,  'Add Employee'),
+
+              _buildNavItem(3,  'Employee List'),
+              _buildNavItem(4,  'Management'),
             ],
           ),
         ),
@@ -84,23 +92,19 @@ class _NavigationPageState extends State<NavigationPage> {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            // decoration: BoxDecoration(
-            //   // color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.transparent,
-            //   borderRadius: BorderRadius.circular(12),
-            // ),
-            child: Image.asset(
+            child: SvgPicture.asset(
               _iconPaths[index],
-              width: 20.sp,
-              height: 22.sp,
-              color: isSelected ?Color(0xFF004368) : Color(0xFF537B92),
+              width: 20.h,
+              height: 22.w,
+              color: isSelected ?Color(0xFFD6E6F0) : Color(0xFF537B92),
             ),
           ),
 
           Text(
             label,
             style: TextStyle(
-              color: isSelected ?Color(0xFF004368) : Color(0xFF537B92),
-              fontSize: 11.sp,
+              color: isSelected ?Color(0xFFD6E6F0) : Color(0xFF537B92),
+              fontSize: 10.sp,
               fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
             ),
           ),

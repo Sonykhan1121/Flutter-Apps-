@@ -80,99 +80,102 @@ class _AttendancePageState extends State<AttendancePage> {
                 ),
                 child: Padding(
                   padding:EdgeInsets.only(left: 10.w,top:8.h),
-                  child: Column(
+                  child: SizedBox(
+                    height: 110.h,
+                    child: Column(
 
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
-                    children: [
-                       Text(
-                        'Select work type',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Cl.primaryColor,
+                      children: [
+                         Text(
+                          'Select work type',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Cl.primaryColor,
+                          ),
                         ),
-                      ),
-                       SizedBox(height: 12.h),
-                      Divider(height: 1.sp,color: Cl.primaryColor.withOpacity(0.2),),
-                      Row(
+                         SizedBox(height: 12.h),
+                        Divider(height: 1.sp,color: Cl.primaryColor.withOpacity(0.2),),
+                        Row(
 
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          // Home option
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isHomeSelected = true;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric( vertical: 8),
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Home option
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isHomeSelected = true;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric( vertical: 8),
 
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    value: true,
-                                    groupValue: isHomeSelected,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isHomeSelected = true;
-                                      });
-                                    },
-                                    activeColor: const Color(0xFF004d71),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  // const Icon(Icons.home_outlined),
-                                  SvgPicture.asset("assets/icons/home_radio_icon.svg",height: 20,),
-                                  const SizedBox(width: 4),
-                                  const Text('Home'),
-                                ],
+                                child: Row(
+                                  children: [
+                                    Radio(
+                                      value: true,
+                                      groupValue: isHomeSelected,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isHomeSelected = true;
+                                        });
+                                      },
+                                      activeColor: const Color(0xFF004d71),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    // const Icon(Icons.home_outlined),
+                                    SvgPicture.asset("assets/icons/home_radio_icon.svg",height: 20,),
+                                    const SizedBox(width: 4),
+                                     Text('Home',style: TextStyle(fontSize: 16.sp),),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                           SizedBox(width: 2.w),
-                          // Onsite option
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isHomeSelected = false;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                // border: Border.all(
-                                //   color: !isHomeSelected
-                                //       ? const Color(0xFF004d71)
-                                //       : Colors.grey[300]!,
-                                // ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Radio(
-                                    value: false,
-                                    groupValue: isHomeSelected,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isHomeSelected = false;
-                                      });
-                                    },
-                                    activeColor: const Color(0xFF004d71),
+                             SizedBox(width: 2.w),
+                            // Onsite option
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isHomeSelected = false;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  // border: Border.all(
+                                  //   color: !isHomeSelected
+                                  //       ? const Color(0xFF004d71)
+                                  //       : Colors.grey[300]!,
+                                  // ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Radio(
+                                      value: false,
+                                      groupValue: isHomeSelected,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isHomeSelected = false;
+                                        });
+                                      },
+                                      activeColor: const Color(0xFF004d71),
 
-                                  ),
-                                  const SizedBox(width: 4),
-                                  SvgPicture.asset("assets/icons/office.svg",height: 20,),
-                                  const SizedBox(width: 4),
-                                  const Text('Onsite'),
-                                ],
+                                    ),
+                                    const SizedBox(width: 4),
+                                    SvgPicture.asset("assets/icons/office.svg",height: 20,),
+                                    const SizedBox(width: 4),
+                                     Text('Onsite',style: TextStyle(fontSize: 16.sp)),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                    ],
+                            Spacer(),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -188,7 +191,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       Text(
                         '08 : 00 : 00 am',
                         style: TextStyle(
-                          fontSize: 24.sp,
+                          fontSize: 26.sp,
                           fontWeight: FontWeight.bold,
                           color: Cl.primaryColor,
                         ),
@@ -199,7 +202,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   Text(
                     '16 April 2025, Thursday',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize: 14.sp,
                       color: Colors.black,
                     ),
                   ),
@@ -210,7 +213,7 @@ class _AttendancePageState extends State<AttendancePage> {
 
               // Action buttons
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Check In button
                   ElevatedButton.icon(
@@ -218,7 +221,7 @@ class _AttendancePageState extends State<AttendancePage> {
                     icon: SvgPicture.asset("assets/icons/touchpad.svg",height: 20,),
                     label:  Text(
                       'Check In',
-                      style: TextStyle(fontSize: 12.sp,color: Colors.white),
+                      style: TextStyle(fontSize: 14.sp,color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Cl.primaryColor,
@@ -228,6 +231,10 @@ class _AttendancePageState extends State<AttendancePage> {
                       ),
                     ),
                   ),
+                  SizedBox(width: 10.w,),
+                  Text('or',style: TextStyle(fontSize: 14.sp,color: Color(
+                      0xFFD6E6F0)),),
+                  SizedBox(width: 10.w,),
 
                   // Face attendance button
                   OutlinedButton.icon(
@@ -235,7 +242,7 @@ class _AttendancePageState extends State<AttendancePage> {
                     icon: SvgPicture.asset("assets/icons/face_id.svg",height: 20,),
                     label:  Text(
                       'Face attendance',
-                      style: TextStyle(fontSize:12.sp,color: Cl.primaryColor),
+                      style: TextStyle(fontSize:14.sp,color: Cl.primaryColor),
                     ),
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xffd6e6f0)),

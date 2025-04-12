@@ -98,10 +98,15 @@ class _EmployeeNavigationPageState extends State<EmployeeNavigationPage> {
     LeavePage(),
   ];
   final List<String> _iconPaths = [
-    'assets/icons/face.png',
-    'assets/icons/activity.png',
-    'assets/icons/task.png',
-    'assets/icons/leaves.png',
+    // 'assets/icons/face.png',
+    // 'assets/icons/activity.png',
+    // 'assets/icons/task.png',
+    // 'assets/icons/leaves.png',
+
+    'assets/icons/activity_employee.svg',
+    'assets/icons/attendance_employee.svg',
+    'assets/icons/task_employee.svg',
+    'assets/icons/leaves_icon_employee.svg',
   ];
 
   void onTabTapped(int index) {
@@ -119,7 +124,7 @@ class _EmployeeNavigationPageState extends State<EmployeeNavigationPage> {
         child: Container(
           height: 70.h,
           decoration: BoxDecoration(
-            color: Color(0xFFF4F8FF),
+            color: Cl.primaryColor,
             borderRadius: BorderRadius.circular(18),
             boxShadow: [
               BoxShadow(
@@ -154,22 +159,20 @@ class _EmployeeNavigationPageState extends State<EmployeeNavigationPage> {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            // decoration: BoxDecoration(
-            //   // color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.transparent,
-            //   borderRadius: BorderRadius.circular(12),
-            // ),
-            child: Image.asset(
+
+
+            child: SvgPicture.asset(
               _iconPaths[index],
-              width: 20.sp,
-              height: 22.sp,
-              color: isSelected ?Color(0xFF004368) : Color(0xFF537B92),
+              width: 20.h,
+              height: 22.w,
+              color: isSelected ?Color(0xFFD6E6F0) : Color(0xFF537B92),
             ),
           ),
 
           Text(
             label,
             style: TextStyle(
-              color: isSelected ?Color(0xFF004368) : Color(0xFF537B92),
+              color: isSelected ?Color(0xFFD6E6F0) : Color(0xFF537B92),
               fontSize: 11.sp,
               fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
             ),

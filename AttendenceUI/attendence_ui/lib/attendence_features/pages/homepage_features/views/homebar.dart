@@ -204,13 +204,13 @@ class _HomeBarState extends State<HomeBar> {
   Color getIconColor(String title) {
     switch (title) {
       case 'Total Employee':
-        return Colors.blue;
+        return Color(0x1A44AEF9);
       case 'Present Employee':
-        return Colors.green;
+        return Color(0x1A534FEB);
       case 'Absent Employee':
-        return Colors.orange;
+        return Color(0x1A534FEB);
       case 'Late Punch':
-        return Colors.red;
+        return Color(0x1AFF9500);
       default:
         return Colors.black;
     }
