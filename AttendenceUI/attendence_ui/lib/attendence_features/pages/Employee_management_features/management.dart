@@ -1,12 +1,10 @@
-import 'package:attendence_ui/attendence_features/pages/qr_scanner_features/qr_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../Colors/colors.dart';
-import '../../Employee_management_features/employee_management.dart';
+import 'employee_management.dart';
 
-class DeviceSettingsScreen extends StatelessWidget {
+class Management extends StatelessWidget {
   final List<Map<String, dynamic>> map = [
     {'icon': 'assets/icons/crowdfunding.svg', 'title': "Device management"},
     {'icon': 'assets/icons/check-list.svg', "title": "Employee management"},
@@ -19,7 +17,7 @@ class DeviceSettingsScreen extends StatelessWidget {
     {'icon': 'assets/icons/apple-reminder.svg', "title": "Rules"},
   ];
 
-  DeviceSettingsScreen({super.key});
+  Management({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +31,9 @@ class DeviceSettingsScreen extends StatelessWidget {
           customRow(map[0]['icon'], map[0]['title']),
           Divider(height: 1.h,),
           GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeManagementScreen()));
-              },
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeManagementScreen()));
+            },
               child: customRow(map[1]['icon'], map[1]['title'])),
           Divider(height: 1.h,),
 
@@ -59,16 +57,16 @@ class DeviceSettingsScreen extends StatelessWidget {
   Widget customRow(String svgasset, String title) {
     return
 
-      Container(
-        margin: EdgeInsets.only(bottom:15.h ,top: 15.h),
-        child: Row(
+     Container(
+       margin: EdgeInsets.only(bottom:15.h ,top: 15.h),
+       child: Row(
           children: [
             SvgPicture.asset(svgasset, height: 20.sp),
             SizedBox(width: 10.w),
             Text(title, style: TextStyle(fontSize: 14.sp)),
           ],
         ),
-      );
+     );
 
   }
 }
