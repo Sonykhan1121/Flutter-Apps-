@@ -1,9 +1,7 @@
-import 'package:attendence_ui/attendence_features/pages/qr_scanner_features/qr_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../Colors/colors.dart';
 import '../../Employee_management_features/employee_management.dart';
 import '../../device_connect_BluWifi_features/connect_device_page2.dart';
 
@@ -20,6 +18,8 @@ class DeviceSettingsScreen extends StatelessWidget {
     {'icon': 'assets/icons/apple-reminder.svg', "title": "Rules"},
   ];
 
+   DeviceSettingsScreen({super.key});
+
 
 
   @override
@@ -32,23 +32,19 @@ class DeviceSettingsScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
-                );
-              },
-              onDoubleTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
-                );
+            InkWell(
+              onTap: (){
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
+                // );
               },
               child: customRow(map[0]['icon'], map[0]['title']),
+
             ),
+
             Divider(height: 1.h),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.push(
                   context,
@@ -57,14 +53,7 @@ class DeviceSettingsScreen extends StatelessWidget {
                   ),
                 );
               },
-              onDoubleTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EmployeeManagementScreen(),
-                  ),
-                );
-              },
+
               child: customRow(map[1]['icon'], map[1]['title']),
             ),
             Divider(height: 1.h),
@@ -75,8 +64,8 @@ class DeviceSettingsScreen extends StatelessWidget {
             customRow(map[3]['icon'], map[3]['title']),
             Divider(height: 1.h),
 
-            customRow(map[4]['icon'], map[4]['title']),
-            Divider(height: 1.h),
+            // customRow(map[4]['icon'], map[4]['title']),
+            // Divider(height: 1.h),
 
             customRow(map[5]['icon'], map[5]['title']),
             Divider(height: 1.h),

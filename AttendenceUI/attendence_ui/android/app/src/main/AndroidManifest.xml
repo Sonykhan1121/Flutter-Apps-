@@ -24,6 +24,21 @@
 
     <!-- Permission to access file storage for database operations -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Required -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+
+
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- legacy for Android 11 or lower -->
+    <uses-permission android:name="android.permission.BLUETOOTH"  />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- legacy for Android 9 or lower -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"  />
+
 
 
 

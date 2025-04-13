@@ -1,4 +1,5 @@
 import 'package:attendence_ui/attendence_features/pages/Employee_features/employee_navigation_features/employee_navigation_page.dart';
+import 'package:attendence_ui/attendence_features/pages/device_connect_BluWifi_features/connect_device_page.dart';
 import 'package:attendence_ui/attendence_features/pages/device_searching_features/device_search_screen.dart';
 import 'package:attendence_ui/attendence_features/pages/navigation_page.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _DeviceConnectState extends State<DeviceConnect> {
               runSpacing: 16, // Vertical space between items
               // Center align items
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     Navigator.pushReplacement(context, MaterialPageRoute(
                         builder: (context) => NavigationPage()));
@@ -78,10 +79,10 @@ class _DeviceConnectState extends State<DeviceConnect> {
                     ),
                   ),
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: (){
-                    Navigator.pushReplacement(context, MaterialPageRoute(
-                        builder: (context) => DesignSearchScreen()));
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => ConnectDevicePage()));
                   },
                   child: Container(
                     width: 155.w,
@@ -121,9 +122,9 @@ class _DeviceConnectState extends State<DeviceConnect> {
                     ),
                   ),
                 ),
-                GestureDetector(
+                InkWell(
                   onTap: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(
+                    Navigator.push(context, MaterialPageRoute(
                         builder: (context) => EmployeeNavigationPage()));
                     // Navigator.push(
                     //   context,

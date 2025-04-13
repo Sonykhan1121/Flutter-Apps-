@@ -33,12 +33,14 @@ dependencies:
   google_ml_kit: ^0.19.0
   fluttertoast: ^8.2.10
   google_mlkit_face_detection: ^0.12.0
-  permission_handler: ^11.4.0
+  permission_handler: ^12.0.0+1
   connectivity_plus: ^6.1.3
   device_info_plus: ^11.3.3
   intl: ^0.20.2
   mobile_scanner: ^6.0.7
   qr_flutter: ^4.1.0
+  lottie: ^3.3.1
+  flutter_blue_plus: ^1.35.3
 
 flutter_native_splash:
   color: "#004368"  # Background color
@@ -76,6 +78,7 @@ flutter:
     - assets/images/
     - assets/tfmodel/
     - assets/icons/employee_profile/
+    - assets/animation/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

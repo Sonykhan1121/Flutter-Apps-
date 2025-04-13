@@ -141,7 +141,7 @@ class _EmployeeNavigationPageState extends State<EmployeeNavigationPage> {
               _buildNavItem(0,  'Attendance'),
               _buildNavItem(1,  'My Activities'),
               _buildNavItem(2,  'Task'),
-              _buildNavItem(3,  'Lectures'),
+              _buildNavItem(3,  'Leaves'),
             ],
           ),
         ),

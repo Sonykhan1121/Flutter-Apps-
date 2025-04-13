@@ -1,8 +1,86 @@
 import 'dart:math' as math;
 
+import 'package:attendence_ui/attendence_features/pages/device_connect_BluWifi_features/connect_device_page2.dart';
 import 'package:flutter/material.dart';
-class DesignSearchScreen extends StatelessWidget {
-  const DesignSearchScreen({super.key});
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:lottie/lottie.dart';
+
+class DeviceSearchScreen extends StatefulWidget {
+
+   const DeviceSearchScreen({super.key});
+
+  @override
+  State<DeviceSearchScreen> createState() => _DeviceSearchScreenState();
+}
+
+class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
+  List<ScanResult> _scanResults = [];
+  bool _isScanning = false;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _startScan();
+    // Listen for scan status
+    FlutterBluePlus.isScanning.listen((isScanning) {
+      setState(() {
+        _isScanning = isScanning;
+      });
+    });
+
+    // Listen for scan results
+    FlutterBluePlus.scanResults.listen((results) {
+      setState(() {
+        _scanResults = results;
+      });
+    }, onError: (e) {
+      print("Scan error: $e");
+    });
+
+
+
+    Future.delayed(Duration(seconds: 20), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ConnectDevicePage2(scanResults: _scanResults)),
+      );
+    });
+
+  }
+  @override
+  void dispose() {
+
+    _stopScan();
+    super.dispose();
+  }
+
+  Future<void> _startScan() async {
+    print('startScan');
+
+    _isScanning = true;
+    try {
+      await FlutterBluePlus.startScan(
+        timeout: const Duration(seconds: 15),
+      );
+      _isScanning = false;
+
+    } catch (e) {
+      print('Error starting scan: $e');
+    }
+  }
+
+  Future<void> _stopScan() async {
+    print('StopScan');
+    _isScanning = false;
+
+    try {
+      await FlutterBluePlus.stopScan();
+    } catch (e) {
+      print('Error stopping scan: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,110 +98,45 @@ class DesignSearchScreen extends StatelessWidget {
           style: TextStyle(color: Colors.black87),
         ),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 40),
-            SearchingAnimation(),
-            SizedBox(height: 40),
-            Text(
-              'Searching......',
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 16,
-              ),
-            ),
-            Spacer(),
-          ],
-        ),
-      ),
-    );
-  }
-}
+            Container(
+              margin: const EdgeInsets.all(20),
+              height: 300,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Lottie.asset('assets/animation/find.json'),
 
-class SearchingAnimation extends StatefulWidget {
-  const SearchingAnimation({super.key});
-
-  @override
-  State<SearchingAnimation> createState() => _SearchingAnimationState();
-}
-
-class _SearchingAnimationState extends State<SearchingAnimation> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 280,
-      height: 280,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Small blue dot indicator
-          Positioned(
-            right: 90,
-            top: 90,
-            child: Container(
-              width: 4,
-              height: 4,
-              decoration: const BoxDecoration(
-                color: Color(0xFF003366),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-          // Ripple animation layers
-          ...List.generate(4, (index) {
-            return AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                final animationProgress = _controller.value;
-                final delay = index / 4;
-                final adjustedProgress = (animationProgress + delay) % 1.0;
-
-                return Opacity(
-                  opacity: 1.0 - adjustedProgress,
-                  child: Transform.scale(
-                    scale: 0.5 + (adjustedProgress * 0.5),
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFE6F0F5).withOpacity(0.8 - (adjustedProgress * 0.6)),
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '20',
+                        style: TextStyle(
+                          fontSize: 34,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                );
-              },
-            );
-          }),
-          // Center blue dot
-          Container(
-            width: 30,
-            height: 30,
-            decoration: const BoxDecoration(
-              color: Color(0xFF003366),
-              shape: BoxShape.circle,
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 40),
+            Text(
+              _isScanning ? 'Searching for devices...' : 'Search completed',
+              style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              '${_scanResults.length} devices found',
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
       ),
     );
   }

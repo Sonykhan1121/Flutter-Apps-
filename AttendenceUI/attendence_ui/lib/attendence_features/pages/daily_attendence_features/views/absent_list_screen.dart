@@ -47,7 +47,7 @@ class _AbsentListScreenState extends State<AbsentListScreen> {
             final GlobalKey _key = GlobalKey();
             final isSelected = selectedIndexes.contains(index);
 
-            return GestureDetector(
+            return InkWell(
               onLongPress: () {
 
                   setState(() {
