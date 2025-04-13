@@ -414,9 +414,11 @@ class _AddEmployeeState extends State<AddEmployee> {
           ),
           const SizedBox(height: 5),
           TextFormField(
+            maxLength: (label=='Contact Number')?11:null,
             controller: controller,
             keyboardType: textInputType,
             decoration: InputDecoration(
+              counterText: '',
               hintText: hintText ?? label,
               prefixText: prefix,
               floatingLabelBehavior: FloatingLabelBehavior.never,

@@ -33,7 +33,7 @@ class _DeviceConnectState extends State<DeviceConnect> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
+                    Navigator.pushReplacement(context, MaterialPageRoute(
                         builder: (context) => NavigationPage()));
                     // Navigator.push(
                     //   context,
@@ -80,7 +80,7 @@ class _DeviceConnectState extends State<DeviceConnect> {
                 ),
                 GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(
+                    Navigator.pushReplacement(context, MaterialPageRoute(
                         builder: (context) => DesignSearchScreen()));
                   },
                   child: Container(
@@ -123,7 +123,7 @@ class _DeviceConnectState extends State<DeviceConnect> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
+                    Navigator.pushReplacement(context, MaterialPageRoute(
                         builder: (context) => EmployeeNavigationPage()));
                     // Navigator.push(
                     //   context,

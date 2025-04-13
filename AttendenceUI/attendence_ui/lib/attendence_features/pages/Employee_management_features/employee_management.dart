@@ -184,7 +184,7 @@ class _EmployeeManagementScreenState extends State<EmployeeManagementScreen> {
             onChanged: onChanged,
             activeColor: const Color(0xFF004D74),
           ),
-          Text(label, style: const TextStyle(fontSize: 16)),
+          Text(label, style:  TextStyle(fontSize: 14.sp)),
         ],
       ),
     );
@@ -192,7 +192,7 @@ class _EmployeeManagementScreenState extends State<EmployeeManagementScreen> {
 
   Widget _buildCheckboxOption(String label, bool value, Function(bool?) onChanged) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      padding:  EdgeInsets.symmetric(vertical: 2.0),
       child: Row(
         children: [
           Checkbox(
@@ -200,7 +200,7 @@ class _EmployeeManagementScreenState extends State<EmployeeManagementScreen> {
             onChanged: onChanged,
             activeColor: const Color(0xFF004D74),
           ),
-          Text(label, style: const TextStyle(fontSize: 16)),
+          Text(label, style:  TextStyle(fontSize: 14.sp)),
         ],
       ),
     );
@@ -228,13 +228,13 @@ class CollapsibleSection extends StatelessWidget {
         InkWell(
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding:  EdgeInsets.symmetric(vertical: 14.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 16),
+                  style:  TextStyle(fontSize: 14.sp),
                 ),
                 Icon(
                   isExpanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_right,

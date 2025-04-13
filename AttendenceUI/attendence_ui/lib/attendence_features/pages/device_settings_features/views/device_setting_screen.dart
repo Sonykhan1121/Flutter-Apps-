@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../Colors/colors.dart';
 import '../../Employee_management_features/employee_management.dart';
+import '../../device_connect_BluWifi_features/connect_device_page2.dart';
 
 class DeviceSettingsScreen extends StatelessWidget {
   final List<Map<String, dynamic>> map = [
@@ -19,7 +20,7 @@ class DeviceSettingsScreen extends StatelessWidget {
     {'icon': 'assets/icons/apple-reminder.svg', "title": "Rules"},
   ];
 
-  DeviceSettingsScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,46 +30,72 @@ class DeviceSettingsScreen extends StatelessWidget {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(children: [
-          customRow(map[0]['icon'], map[0]['title']),
-          Divider(height: 1.h,),
-          GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>EmployeeManagementScreen()));
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
+                );
               },
-              child: customRow(map[1]['icon'], map[1]['title'])),
-          Divider(height: 1.h,),
+              onDoubleTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
+                );
+              },
+              child: customRow(map[0]['icon'], map[0]['title']),
+            ),
+            Divider(height: 1.h),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EmployeeManagementScreen(),
+                  ),
+                );
+              },
+              onDoubleTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EmployeeManagementScreen(),
+                  ),
+                );
+              },
+              child: customRow(map[1]['icon'], map[1]['title']),
+            ),
+            Divider(height: 1.h),
 
-          customRow(map[2]['icon'], map[2]['title']),
-          Divider(height: 1.h,),
+            customRow(map[2]['icon'], map[2]['title']),
+            Divider(height: 1.h),
 
-          customRow(map[3]['icon'], map[3]['title']),
-          Divider(height: 1.h,),
+            customRow(map[3]['icon'], map[3]['title']),
+            Divider(height: 1.h),
 
-          customRow(map[4]['icon'], map[4]['title']),
-          Divider(height: 1.h,),
+            customRow(map[4]['icon'], map[4]['title']),
+            Divider(height: 1.h),
 
-          customRow(map[5]['icon'], map[5]['title']),
-          Divider(height: 1.h,),
-
-        ]),
+            customRow(map[5]['icon'], map[5]['title']),
+            Divider(height: 1.h),
+          ],
+        ),
       ),
     );
   }
 
-  Widget customRow(String svgasset, String title) {
-    return
-
-      Container(
-        margin: EdgeInsets.only(bottom:15.h ,top: 15.h),
-        child: Row(
-          children: [
-            SvgPicture.asset(svgasset, height: 20.sp),
-            SizedBox(width: 10.w),
-            Text(title, style: TextStyle(fontSize: 14.sp)),
-          ],
-        ),
-      );
-
+  Widget customRow(String svgAsset, String title) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15.h, top: 15.h),
+      child: Row(
+        children: [
+          SvgPicture.asset(svgAsset, height: 20.sp),
+          SizedBox(width: 10.w),
+          Text(title, style: TextStyle(fontSize: 14.sp), maxLines: 2),
+        ],
+      ),
+    );
   }
 }
