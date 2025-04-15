@@ -6,7 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import '../../../../Colors/colors.dart';
 
 class LeavePage extends StatefulWidget {
-  const LeavePage({super.key});
+
+   LeavePage({ super.key});
 
   @override
   State<LeavePage> createState() => _LeavePageState();

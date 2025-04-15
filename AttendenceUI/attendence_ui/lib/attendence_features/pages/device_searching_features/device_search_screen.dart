@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:attendence_ui/attendence_features/pages/device_connect_BluWifi_features/connect_device_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:lottie/lottie.dart';
+
+import '../../Colors/colors.dart';
 
 class DeviceSearchScreen extends StatefulWidget {
 
@@ -16,55 +19,71 @@ class DeviceSearchScreen extends StatefulWidget {
 class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
   List<ScanResult> _scanResults = [];
   bool _isScanning = false;
+ Timer? _navigationTimer;
 
 
   @override
-  void initState() {
+ void initState()  {
     // TODO: implement initState
     super.initState();
     _startScan();
+
     // Listen for scan status
     FlutterBluePlus.isScanning.listen((isScanning) {
-      setState(() {
-        _isScanning = isScanning;
-      });
+      if(mounted) {
+        setState(() {
+          _isScanning = isScanning;
+        });
+      }
+      print('isScanninglisten: $isScanning');
     });
+
 
     // Listen for scan results
     FlutterBluePlus.scanResults.listen((results) {
-      setState(() {
+      if(mounted) {
+        setState(() {
         _scanResults = results;
       });
+      }
     }, onError: (e) {
       print("Scan error: $e");
     });
 
 
 
-    Future.delayed(Duration(seconds: 20), () {
+
+    if(mounted) {
+     _navigationTimer =  Timer(Duration(seconds: 10), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ConnectDevicePage2(scanResults: _scanResults)),
       );
+      return null;
     });
+    }
 
   }
   @override
   void dispose() {
 
     _stopScan();
+   _navigationTimer?.cancel();
     super.dispose();
   }
 
   Future<void> _startScan() async {
     print('startScan');
+    setState(() {
+      _isScanning = true;
+    });
+    print('_isScanning : $_isScanning');
 
-    _isScanning = true;
     try {
       await FlutterBluePlus.startScan(
-        timeout: const Duration(seconds: 15),
+        timeout: const Duration(seconds: 10),
       );
-      _isScanning = false;
+
 
     } catch (e) {
       print('Error starting scan: $e');
@@ -91,7 +110,10 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.black54),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+
+          },
         ),
         title: const Text(
           'Find Device',
@@ -112,13 +134,9 @@ class _DeviceSearchScreenState extends State<DeviceSearchScreen> {
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        '20',
-                        style: TextStyle(
-                          fontSize: 34,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                      child: Icon(
+                       Icons.bluetooth_audio,
+                       color: Colors.white,
                       ),
                     ),
                   ),

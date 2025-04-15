@@ -180,12 +180,12 @@ class _HomeBarState extends State<HomeBar> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-
-          onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ConnectDevicePage()));
-
-      },child:Icon(Icons.add)),
+      // floatingActionButton: FloatingActionButton(
+      //
+      //     onPressed: (){
+      //   Navigator.push(context, MaterialPageRoute(builder: (context)=>ConnectDevicePage()));
+      //
+      // },child:Icon(Icons.add)),
       // floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
     );
   }

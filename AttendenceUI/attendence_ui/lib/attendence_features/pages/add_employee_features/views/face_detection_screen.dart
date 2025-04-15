@@ -64,7 +64,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
         enableLandmarks: true,
         enableClassification: true,
         enableTracking: true,
-        minFaceSize: 0.7,
+        minFaceSize: 0.25,
       ),
     );
   }
@@ -369,7 +369,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
           enableClassification: true,
           enableLandmarks: true,
           enableTracking: true,
-          minFaceSize: 0.7,
+          minFaceSize: 0.25,
           performanceMode: FaceDetectorMode.accurate,
         ),
       );

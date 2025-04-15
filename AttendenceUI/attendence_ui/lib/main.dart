@@ -9,6 +9,7 @@ import 'attendence_features/pages/daily_attendence_features/provider/daily_atten
 import 'attendence_features/pages/employee_list_features/provider/employee_provider.dart';
 import 'attendence_features/pages/homepage_features/provider/homeprovider.dart';
 import 'attendence_features/pages/navigation_page.dart';
+import 'attendence_features/pages/task_management/task_provider.dart';
 import 'attendence_features/providers/user_provider.dart';
 
 void main() async {
@@ -34,6 +35,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => DailyAttendanceProvider()),
         ChangeNotifierProvider(create: (_) => EmployeeProvider()),
         ChangeNotifierProvider(create: (_) => AddEmployeeProvider()),
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
       ],
       child: MyApp(),
     ),
@@ -55,6 +57,15 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.white, // Global AppBar background
+            foregroundColor: Colors.black.withOpacity(0.6), // Icon and title color
+            elevation: 0,
+            centerTitle: true,
+          ),
+        ),
           home: DeviceConnect(),
         );
       },

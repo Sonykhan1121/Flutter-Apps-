@@ -1,3 +1,8 @@
+import 'package:attendence_ui/attendence_features/Rules_list/rules_list.dart';
+import 'package:attendence_ui/attendence_features/pages/device_searching_features/device_search_screen.dart';
+import 'package:attendence_ui/attendence_features/pages/leave_approval_features/leave_approval.dart';
+import 'package:attendence_ui/attendence_features/pages/task_management/task_list.dart';
+import 'package:attendence_ui/attendence_features/pages/task_management/task_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,9 +23,7 @@ class DeviceSettingsScreen extends StatelessWidget {
     {'icon': 'assets/icons/apple-reminder.svg', "title": "Rules"},
   ];
 
-   DeviceSettingsScreen({super.key});
-
-
+  DeviceSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +36,13 @@ class DeviceSettingsScreen extends StatelessWidget {
         child: Column(
           children: [
             InkWell(
-              onTap: (){
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
-                // );
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DeviceSearchScreen()),
+                );
               },
               child: customRow(map[0]['icon'], map[0]['title']),
-
             ),
 
             Divider(height: 1.h),
@@ -58,16 +60,39 @@ class DeviceSettingsScreen extends StatelessWidget {
             ),
             Divider(height: 1.h),
 
-            customRow(map[2]['icon'], map[2]['title']),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TaskList()),
+                );
+              },
+              child: customRow(map[2]['icon'], map[2]['title']),
+            ),
             Divider(height: 1.h),
 
-            customRow(map[3]['icon'], map[3]['title']),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LeaveApproval()),
+                );
+              },
+              child: customRow(map[3]['icon'], map[3]['title']),
+            ),
             Divider(height: 1.h),
 
             // customRow(map[4]['icon'], map[4]['title']),
             // Divider(height: 1.h),
-
-            customRow(map[5]['icon'], map[5]['title']),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RulesList()),
+                );
+              },
+              child: customRow(map[5]['icon'], map[5]['title']),
+            ),
             Divider(height: 1.h),
           ],
         ),
