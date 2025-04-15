@@ -33,6 +33,34 @@ class AddEmployeeProvider with ChangeNotifier {
     'Security Analyst',
 
   ];
+  final List<String> deviceNames = [
+    // Android devices
+    'Pixel 6',
+    'Pixel 7 Pro',
+    'Samsung Galaxy S21',
+    'Samsung Galaxy S22 Ultra',
+    'OnePlus 9',
+    'OnePlus 11',
+    'Xiaomi Mi 11',
+    'Redmi Note 11',
+    'Realme GT Neo',
+    'Asus ROG Phone 5',
+    'Motorola Edge 30',
+
+    // iOS devices
+    'iPhone 13',
+    'iPhone 13 Pro',
+    'iPhone 14',
+    'iPhone 14 Pro Max',
+    'iPhone SE (3rd generation)',
+    'iPad Air (5th generation)',
+    'iPad Pro 12.9-inch (6th generation)',
+    'iPhone 15',
+    'iPhone 15 Pro',
+
+
+  ];
+
   File? _image;
 
   File? get image => _image;
@@ -42,11 +70,19 @@ class AddEmployeeProvider with ChangeNotifier {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController employeeIdController = TextEditingController();
    String _designation ="Project Manager" ;
+   String _device ="Pixel 6" ;
   final TextEditingController addressController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
   final TextEditingController salaryController = TextEditingController();
   final TextEditingController overtimeRateController = TextEditingController();
+
+  String get device => _device;
+  void set_device(String dev)
+  {
+    _device = dev;
+    notifyListeners();
+  }
 
   void pickImage(File? img) {
     _image = img;

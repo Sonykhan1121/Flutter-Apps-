@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'employee_list_management.dart';
+
 class EmployeeManagementScreen extends StatefulWidget {
-  const EmployeeManagementScreen({Key? key}) : super(key: key);
+  List<MEmployee>? employees;
+
+
+
+   EmployeeManagementScreen({this.employees,Key? key}) : super(key: key);
 
   @override
   _EmployeeManagementScreenState createState() => _EmployeeManagementScreenState();

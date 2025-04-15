@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:attendence_ui/attendence_features/models/employee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/provider/employee_provider.dart';
+import 'package:attendence_ui/attendence_features/pages/employee_list_features/views/employee_list.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         );
         return;
       }
-      String dId = await getDeviceId();
+      // String dId = await getDeviceId();
 
       final Employee employee = Employee(
         name: addemployeeProvider.nameController.text,
@@ -127,7 +128,7 @@ class _AddEmployeeState extends State<AddEmployee> {
         address: addemployeeProvider.addressController.text,
         email: addemployeeProvider.emailController.text.toLowerCase(),
         contactNumber: addemployeeProvider.contactController.text,
-        deviceId: dId,
+        deviceId: addemployeeProvider.device,
         salary: double.parse(addemployeeProvider.salaryController.text),
         overtimeRate: double.parse(
           addemployeeProvider.overtimeRateController.text,
@@ -150,6 +151,8 @@ class _AddEmployeeState extends State<AddEmployee> {
 
       addemployeeProvider.clearFields();
       hideKeyboard(context);
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>EmployeeList()));
     } catch (e) {
       Navigator.pop(context);
       showToast("Registration failed: ${e.toString()}");
@@ -350,6 +353,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                     TextInputType.number,
                     hintText: "e.g., 15.50",
                   ),
+                  DeviceDropdown(provider,"Devices"),
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
@@ -512,6 +516,63 @@ class _AddEmployeeState extends State<AddEmployee> {
           }).toList(),
           validator: (value) =>
           value == null ? 'Please select a designation' : null,
+        ),
+      ],
+    );
+  }
+  Widget DeviceDropdown(AddEmployeeProvider addemployeeProvider,String label)
+  {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.sp,
+            color: Colors.black.withOpacity(0.6),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 5),
+        DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+
+            labelStyle: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.black.withOpacity(0.6),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 9,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(9),
+              borderSide: BorderSide(color: Colors.grey.shade400),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(9),
+              borderSide: const BorderSide(color: Color(0x66004368)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(9),
+              borderSide: const BorderSide(color: Colors.blue),
+            ),
+          ),
+          value: addemployeeProvider.device,
+          onChanged: (value) {
+            addemployeeProvider.set_device(value!);
+          },
+          items: addemployeeProvider.deviceNames.map((device) {
+            return DropdownMenuItem<String>(
+              value: device,
+              child: Text(device),
+            );
+          }).toList(),
+          validator: (value) =>
+          value == null ? 'Please select a device' : null,
         ),
       ],
     );
