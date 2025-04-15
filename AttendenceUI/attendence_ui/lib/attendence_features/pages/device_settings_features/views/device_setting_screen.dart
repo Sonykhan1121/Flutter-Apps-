@@ -39,7 +39,7 @@ class DeviceSettingsScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DeviceSearchScreen()),
+                  MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
                 );
               },
               child: customRow(map[0]['icon'], map[0]['title']),

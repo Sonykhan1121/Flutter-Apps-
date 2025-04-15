@@ -68,7 +68,8 @@ class _DeviceConnectState extends State<DeviceConnect> {
                         ),
                         SizedBox(height: 18),
                         Text(
-                          'Connect Device',
+                          'Admin Connect Device',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
@@ -111,7 +112,8 @@ class _DeviceConnectState extends State<DeviceConnect> {
                         ),
                         SizedBox(height: 18),
                         Text(
-                          'Manual Connect',
+                          'Manual Connect device',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
@@ -149,6 +151,7 @@ class _DeviceConnectState extends State<DeviceConnect> {
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
                           'assets/icons/employee_profile/qr-code.svg',
@@ -158,11 +161,14 @@ class _DeviceConnectState extends State<DeviceConnect> {
                         ),
                         SizedBox(height: 18),
                         Text(
-                          'Scan Qr Code',
+                          'Employee connect device',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
+
                             fontSize: 15.sp,
                             fontWeight: FontWeight.w600,
                             color: Cl.primaryColor,
+
                           ),
                         ),
                       ],

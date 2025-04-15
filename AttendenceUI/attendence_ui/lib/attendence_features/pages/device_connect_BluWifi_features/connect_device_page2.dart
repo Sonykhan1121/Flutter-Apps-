@@ -9,9 +9,9 @@ import 'confirm_password_dialog.dart';
 import 'device_card.dart';
 
 class ConnectDevicePage2 extends StatefulWidget {
-  List<ScanResult> scanResults;
+  List<ScanResult>? scanResults;
 
-  ConnectDevicePage2({required this.scanResults});
+  ConnectDevicePage2({ this.scanResults});
 
   @override
   State<ConnectDevicePage2> createState() => _ConnectDevicePage2State();
@@ -41,29 +41,30 @@ class _ConnectDevicePage2State extends State<ConnectDevicePage2> {
         ],
       ),
       body:
-          widget.scanResults.isEmpty
+          widget.scanResults!.isEmpty
               ? Center(child: Text('No Device found'))
               : ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: widget.scanResults.length,
+                itemCount: widget.scanResults!.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: DeviceCard(
                       
-                      name: widget.scanResults[index].device.platformName.isEmpty?"Unknown Device":widget.scanResults[index].device.platformName.toString(),
+                      name: widget.scanResults![index].advertisementData.localName.isEmpty?"Unknown Device":widget.scanResults![index].advertisementData.localName.toString(),
                       mac:
-                          widget.scanResults[index].device.remoteId
+                          widget.scanResults![index].device.remoteId
                               .toString(),
-                      isConnected: widget.scanResults[index].device.isConnected,
+                      isConnected: widget.scanResults![index].device.isConnected,
                       onTap: () {
+                        // widget.scanResults[index].device.connect();
 
 
                         showDialog(
                           context: context,
                           builder:
                               (context) =>
-                                  widget.scanResults[index].device.isConnected
+                                  widget.scanResults![index].device.isConnected
                                       ? InputPasswordDialog()
                                       : ConfirmPasswordDialog(),
                         );
