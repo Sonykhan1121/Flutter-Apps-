@@ -1,5 +1,6 @@
 import 'package:attendence_ui/attendence_features/Rules_list/rules_list.dart';
 import 'package:attendence_ui/attendence_features/pages/Employee_management_features/employee_list_management.dart';
+import 'package:attendence_ui/attendence_features/pages/device_management_features/device_management.dart';
 import 'package:attendence_ui/attendence_features/pages/device_searching_features/device_search_screen.dart';
 import 'package:attendence_ui/attendence_features/pages/leave_approval_features/leave_approval.dart';
 import 'package:attendence_ui/attendence_features/pages/task_management/task_list.dart';
@@ -40,7 +41,7 @@ class DeviceSettingsScreen extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ConnectDevicePage2()),
+                  MaterialPageRoute(builder: (context) => DeviceManagement()),
                 );
               },
               child: customRow(map[0]['icon'], map[0]['title']),
