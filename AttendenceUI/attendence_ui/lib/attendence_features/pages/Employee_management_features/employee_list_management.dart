@@ -291,10 +291,10 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         'Filter Options',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -310,10 +310,10 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                       controller: scrollController,
                       children: [
                         // Department filter
-                        const Text(
+                         Text(
                           'Department',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -323,7 +323,7 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                           children: departments.map((department) {
                             final isSelected = _activeFilters['department'] == department;
                             return FilterChip(
-                              label: Text(department),
+                              label: Text(department,style: TextStyle(fontSize:14.sp),),
                               selected: isSelected,
                               onSelected: (selected) {
                                 setSheetState(() {
@@ -341,10 +341,10 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                         const SizedBox(height: 16),
 
                         // Employment Type filter
-                        const Text(
+                         Text(
                           'Employment Type',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -354,7 +354,7 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                           children: employmentTypes.map((type) {
                             final isSelected = _activeFilters['employmentType'] == type;
                             return FilterChip(
-                              label: Text(type),
+                              label: Text(type,style: TextStyle(fontSize:14.sp),),
                               selected: isSelected,
                               onSelected: (selected) {
                                 setSheetState(() {
@@ -372,10 +372,10 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                         const SizedBox(height: 16),
 
                         // Hire Date Range filter
-                        const Text(
+                         Text(
                           'Hire Date Range',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -435,29 +435,42 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
 
                         // Apply and Clear buttons
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey[300],
+                            Expanded(
+                              child: ElevatedButton(
+
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey[300],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  )
+
+                                ),
+                                onPressed: () {
+                                  setSheetState(() {
+                                    _activeFilters = {};
+                                  });
+                                  _filterEmployees();
+                                },
+                                child: const Text('Clear All'),
                               ),
-                              onPressed: () {
-                                setSheetState(() {
-                                  _activeFilters = {};
-                                });
-                                _filterEmployees();
-                              },
-                              child: const Text('Clear All'),
                             ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Cl.primaryColor,
-                                foregroundColor: Colors.white,
+                            SizedBox(width: 10.w,),
+                            Expanded(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Cl.primaryColor,
+                                  foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    )
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Apply Filters'),
                               ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Apply Filters'),
                             ),
                           ],
                         ),

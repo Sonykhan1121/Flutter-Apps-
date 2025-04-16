@@ -303,7 +303,7 @@ class _AddEmployeeState extends State<AddEmployee> {
             centerTitle: true,
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding:  EdgeInsets.all(16),
             child: Form(
               key: _formKey,
               child: Column(

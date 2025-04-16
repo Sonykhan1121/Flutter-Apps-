@@ -203,6 +203,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
   }
 
   Color getIconColor(String title) {
+    return Color(0x1A44AEF9);
     switch (title) {
       case 'Absent':
         return Color(0x1A44AEF9);
@@ -244,7 +245,7 @@ class _MyActivityPageState extends State<MyActivityPage> {
               borderRadius: BorderRadius.circular(8),
               color: color.withOpacity(0.1),
             ),
-            child: SvgPicture.asset(svgAssets, height: 20.sp),
+            child: SvgPicture.asset(svgAssets, height: 20.sp,color: Cl.primaryColor,),
           ),
           SizedBox(height: 16.h),
           Text(title, style: TextStyle(fontSize: 12.sp, color: Colors.black)),

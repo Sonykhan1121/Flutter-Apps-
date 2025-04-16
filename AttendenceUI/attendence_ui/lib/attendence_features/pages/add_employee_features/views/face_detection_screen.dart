@@ -637,7 +637,7 @@ class _FaceDetectionScreenState extends State<FaceDetectionScreen> {
               SizedBox(width: 12),
               Flexible(
                 child: Text(
-                  _isValidFace ? "Hold still..." : "Position your face in the circle",
+                  _isValidFace ? "Hold still..." : "Keep your face in center",
                   style: TextStyle(
                     color: _isValidFace ? Color(0xFF00FB46) : Colors.white,
                     fontSize: 16,
