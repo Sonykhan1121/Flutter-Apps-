@@ -52,7 +52,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 'Device Details',
                 style: TextStyle(
                   color: Cl.primaryColor,
-                  fontSize: 16.sp,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
@@ -76,7 +76,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 'Device Settings',
                 style: TextStyle(
                   color: Cl.primaryColor,
-                  fontSize: 16.sp,
+                  fontSize: 14.sp,
                 ),
               ),
             ),
@@ -135,9 +135,13 @@ class DeviceSettingsPage extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 'Data Transfer',
-                style: Theme.of(context).textTheme.titleLarge,
+                 style: TextStyle(
+                color: Cl.primaryColor,
+                fontSize: 14.sp,
+              ),
               ),
             ),
+            Divider(thickness: 1,),
 
             _buildSettingItem(
                 context,
@@ -230,12 +234,12 @@ class DeviceSettingsPage extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(fontSize: 16),
+            style:  TextStyle(fontSize: 14.sp),
           ),
           Text(
             value,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
               color: Cl.primaryColor,
             ),

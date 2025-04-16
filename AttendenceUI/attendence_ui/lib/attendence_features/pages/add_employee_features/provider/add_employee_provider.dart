@@ -71,11 +71,13 @@ class AddEmployeeProvider with ChangeNotifier {
   final TextEditingController employeeIdController = TextEditingController();
    String _designation ="Project Manager" ;
    String _device ="Pixel 6" ;
+  int _employeeIdStart = 5040;
   final TextEditingController addressController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
   final TextEditingController salaryController = TextEditingController();
   final TextEditingController overtimeRateController = TextEditingController();
+
 
   String get device => _device;
   void set_device(String dev)
@@ -105,6 +107,7 @@ class AddEmployeeProvider with ChangeNotifier {
     contactController.clear();
     salaryController.clear();
     overtimeRateController.clear();
+    _device = "Pixel 6";
     _image = null;
   }
   void setAllTextController(Employee employee) async
@@ -191,31 +194,7 @@ class AddEmployeeProvider with ChangeNotifier {
     return dotProduct / (sqrt(normA) * sqrt(normB));
   }
 
-  Map<String, dynamic> createUserMap({
-    required String name,
-    required String employeeId,
-    required String designation,
-    required String address,
-    required String email,
-    required String contactNumber,
-    required String salary,
-    required String overtimeRate,
-    required dynamic embedding,
-    required dynamic byteImage,
-  }) {
-    return {
-      UserDatabase.columnName: name,
-      UserDatabase.columnEmployeeId: employeeId,
-      UserDatabase.columnDesignation: designation,
-      UserDatabase.columnAddress: address,
-      UserDatabase.columnEmail: email.toLowerCase(),
-      UserDatabase.columnContactNumber: contactNumber,
-      UserDatabase.columnSalary: double.parse(salary),
-      UserDatabase.columnOvertimeRate: double.parse(overtimeRate),
-      UserDatabase.columnEmbedding: embedding,
-      UserDatabase.columnImageFile: byteImage,
-    };
-  }
+
 
   @override
   void dispose() {
@@ -229,5 +208,12 @@ class AddEmployeeProvider with ChangeNotifier {
     overtimeRateController.dispose();
     embedder.dispose();
     super.dispose();
+  }
+
+  int get employeeIdStart => _employeeIdStart;
+
+  void setEmployeeId() {
+    _employeeIdStart++;
+    notifyListeners();
   }
 }

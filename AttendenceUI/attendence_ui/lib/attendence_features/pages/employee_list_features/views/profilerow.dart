@@ -1,4 +1,5 @@
 import 'package:attendence_ui/attendence_features/models/employee.dart';
+import 'package:attendence_ui/attendence_features/pages/add_employee_features/views/addemployee.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_list_features/provider/employee_provider.dart';
 import 'package:attendence_ui/attendence_features/pages/employee_profile_features/emp_details.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,9 @@ class _ProfileRowState extends State<ProfileRow> {
     );
 
     if (selection == 'edit') {
-      _showPopupDialog();
+      // _showPopupDialog();
+
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>AddEmployee(employee:widget.employee,)));
 
       // pop dialog text field will open
       // Open a dialog with input field for the new name

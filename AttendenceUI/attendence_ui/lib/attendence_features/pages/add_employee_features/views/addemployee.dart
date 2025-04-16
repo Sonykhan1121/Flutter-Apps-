@@ -18,7 +18,9 @@ import '../provider/add_employee_provider.dart';
 import 'face_detection_screen.dart';
 
 class AddEmployee extends StatefulWidget {
-  const AddEmployee({super.key});
+  final Employee? employee;
+
+  const AddEmployee({this.employee, super.key});
 
   @override
   State<AddEmployee> createState() => _AddEmployeeState();
@@ -28,45 +30,64 @@ class _AddEmployeeState extends State<AddEmployee> {
   String? alreadyregisteruserName;
 
   bool _isProcessing = false;
+
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<AddEmployeeProvider>(context,listen: false);
-    provider.employeeIdController.text = generateRandomEmployeeId();
+
+    _initializeForm();
   }
-  Future<String> getDeviceId() async
-  {
+
+  Future<void> _initializeForm() async {
+    final provider = Provider.of<AddEmployeeProvider>(context, listen: false);
+
+    if (widget.employee != null) {
+      provider.nameController.text = widget.employee!.name.toString();
+      provider.set_designation(widget.employee!.designation.toString());
+      provider.addressController.text = widget.employee!.address.toString();
+      provider.emailController.text = widget.employee!.email.toString();
+      provider.contactController.text =
+          widget.employee!.contactNumber.toString();
+      provider.set_device(widget.employee!.deviceId.toString());
+      provider.salaryController.text = widget.employee!.salary.toString();
+      provider.overtimeRateController.text =
+          widget.employee!.overtimeRate.toString();
+      provider.employeeIdController.text = widget.employee!.employeeId;
+      provider.pickImage(
+        await provider.convertUint8ListToFile(widget.employee!.imageFile),
+      );
+    } else {
+      provider.clearFields();
+      provider.employeeIdController.text = getEmployeeId();
+    }
+  }
+
+  Future<String> getDeviceId() async {
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-    if(Platform.isAndroid)
-      {
-        AndroidDeviceInfo androidDeviceInfo = await deviceInfoPlugin.androidInfo;
-        return androidDeviceInfo.id;
-      }else if(Platform.isIOS)
-        {
-          IosDeviceInfo iosDeviceInfo = await deviceInfoPlugin.iosInfo;
-          return iosDeviceInfo.identifierForVendor ?? "ios device id not found";
-        }
-    else
-      {
-        return 'Unknown Device';
-      }
-
-
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+      return androidDeviceInfo.id;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+      return iosDeviceInfo.identifierForVendor ?? "ios device id not found";
+    } else {
+      return 'Unknown Device';
+    }
   }
 
   void showToast(String msg) {
     Fluttertoast.showToast(msg: msg, toastLength: Toast.LENGTH_LONG);
   }
-  String get_formattedDate()
-  {
+
+  String get_formattedDate() {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     return formattedDate;
   }
-  String get_formattedTime()
-  {
+
+  String get_formattedTime() {
     DateTime now = DateTime.now();
     String formattedTime = DateFormat('hh:mm a').format(now);
     return formattedTime;
@@ -92,7 +113,6 @@ class _AddEmployeeState extends State<AddEmployee> {
     await Future.delayed(Duration(seconds: 2));
 
     try {
-
       final employeeprovider = Provider.of<EmployeeProvider>(
         context,
         listen: false,
@@ -146,13 +166,19 @@ class _AddEmployeeState extends State<AddEmployee> {
 
       Navigator.pop(context);
 
-
       showSuccessPopup(context);
 
       addemployeeProvider.clearFields();
       hideKeyboard(context);
 
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>EmployeeList()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => EmployeeList()),
+      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        addemployeeProvider.setEmployeeId();
+      });
+
     } catch (e) {
       Navigator.pop(context);
       showToast("Registration failed: ${e.toString()}");
@@ -161,13 +187,69 @@ class _AddEmployeeState extends State<AddEmployee> {
     }
   }
 
-  void showSuccessPopup(BuildContext context) {
+  Future<void> updateEmployeebtn() async {
+    setState(() {
+    _isProcessing = true;
+
+    });
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(child: CircularProgressIndicator()),
+    );
+    await Future.delayed(Duration(seconds: 2));
+
+    final employeeProvider = Provider.of<EmployeeProvider>(
+      context,
+      listen: false,
+    );
+    final addemployeeProvider = Provider.of<AddEmployeeProvider>(
+      context,
+      listen: false,
+    );
+    final embedding = await addemployeeProvider.getEmbedding();
+
+    Uint8List? byteimage = await addemployeeProvider.ImagetoByteImage();
+
+    final updatedEmployee = Employee(
+      id: widget.employee?.id,
+      name: addemployeeProvider.nameController.text,
+      employeeId: addemployeeProvider.employeeIdController.text,
+      designation: addemployeeProvider.designation,
+      address: addemployeeProvider.addressController.text,
+      email: addemployeeProvider.emailController.text.toLowerCase(),
+      contactNumber: addemployeeProvider.contactController.text,
+      deviceId: addemployeeProvider.device,
+      salary: double.parse(addemployeeProvider.salaryController.text),
+      startTime: widget.employee?.startTime,
+      startDate: widget.employee?.startDate,
+      overtimeRate: double.parse(
+        addemployeeProvider.overtimeRateController.text,
+      ),
+      embedding: embedding,
+      imageFile: byteimage!,
+    );
+
+    print(' update id : ${widget.employee?.id}');
+    employeeProvider.updateEmployee(updatedEmployee);
+
+    showSuccessPopup(context, "Employee Updated successfully");
+    hideKeyboard(context);
+    Navigator.pop(context);
+    setState(() {
+
+    _isProcessing = false;
+
+    });
+  }
+
+  void showSuccessPopup(BuildContext context, [String? txt]) {
     final snackBar = SnackBar(
       content: Row(
         children: [
           Icon(Icons.check_circle, color: Colors.white),
           SizedBox(width: 10),
-          Text("Employee added successfully!"),
+          Text(txt ?? "Employee added successfully!"),
         ],
       ),
       backgroundColor: Color(0xFF004368),
@@ -185,11 +267,13 @@ class _AddEmployeeState extends State<AddEmployee> {
   void hideKeyboard(BuildContext context) {
     FocusScope.of(context).unfocus();
   }
-  String generateRandomEmployeeId() {
-    final random = Random();
-    // Generate a random number (you can adjust the range as per your requirement)
-    int randomNumber = random.nextInt(10000)+1111; // Random number up to 999999
-    return "${randomNumber.toString().padLeft(5, '0')}"; // Format it with "TG-" and a 6-digit number
+
+  String getEmployeeId() {
+    final provider = Provider.of<AddEmployeeProvider>(context, listen: false);
+    int empId = provider.employeeIdStart;
+
+
+    return empId.toString();
   }
 
   void showWarningToast(String message) {
@@ -208,18 +292,15 @@ class _AddEmployeeState extends State<AddEmployee> {
     return Consumer<AddEmployeeProvider>(
       builder: (BuildContext context, provider, Widget? child) {
         return Scaffold(
-          backgroundColor: Colors.white,
           appBar: AppBar(
             title: Text(
-              'Add Employee',
+              (widget.employee != null) ? "Update Employee" : 'Add Employee',
               style: TextStyle(
                 color: Colors.black.withOpacity(0.6),
                 fontSize: 20.sp,
               ),
             ),
             centerTitle: true,
-            backgroundColor: Colors.white,
-            elevation: 0,
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -227,7 +308,7 @@ class _AddEmployeeState extends State<AddEmployee> {
               key: _formKey,
               child: Column(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () async {
                       final imgFile = await Navigator.push<File?>(
                         context,
@@ -326,7 +407,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                     TextInputType.number,
                     prefix: "TG-",
                   ),
-                  DesignationDropdown(provider,"Designation"),
+                  DesignationDropdown(provider, "Designation"),
                   buildTextField(
                     "Address",
                     provider.addressController,
@@ -353,7 +434,7 @@ class _AddEmployeeState extends State<AddEmployee> {
                     TextInputType.number,
                     hintText: "e.g., 15.50",
                   ),
-                  DeviceDropdown(provider,"Devices"),
+                  DeviceDropdown(provider, "Devices"),
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
@@ -362,20 +443,16 @@ class _AddEmployeeState extends State<AddEmployee> {
                       onPressed:
                           _isProcessing
                               ? null
-                              : () async {
+                              : (widget.employee == null)
+                              ? () async {
                                 await _registerUser(provider, context);
+                              }
+                              : () async {
+                                await updateEmployeebtn();
                               },
-                      icon: SvgPicture.asset(
-                        "assets/icons/button_icon.svg",
-                        width: 20.w,
-                        height: 20.h,
-                        colorFilter: const ColorFilter.mode(
-                          Colors.white,
-                          BlendMode.srcIn,
-                        ),
-                      ),
+
                       label: Text(
-                        "Save Employee",
+                        (widget.employee == null) ? "Generate QR Code" : "Save",
                         style: TextStyle(fontSize: 15.sp, color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
@@ -400,9 +477,8 @@ class _AddEmployeeState extends State<AddEmployee> {
     TextEditingController controller,
     TextInputType textInputType, {
     String? prefix,
-        String? hintText
+    String? hintText,
   }) {
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -418,7 +494,7 @@ class _AddEmployeeState extends State<AddEmployee> {
           ),
           const SizedBox(height: 5),
           TextFormField(
-            maxLength: (label=='Contact Number')?11:null,
+            maxLength: (label == 'Contact Number') ? 11 : null,
             controller: controller,
             keyboardType: textInputType,
             decoration: InputDecoration(
@@ -447,10 +523,10 @@ class _AddEmployeeState extends State<AddEmployee> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(9),
-                borderSide:  BorderSide(color: Cl.primaryColor),
+                borderSide: BorderSide(color: Cl.primaryColor),
               ),
             ),
-            validator: (value) => validateInput(value, "required"),
+            validator: (value) => validateInput(value, "$label required"),
           ),
         ],
       ),
@@ -463,8 +539,11 @@ class _AddEmployeeState extends State<AddEmployee> {
     }
     return null; // Validation successful
   }
-  Widget DesignationDropdown(AddEmployeeProvider addemployeeProvider,String label)
-  {
+
+  Widget DesignationDropdown(
+    AddEmployeeProvider addemployeeProvider,
+    String label,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -508,20 +587,21 @@ class _AddEmployeeState extends State<AddEmployee> {
           onChanged: (value) {
             addemployeeProvider.set_designation(value!);
           },
-          items: addemployeeProvider.designations.map((designation) {
-            return DropdownMenuItem<String>(
-              value: designation,
-              child: Text(designation),
-            );
-          }).toList(),
-          validator: (value) =>
-          value == null ? 'Please select a designation' : null,
+          items:
+              addemployeeProvider.designations.map((designation) {
+                return DropdownMenuItem<String>(
+                  value: designation,
+                  child: Text(designation),
+                );
+              }).toList(),
+          validator:
+              (value) => value == null ? 'Please select a designation' : null,
         ),
       ],
     );
   }
-  Widget DeviceDropdown(AddEmployeeProvider addemployeeProvider,String label)
-  {
+
+  Widget DeviceDropdown(AddEmployeeProvider addemployeeProvider, String label) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -565,14 +645,14 @@ class _AddEmployeeState extends State<AddEmployee> {
           onChanged: (value) {
             addemployeeProvider.set_device(value!);
           },
-          items: addemployeeProvider.deviceNames.map((device) {
-            return DropdownMenuItem<String>(
-              value: device,
-              child: Text(device),
-            );
-          }).toList(),
-          validator: (value) =>
-          value == null ? 'Please select a device' : null,
+          items:
+              addemployeeProvider.deviceNames.map((device) {
+                return DropdownMenuItem<String>(
+                  value: device,
+                  child: Text(device),
+                );
+              }).toList(),
+          validator: (value) => value == null ? 'Please select a device' : null,
         ),
       ],
     );

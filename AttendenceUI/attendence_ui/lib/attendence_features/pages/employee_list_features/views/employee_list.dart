@@ -36,6 +36,7 @@ class _EmployeeListState extends State<EmployeeList> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate to login screen
+            Navigator.pop(context);
           },
         ),
         title: Text(
