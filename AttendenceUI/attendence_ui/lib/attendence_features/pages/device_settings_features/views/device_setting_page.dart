@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../Colors/colors.dart';
 
@@ -15,6 +16,17 @@ class DeviceSettingsPage extends StatelessWidget {
     "storageAvailable": "3.2 GB",
     "registeredEmployees": "124",
   };
+  final List<String> icons = [
+    "assets/icons/device_setting/face-id.svg",
+    "assets/icons/device_setting/camera.svg",
+    "assets/icons/device_setting/chart-relationship.svg",
+    "assets/icons/device_setting/clock-01.svg",
+    "assets/icons/device_setting/user-settings-01.svg",
+    "assets/icons/device_setting/cloud-upload.svg",
+    "assets/icons/device_setting/copy-02.svg",
+    "assets/icons/device_setting/folder-export.svg",
+  ];
+
 
   DeviceSettingsPage({Key? key}) : super(key: key);
 
@@ -86,7 +98,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Recognition Mode',
                 'Face + Fingerprint',
-                Icons.face,
+                icons[0],
                     () => _showSettingOptions(context, 'Recognition Mode', ['Face Only', 'Fingerprint Only', 'Face + Fingerprint', 'Card Only'])
             ),
 
@@ -94,7 +106,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Camera Settings',
                 'Configure camera parameters',
-                Icons.camera_alt,
+                icons[1],
                     () => Navigator.push(context, MaterialPageRoute(builder: (context) => DummyPage('Camera Settings')))
             ),
 
@@ -102,7 +114,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Connectivity',
                 'Bluetooth, Wi-Fi, Ethernet',
-                Icons.settings_bluetooth,
+                icons[2],
                     () => Navigator.push(context, MaterialPageRoute(builder: (context) => DummyPage('Connectivity Settings')))
             ),
 
@@ -110,7 +122,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Time Settings',
                 'Sync device time',
-                Icons.access_time,
+                icons[3],
                     () => Navigator.push(context, MaterialPageRoute(builder: (context) => DummyPage('Time Settings')))
             ),
 
@@ -118,7 +130,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Employee Management',
                 'Add, remove, modify employee data',
-                Icons.people,
+                icons[4],
                     () => Navigator.push(context, MaterialPageRoute(builder: (context) => DummyPage('Employee Management')))
             ),
 
@@ -126,7 +138,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Data Backup',
                 'Backup and restore device data',
-                Icons.backup,
+                icons[5],
                     () => Navigator.push(context, MaterialPageRoute(builder: (context) => DummyPage('Data Backup')))
             ),
 
@@ -147,7 +159,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Copy Data to Another Device',
                 'Transfer data while keeping original copy',
-                Icons.copy,
+                icons[6],
                     () => _showDataTransferDialog(context, 'Copy Data')
             ),
 
@@ -155,7 +167,7 @@ class DeviceSettingsPage extends StatelessWidget {
                 context,
                 'Move Data to Another Device',
                 'Transfer data and delete from this device',
-                Icons.drive_file_move,
+                icons[7],
                     () => _showDataTransferDialog(context, 'Move Data')
             ),
 
@@ -175,7 +187,7 @@ class DeviceSettingsPage extends StatelessWidget {
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        side: BorderSide(color: Cl.primaryColor, width: 1.5),
+                        side: BorderSide(color: Cl.primaryColor, width: 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -200,7 +212,7 @@ class DeviceSettingsPage extends StatelessWidget {
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Cl.primaryColor,
-                        side: BorderSide(width: 1.5),
+                        side: BorderSide(width: 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -249,9 +261,9 @@ class DeviceSettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem(BuildContext context, String title, String subtitle, IconData icon, VoidCallback onTap) {
+  Widget _buildSettingItem(BuildContext context, String title, String subtitle, String asset, VoidCallback onTap) {
     return ListTile(
-      leading: Icon(icon, color: Cl.primaryColor),
+      leading: SvgPicture.asset(asset, color: Cl.primaryColor),
       title: Text(title),
       subtitle: Text(subtitle),
       trailing: const Icon(Icons.chevron_right),

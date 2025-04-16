@@ -27,10 +27,11 @@ class MEmployee {
 }
 
 class EmployeeListManagement extends StatefulWidget {
-   EmployeeListManagement({Key? key}) : super(key: key);
+  EmployeeListManagement({Key? key}) : super(key: key);
 
   @override
-  _EmployeeManagementScreenState createState() => _EmployeeManagementScreenState();
+  _EmployeeManagementScreenState createState() =>
+      _EmployeeManagementScreenState();
 }
 
 class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
@@ -173,59 +174,66 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
       if (query.isEmpty && _activeFilters.isEmpty) {
         _filteredEmployees = List.from(_allEmployees);
       } else {
-        _filteredEmployees = _allEmployees.where((employee) {
-          bool matchesSearch = query.isEmpty ||
-              employee.name.toLowerCase().contains(query);
+        _filteredEmployees =
+            _allEmployees.where((employee) {
+              bool matchesSearch =
+                  query.isEmpty || employee.name.toLowerCase().contains(query);
 
-          bool matchesFilters = true;
+              bool matchesFilters = true;
 
-          // Apply department filter
-          if (_activeFilters.containsKey('department') &&
-              _activeFilters['department'] != null &&
-              _activeFilters['department'] != 'All') {
-            matchesFilters = matchesFilters &&
-                employee.department == _activeFilters['department'];
-          }
+              // Apply department filter
+              if (_activeFilters.containsKey('department') &&
+                  _activeFilters['department'] != null &&
+                  _activeFilters['department'] != 'All') {
+                matchesFilters =
+                    matchesFilters &&
+                    employee.department == _activeFilters['department'];
+              }
 
-          // Apply job title filter
-          if (_activeFilters.containsKey('jobTitle') &&
-              _activeFilters['jobTitle'] != null &&
-              _activeFilters['jobTitle'] != 'All') {
-            matchesFilters = matchesFilters &&
-                employee.jobTitle == _activeFilters['jobTitle'];
-          }
+              // Apply job title filter
+              if (_activeFilters.containsKey('jobTitle') &&
+                  _activeFilters['jobTitle'] != null &&
+                  _activeFilters['jobTitle'] != 'All') {
+                matchesFilters =
+                    matchesFilters &&
+                    employee.jobTitle == _activeFilters['jobTitle'];
+              }
 
-          // Apply location filter
-          if (_activeFilters.containsKey('location') &&
-              _activeFilters['location'] != null &&
-              _activeFilters['location'] != 'All') {
-            matchesFilters = matchesFilters &&
-                employee.location == _activeFilters['location'];
-          }
+              // Apply location filter
+              if (_activeFilters.containsKey('location') &&
+                  _activeFilters['location'] != null &&
+                  _activeFilters['location'] != 'All') {
+                matchesFilters =
+                    matchesFilters &&
+                    employee.location == _activeFilters['location'];
+              }
 
-          // Apply employment type filter
-          if (_activeFilters.containsKey('employmentType') &&
-              _activeFilters['employmentType'] != null &&
-              _activeFilters['employmentType'] != 'All') {
-            matchesFilters = matchesFilters &&
-                employee.employmentType == _activeFilters['employmentType'];
-          }
+              // Apply employment type filter
+              if (_activeFilters.containsKey('employmentType') &&
+                  _activeFilters['employmentType'] != null &&
+                  _activeFilters['employmentType'] != 'All') {
+                matchesFilters =
+                    matchesFilters &&
+                    employee.employmentType == _activeFilters['employmentType'];
+              }
 
-          // Apply hire date filter (if exists)
-          if (_activeFilters.containsKey('hireDateFrom') &&
-              _activeFilters['hireDateFrom'] != null) {
-            matchesFilters = matchesFilters &&
-                employee.hireDate.isAfter(_activeFilters['hireDateFrom']);
-          }
+              // Apply hire date filter (if exists)
+              if (_activeFilters.containsKey('hireDateFrom') &&
+                  _activeFilters['hireDateFrom'] != null) {
+                matchesFilters =
+                    matchesFilters &&
+                    employee.hireDate.isAfter(_activeFilters['hireDateFrom']);
+              }
 
-          if (_activeFilters.containsKey('hireDateTo') &&
-              _activeFilters['hireDateTo'] != null) {
-            matchesFilters = matchesFilters &&
-                employee.hireDate.isBefore(_activeFilters['hireDateTo']);
-          }
+              if (_activeFilters.containsKey('hireDateTo') &&
+                  _activeFilters['hireDateTo'] != null) {
+                matchesFilters =
+                    matchesFilters &&
+                    employee.hireDate.isBefore(_activeFilters['hireDateTo']);
+              }
 
-          return matchesSearch && matchesFilters;
-        }).toList();
+              return matchesSearch && matchesFilters;
+            }).toList();
       }
     });
   }
@@ -272,7 +280,17 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
   }
 
   Widget _buildFilterBottomSheet() {
-    final departments = ['All', 'Engineering', 'Marketing', 'Sales', 'HR', 'Finance', 'Design', 'Product', 'Customer Support'];
+    final departments = [
+      'All',
+      'Engineering',
+      'Marketing',
+      'Sales',
+      'HR',
+      'Finance',
+      'Design',
+      'Product',
+      'Customer Support',
+    ];
     final employmentTypes = ['All', 'Full-time', 'Part-time', 'Contract'];
 
     return StatefulBuilder(
@@ -291,7 +309,7 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                       Text(
+                      Text(
                         'Filter Options',
                         style: TextStyle(
                           fontSize: 16.sp,
@@ -299,7 +317,7 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                         ),
                       ),
                       IconButton(
-                        icon:  Icon(Icons.close,color:Colors.red),
+                        icon: Icon(Icons.close, color: Colors.red),
                         onPressed: () => Navigator.pop(context),
                       ),
                     ],
@@ -310,7 +328,7 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                       controller: scrollController,
                       children: [
                         // Department filter
-                         Text(
+                        Text(
                           'Department',
                           style: TextStyle(
                             fontSize: 14.sp,
@@ -320,28 +338,34 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                         const SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
-                          children: departments.map((department) {
-                            final isSelected = _activeFilters['department'] == department;
-                            return FilterChip(
-                              label: Text(department,style: TextStyle(fontSize:14.sp),),
-                              selected: isSelected,
-                              onSelected: (selected) {
-                                setSheetState(() {
-                                  if (selected) {
-                                    _activeFilters['department'] = department;
-                                  } else {
-                                    _activeFilters['department'] = 'All';
-                                  }
-                                });
-                                _filterEmployees();
-                              },
-                            );
-                          }).toList(),
+                          children:
+                              departments.map((department) {
+                                final isSelected =
+                                    _activeFilters['department'] == department;
+                                return FilterChip(
+                                  label: Text(
+                                    department,
+                                    style: TextStyle(fontSize: 14.sp),
+                                  ),
+                                  selected: isSelected,
+                                  onSelected: (selected) {
+                                    setSheetState(() {
+                                      if (selected) {
+                                        _activeFilters['department'] =
+                                            department;
+                                      } else {
+                                        _activeFilters['department'] = 'All';
+                                      }
+                                    });
+                                    _filterEmployees();
+                                  },
+                                );
+                              }).toList(),
                         ),
                         const SizedBox(height: 16),
 
                         // Employment Type filter
-                         Text(
+                        Text(
                           'Employment Type',
                           style: TextStyle(
                             fontSize: 14.sp,
@@ -351,28 +375,34 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                         const SizedBox(height: 8),
                         Wrap(
                           spacing: 8,
-                          children: employmentTypes.map((type) {
-                            final isSelected = _activeFilters['employmentType'] == type;
-                            return FilterChip(
-                              label: Text(type,style: TextStyle(fontSize:14.sp),),
-                              selected: isSelected,
-                              onSelected: (selected) {
-                                setSheetState(() {
-                                  if (selected) {
-                                    _activeFilters['employmentType'] = type;
-                                  } else {
-                                    _activeFilters['employmentType'] = 'All';
-                                  }
-                                });
-                                _filterEmployees();
-                              },
-                            );
-                          }).toList(),
+                          children:
+                              employmentTypes.map((type) {
+                                final isSelected =
+                                    _activeFilters['employmentType'] == type;
+                                return FilterChip(
+                                  label: Text(
+                                    type,
+                                    style: TextStyle(fontSize: 14.sp),
+                                  ),
+                                  selected: isSelected,
+                                  onSelected: (selected) {
+                                    setSheetState(() {
+                                      if (selected) {
+                                        _activeFilters['employmentType'] = type;
+                                      } else {
+                                        _activeFilters['employmentType'] =
+                                            'All';
+                                      }
+                                    });
+                                    _filterEmployees();
+                                  },
+                                );
+                              }).toList(),
                         ),
                         const SizedBox(height: 16),
 
                         // Hire Date Range filter
-                         Text(
+                        Text(
                           'Hire Date Range',
                           style: TextStyle(
                             fontSize: 16.sp,
@@ -387,7 +417,9 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                                 onPressed: () async {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
-                                    initialDate: _activeFilters['hireDateFrom'] ?? DateTime.now(),
+                                    initialDate:
+                                        _activeFilters['hireDateFrom'] ??
+                                        DateTime.now(),
                                     firstDate: DateTime(2010),
                                     lastDate: DateTime.now(),
                                   );
@@ -411,7 +443,9 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                                 onPressed: () async {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
-                                    initialDate: _activeFilters['hireDateTo'] ?? DateTime.now(),
+                                    initialDate:
+                                        _activeFilters['hireDateTo'] ??
+                                        DateTime.now(),
                                     firstDate: DateTime(2010),
                                     lastDate: DateTime.now(),
                                   );
@@ -439,13 +473,11 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                           children: [
                             Expanded(
                               child: ElevatedButton(
-
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.grey[300],
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                  )
-
+                                  ),
                                 ),
                                 onPressed: () {
                                   setSheetState(() {
@@ -456,15 +488,15 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                                 child: const Text('Clear All'),
                               ),
                             ),
-                            SizedBox(width: 10.w,),
+                            SizedBox(width: 10.w),
                             Expanded(
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Cl.primaryColor,
                                   foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    )
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                 ),
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -488,14 +520,16 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
 
   void _navigateToRulesPage() {
     // Get the selected employees
-    List<MEmployee> selectedEmployees = _allEmployees
-        .where((employee) => _selectedEmployeeIds.contains(employee.id))
-        .toList();
+    List<MEmployee> selectedEmployees =
+        _allEmployees
+            .where((employee) => _selectedEmployeeIds.contains(employee.id))
+            .toList();
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EmployeeManagementScreen(employees: selectedEmployees),
+        builder:
+            (context) => EmployeeManagementScreen(employees: selectedEmployees),
       ),
     );
   }
@@ -512,25 +546,27 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
             Navigator.of(context).pop();
           },
         ),
-        actions: _isMultiSelectMode
-            ? [
-          IconButton(
-            icon:  Icon(Icons.check,color:Cl.primaryColor),
-            onPressed: _selectedEmployeeIds.isNotEmpty
-                ? _navigateToRulesPage
+        actions:
+            _isMultiSelectMode
+                ? [
+                  IconButton(
+                    icon: Icon(Icons.check, color: Cl.primaryColor),
+                    onPressed:
+                        _selectedEmployeeIds.isNotEmpty
+                            ? _navigateToRulesPage
+                            : null,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.red),
+                    onPressed: () {
+                      setState(() {
+                        _isMultiSelectMode = false;
+                        _selectedEmployeeIds.clear();
+                      });
+                    },
+                  ),
+                ]
                 : null,
-          ),
-          IconButton(
-            icon:  Icon(Icons.close,color: Colors.red,),
-            onPressed: () {
-              setState(() {
-                _isMultiSelectMode = false;
-                _selectedEmployeeIds.clear();
-              });
-            },
-          ),
-        ]
-            : null,
       ),
       body: Column(
         children: [
@@ -538,10 +574,7 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Select employee for choose employee work type, attendance methods and which information\'s an employee can see',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14.sp,
-              ),
+              style: TextStyle(color: Colors.black, fontSize: 14.sp),
             ),
           ),
           Padding(
@@ -560,7 +593,10 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                         hintText: 'Search employee',
                         suffixIcon: Icon(Icons.search, color: Colors.grey[400]),
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 12,horizontal: 16),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
                       ),
                     ),
                   ),
@@ -579,7 +615,36 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 10.h),
+          if (_isMultiSelectMode)
+            ListTile(
+              leading: SizedBox(width: 50.w),
+              title: Text(
+                "select all",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Cl.primaryColor,
+                ),
+              ),
+              trailing: Checkbox(
+                value: _selectedEmployeeIds.length == _filteredEmployees.length,
+                onChanged: (value) {
+                  setState(() {
+                    if (value == true) {
+                      // Select all
+                      _selectedEmployeeIds =
+                          _filteredEmployees.map((e) => e.id).toSet();
+                    } else {
+                      // Deselect all
+                      _selectedEmployeeIds.clear();
+                    }
+                  });
+                },
+              ),
+
+
+            ),
+          SizedBox(height: 5.h),
           Expanded(
             child: ListView.builder(
               itemCount: _filteredEmployees.length,
@@ -594,19 +659,20 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
                   ),
                   title: Text(
                     employee.name,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: Cl.primaryColor,
                     ),
                   ),
-                  trailing: _isMultiSelectMode
-                      ? Checkbox(
-                    value: isSelected,
-                    onChanged: (value) {
-                      _toggleEmployeeSelection(employee.id);
-                    },
-                  )
-                      : null,
+                  trailing:
+                      _isMultiSelectMode
+                          ? Checkbox(
+                            value: isSelected,
+                            onChanged: (value) {
+                              _toggleEmployeeSelection(employee.id);
+                            },
+                          )
+                          : null,
                   selected: isSelected,
                   onTap: () => _onEmployeeTap(employee.id),
                   onLongPress: () => _onEmployeeLongPress(employee.id),
@@ -616,13 +682,13 @@ class _EmployeeManagementScreenState extends State<EmployeeListManagement> {
           ),
         ],
       ),
-      floatingActionButton: _isMultiSelectMode && _selectedEmployeeIds.isNotEmpty
-          ? FloatingActionButton.extended(
-        onPressed: _navigateToRulesPage,
-        label: const Text('Continue'),
-        icon: const Icon(Icons.arrow_forward),
-      )
-          : null,
+      // floatingActionButton: _isMultiSelectMode && _selectedEmployeeIds.isNotEmpty
+      //     ? FloatingActionButton.extended(
+      //   onPressed: _navigateToRulesPage,
+      //   label: const Text('Continue'),
+      //   icon: const Icon(Icons.arrow_forward),
+      // )
+      //     : null,
     );
   }
 }
